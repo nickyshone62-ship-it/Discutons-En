@@ -6,6 +6,8 @@ out/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.*.local
+.neon
 *.log
 .DS_Store
 .vercel/
