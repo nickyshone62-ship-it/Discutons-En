@@ -699,32 +699,35 @@ export default function ChatSpace() {
 
                       {/* TAP-TO-OPEN INTERACTIVE MENU PANEL */}
                       {activeMenuMsgId === msg.id && (
-                        <div className="mt-2 flex items-center gap-1.5 rounded-full border border-cyan-400/60 bg-slate-950/95 p-1.5 px-3 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150 z-30">
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          className={`mt-2 flex flex-wrap items-center gap-2 rounded-2xl border border-cyan-400/60 bg-slate-950/95 p-2 px-3 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150 z-30 max-w-full ${
+                            msg.isMe ? "justify-end" : "justify-start"
+                          }`}
+                        >
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation();
+                            onClick={() => {
                               setReplyingToMsg(msg);
                               setActiveMenuMsgId(null);
                             }}
-                            className="flex items-center gap-1 rounded-full bg-cyan-400/20 px-2.5 py-1 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition"
+                            className="flex items-center gap-1.5 rounded-xl bg-cyan-400/20 px-3 py-1.5 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition active:scale-95"
                           >
-                            <Reply size={13} />
+                            <Reply size={14} />
                             <span>Répondre</span>
                           </button>
 
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation();
+                            onClick={() => {
                               handleLikeMessage(msg.id);
                               setActiveMenuMsgId(null);
                             }}
-                            className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold transition ${
+                            className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition active:scale-95 ${
                               msg.isLikedByMe
-                                ? "bg-rose-500/20 text-rose-300"
+                                ? "bg-rose-500/30 text-rose-300 border border-rose-400/40"
                                 : "bg-white/10 text-slate-200 hover:text-rose-400"
                             }`}
                           >
-                            <Heart size={13} className={msg.isLikedByMe ? "fill-rose-400" : ""} />
+                            <Heart size={14} className={msg.isLikedByMe ? "fill-rose-400" : ""} />
                             <span>Aimer ({msg.likesCount || 0})</span>
                           </button>
 
@@ -732,44 +735,40 @@ export default function ChatSpace() {
                             <>
                               {!msg.audioUrl && (
                                 <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
+                                  onClick={() => {
                                     setEditingId(msg.id);
                                     setEditText(msg.content);
                                     setActiveMenuMsgId(null);
                                   }}
-                                  className="flex items-center gap-1 rounded-full bg-cyan-400/20 px-2.5 py-1 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition"
+                                  className="flex items-center gap-1.5 rounded-xl bg-cyan-400/20 px-3 py-1.5 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition active:scale-95"
                                 >
-                                  <Edit2 size={13} />
+                                  <Edit2 size={14} />
                                   <span>Modifier</span>
                                 </button>
                               )}
                               <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
+                                onClick={() => {
                                   handleDeleteMessage(msg.id);
                                   setActiveMenuMsgId(null);
                                 }}
-                                className="flex items-center gap-1 rounded-full bg-red-500/20 px-2.5 py-1 text-xs font-bold text-red-300 hover:bg-red-500/30 transition"
+                                className="flex items-center gap-1.5 rounded-xl bg-red-500/25 border border-red-500/40 px-3 py-1.5 text-xs font-black text-red-200 hover:bg-red-500/40 transition active:scale-95 shadow-md shadow-red-950/50"
                               >
-                                <Trash2 size={13} />
+                                <Trash2 size={14} className="text-red-400" />
                                 <span>Supprimer</span>
                               </button>
                             </>
                           )}
 
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveMenuMsgId(null);
-                            }}
-                            className="p-1 text-slate-400 hover:text-white"
+                            onClick={() => setActiveMenuMsgId(null)}
+                            className="p-1.5 rounded-xl bg-white/10 text-slate-400 hover:text-white transition"
                             title="Fermer"
                           >
-                            <X size={14} />
+                            <X size={15} />
                           </button>
                         </div>
                       )}
+
                     </div>
                   )}
 
