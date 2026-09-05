@@ -40,6 +40,8 @@ export async function GET() {
       account: {
         id: user.id,
         username: user.username,
+        firstName: (user as any).first_name || null,
+        lastName: (user as any).last_name || null,
         email: user.email,
         role: user.role,
         createdAt: user.created_at,

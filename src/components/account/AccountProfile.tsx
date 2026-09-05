@@ -21,6 +21,8 @@ type AccountData = {
   account: {
     id: string;
     username: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
     role: string;
     createdAt: string;
@@ -176,7 +178,7 @@ export default function AccountProfile() {
             <div className="flex items-center justify-center sm:justify-start gap-2">
               <span className="inline-flex items-center gap-1 rounded-full bg-cyan-400/20 px-3 py-0.5 text-xs font-bold text-cyan-300 border border-cyan-400/30">
                 <ShieldCheck size={14} />
-                Profil Anonyme Public
+                Profil Anonyme Bitmoji
               </span>
             </div>
 
@@ -234,6 +236,22 @@ export default function AccountProfile() {
         </div>
 
         <div className="space-y-4">
+          {(data.account.firstName || data.account.lastName) && (
+            <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-4 border border-white/15">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 text-cyan-300 shrink-0">
+                <User size={18} />
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-cyan-200/80 uppercase">
+                  Nom & Prénom Réels (Confidentiel)
+                </p>
+                <p className="text-sm font-bold text-white">
+                  {data.account.firstName ?? ""} {data.account.lastName ?? ""}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-4 border border-white/15">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 text-cyan-300 shrink-0">
               <User size={18} />
@@ -263,6 +281,8 @@ export default function AccountProfile() {
           </div>
         </div>
       </div>
+
+
 
       {/* DANGER ZONE - ACCOUNT DELETION */}
       <div className="rounded-3xl border border-red-500/40 bg-red-950/40 p-6 shadow-2xl backdrop-blur-xl sm:p-8 space-y-4">

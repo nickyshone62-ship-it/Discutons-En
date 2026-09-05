@@ -18,11 +18,37 @@ export async function POST(request: Request) {
     const rawEmail = typeof body.email === "string" ? body.email : "";
     const rawUsername =
       typeof body.username === "string" ? body.username : "";
+    const firstName =
+      typeof body.firstName === "string" ? body.firstName.trim() : "";
+    const lastName =
+      typeof body.lastName === "string" ? body.lastName.trim() : "";
     const password =
       typeof body.password === "string" ? body.password : "";
+    const avatarSeed =
+      typeof body.avatarSeed === "string" ? body.avatarSeed.trim() : "";
 
     const email = normalizeEmail(rawEmail);
     const username = normalizeUsername(rawUsername);
+
+    if (!firstName || firstName.length < 2) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Le prénom doit contenir au moins 2 caractères.",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!lastName || lastName.length < 2) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Le nom doit contenir au moins 2 caractères.",
+        },
+        { status: 400 }
+      );
+    }
 
     if (!validateEmail(email)) {
       return NextResponse.json(
@@ -54,6 +80,10 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // Ensure columns exist
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name TEXT`;
 
     const existingEmail = await sql`
       SELECT id
@@ -97,6 +127,8 @@ export async function POST(request: Request) {
       INSERT INTO users (
         email,
         username,
+        first_name,
+        last_name,
         password_hash,
         role,
         is_active
@@ -104,11 +136,13 @@ export async function POST(request: Request) {
       VALUES (
         ${email},
         ${username},
+        ${firstName},
+        ${lastName},
         ${passwordHash},
         'USER',
         TRUE
       )
-      RETURNING id, email, username, role, is_active, created_at
+      RETURNING id, email, username, first_name, last_name, role, is_active, created_at
     `;
 
     if (users.length === 0) {
@@ -123,7 +157,7 @@ export async function POST(request: Request) {
 
     const user = users[0];
 
-    await getOrCreateAnonymousIdentity(user.id as string);
+    await getOrCreateAnonymousIdentity(user.id as string, avatarSeed);
 
     await createSession(user.id as string);
 
@@ -134,6 +168,8 @@ export async function POST(request: Request) {
         id: user.id,
         email: user.email,
         username: user.username,
+        firstName: user.first_name,
+        lastName: user.last_name,
         role: user.role,
       },
     });

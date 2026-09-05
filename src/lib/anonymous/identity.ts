@@ -26,7 +26,8 @@ function generateAvatarSeed() {
 }
 
 export async function createAnonymousIdentity(
-  userId: string
+  userId: string,
+  customAvatarSeed?: string
 ): Promise<AnonymousIdentity> {
   const existing = await sql`
     SELECT
@@ -45,7 +46,7 @@ export async function createAnonymousIdentity(
 
   for (let attempt = 0; attempt < 10; attempt++) {
     const anonymousName = generateAnonymousName();
-    const avatarSeed = generateAvatarSeed();
+    const avatarSeed = customAvatarSeed && customAvatarSeed.trim() ? customAvatarSeed.trim() : generateAvatarSeed();
 
     try {
       const result = await sql`
@@ -110,7 +111,8 @@ export async function getAnonymousIdentity(
 }
 
 export async function getOrCreateAnonymousIdentity(
-  userId: string
+  userId: string,
+  customAvatarSeed?: string
 ): Promise<AnonymousIdentity> {
   const existing =
     await getAnonymousIdentity(userId);
@@ -119,5 +121,6 @@ export async function getOrCreateAnonymousIdentity(
     return existing;
   }
 
-  return createAnonymousIdentity(userId);
+  return createAnonymousIdentity(userId, customAvatarSeed);
 }
+

@@ -10,4 +10,10 @@ export type {
 
 export {
   getAvatarUrl,
+  SNAPCHAT_AVATARS,
 } from "./avatar";
+
+export type {
+  SnapchatAvatarPreset,
+} from "./avatar";
+
