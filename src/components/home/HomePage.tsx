@@ -11,6 +11,7 @@ import {
   LogOut,
   Menu,
   MessageCircle,
+  MessageSquare,
   Plus,
   Search,
   ShieldCheck,
@@ -198,6 +199,14 @@ export default function HomePage() {
 
           <div className="hidden items-center gap-2 md:flex">
             <Link
+              href="/chat"
+              className="flex h-10 items-center gap-2 rounded-xl bg-sky-50 px-3 text-sm font-bold text-sky-700 transition hover:bg-sky-100"
+            >
+              <MessageSquare size={18} />
+              Chat en direct
+            </Link>
+
+            <Link
               href="/recherche"
               className="flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-medium text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
             >
@@ -313,6 +322,14 @@ export default function HomePage() {
                 >
                   <Home size={18} />
                   Accueil
+                </Link>
+
+                <Link
+                  href="/chat"
+                  className="mt-1 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-sky-700 bg-sky-50 transition hover:bg-sky-100"
+                >
+                  <MessageSquare size={18} />
+                  Chat en direct
                 </Link>
 
                 <Link
@@ -620,6 +637,14 @@ export default function HomePage() {
           >
             <Home size={20} />
             <span className="text-[10px] font-bold">Accueil</span>
+          </Link>
+
+          <Link
+            href="/chat"
+            className="flex flex-col items-center gap-1 px-4 py-1.5 text-slate-400 hover:text-sky-600"
+          >
+            <MessageSquare size={20} />
+            <span className="text-[10px] font-bold">Chat</span>
           </Link>
 
           <Link
