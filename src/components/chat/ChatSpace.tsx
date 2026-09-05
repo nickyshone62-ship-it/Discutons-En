@@ -43,41 +43,148 @@ function formatTime(dateStr: string) {
   });
 }
 
-function VoicePlayer({ src }: { src: string }) {
+function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
   const [playing, setPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleLoaded = () => {
+      if (audio.duration && !isNaN(audio.duration)) {
+        setDuration(audio.duration);
+      }
+    };
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+    };
+
+    const handleEnded = () => {
+      setPlaying(false);
+      setCurrentTime(0);
+    };
+
+    audio.addEventListener("loadedmetadata", handleLoaded);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("ended", handleEnded);
+
+    return () => {
+      audio.removeEventListener("loadedmetadata", handleLoaded);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, [src]);
 
   function togglePlay() {
     if (!audioRef.current) return;
     if (playing) {
       audioRef.current.pause();
+      setPlaying(false);
     } else {
       audioRef.current.play();
+      setPlaying(true);
     }
-    setPlaying(!playing);
   }
 
+  function handleSeek(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!audioRef.current) return;
+    const seekTime = Number(e.target.value);
+    audioRef.current.currentTime = seekTime;
+    setCurrentTime(seekTime);
+  }
+
+  function formatAudioTime(seconds: number) {
+    if (isNaN(seconds) || seconds === 0) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  }
+
+  const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
+  const waveformHeights = [40, 70, 45, 90, 60, 30, 85, 50, 95, 40, 75, 55, 80, 35, 65];
+
   return (
-    <div className="flex items-center gap-3 bg-sky-900/40 text-white rounded-2xl p-2 px-3 border border-sky-500/30">
-      <audio
-        ref={audioRef}
-        src={src}
-        onEnded={() => setPlaying(false)}
-        className="hidden"
-      />
+    <div
+      className={`relative flex items-center gap-3.5 rounded-3xl p-3.5 px-4 shadow-md transition-all border min-w-[250px] sm:min-w-[280px] ${
+        isMe
+          ? "bg-gradient-to-r from-slate-900 via-sky-950 to-slate-950 text-white border-sky-500/30"
+          : "bg-gradient-to-r from-white via-slate-50 to-sky-50 text-slate-800 border-slate-200"
+      }`}
+    >
+      <audio ref={audioRef} src={src} preload="metadata" />
+
+      {/* PLAY / PAUSE BUTTON */}
       <button
         type="button"
         onClick={togglePlay}
-        className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-500 text-white hover:bg-sky-400 transition"
+        className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-md transition transform active:scale-95 ${
+          isMe
+            ? "bg-sky-500 text-white hover:bg-sky-400 shadow-sky-500/30"
+            : "bg-sky-600 text-white hover:bg-sky-500 shadow-sky-600/20"
+        }`}
       >
-        {playing ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
+        {playing && (
+          <span className="absolute inset-0 rounded-2xl bg-sky-400 opacity-40 animate-ping" />
+        )}
+        {playing ? (
+          <Pause size={20} className="relative z-10" />
+        ) : (
+          <Play size={20} className="relative z-10 ml-0.5" />
+        )}
       </button>
 
-      <div className="flex flex-col">
-        <span className="text-xs font-bold text-sky-200 flex items-center gap-1">
-          🎤 Message vocal
-        </span>
-        <span className="text-[10px] text-sky-300/80">Cliquez pour écouter</span>
+      {/* WAVEFORM AND PROGRESS BAR */}
+      <div className="flex-1 space-y-1.5">
+        <div className="flex items-center justify-between text-[11px] font-bold tracking-tight">
+          <span className={isMe ? "text-sky-300" : "text-sky-700"}>
+            🎙️ Message Vocal
+          </span>
+          <span className={isMe ? "text-slate-400" : "text-slate-500"}>
+            {formatAudioTime(currentTime)} / {formatAudioTime(duration || 0)}
+          </span>
+        </div>
+
+        {/* WAVEFORM BARS */}
+        <div className="flex items-center gap-1 h-5 py-0.5">
+          {waveformHeights.map((h, index) => {
+            const barProgress = (index / waveformHeights.length) * 100;
+            const isPassed = progressPercent >= barProgress;
+
+            return (
+              <div
+                key={index}
+                className={`flex-1 rounded-full transition-all duration-200 ${
+                  playing ? "animate-pulse" : ""
+                } ${
+                  isPassed
+                    ? isMe
+                      ? "bg-sky-400 shadow-sm shadow-sky-400/50"
+                      : "bg-sky-600"
+                    : isMe
+                    ? "bg-slate-700/60"
+                    : "bg-slate-200"
+                }`}
+                style={{
+                  height: `${playing ? Math.max(30, h) : h}%`,
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* SCRUBBER */}
+        <input
+          type="range"
+          min={0}
+          max={duration || 100}
+          value={currentTime}
+          onChange={handleSeek}
+          className="w-full h-1 bg-transparent accent-sky-400 cursor-pointer opacity-30 hover:opacity-100 transition"
+        />
       </div>
     </div>
   );
@@ -496,7 +603,7 @@ export default function ChatSpace() {
                   ) : (
                     <div className="relative inline-block text-left">
                       {msg.audioUrl ? (
-                        <VoicePlayer src={msg.audioUrl} />
+                        <VoicePlayer src={msg.audioUrl} isMe={msg.isMe} />
                       ) : (
                         <div
                           className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap break-words inline-block shadow-sm ${
