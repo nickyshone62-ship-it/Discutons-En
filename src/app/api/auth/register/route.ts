@@ -81,9 +81,46 @@ export async function POST(request: Request) {
       );
     }
 
-    // Ensure columns exist
+    // Ensure all database tables & columns exist before querying
+    await sql`
+      CREATE TABLE IF NOT EXISTS users (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        email TEXT UNIQUE NOT NULL,
+        username TEXT UNIQUE NOT NULL,
+        first_name TEXT,
+        last_name TEXT,
+        password_hash TEXT NOT NULL,
+        role TEXT DEFAULT 'USER',
+        is_active BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `;
+
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name TEXT`;
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name TEXT`;
+
+    await sql`
+      CREATE TABLE IF NOT EXISTS sessions (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        token_hash TEXT NOT NULL,
+        expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `;
+
+    await sql`
+      CREATE TABLE IF NOT EXISTS anonymous_identities (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+        anonymous_name TEXT UNIQUE NOT NULL,
+        avatar_seed TEXT NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `;
+
+    await sql`ALTER TABLE anonymous_identities ADD COLUMN IF NOT EXISTS avatar_seed TEXT`;
 
     const existingEmail = await sql`
       SELECT id
