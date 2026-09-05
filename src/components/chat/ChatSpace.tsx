@@ -510,22 +510,24 @@ export default function ChatSpace() {
                       )}
 
                       {/* EDIT / DELETE ACTIONS FOR MY MESSAGES */}
-                      {msg.isMe && !msg.audioUrl && (
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-3 right-2 flex items-center gap-1 bg-white border border-slate-200 shadow-md rounded-xl px-1.5 py-0.5">
-                          <button
-                            onClick={() => {
-                              setEditingId(msg.id);
-                              setEditText(msg.content);
-                            }}
-                            className="p-1 text-slate-400 hover:text-sky-600 transition"
-                            title="Modifier"
-                          >
-                            <Edit2 size={13} />
-                          </button>
+                      {msg.isMe && (
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-3 right-2 flex items-center gap-1 bg-white border border-slate-200 shadow-md rounded-xl px-1.5 py-0.5 z-10">
+                          {!msg.audioUrl && (
+                            <button
+                              onClick={() => {
+                                setEditingId(msg.id);
+                                setEditText(msg.content);
+                              }}
+                              className="p-1 text-slate-400 hover:text-sky-600 transition"
+                              title="Modifier"
+                            >
+                              <Edit2 size={13} />
+                            </button>
+                          )}
                           <button
                             onClick={() => handleDeleteMessage(msg.id)}
                             className="p-1 text-slate-400 hover:text-red-500 transition"
-                            title="Supprimer"
+                            title="Supprimer le message"
                           >
                             <Trash2 size={13} />
                           </button>
