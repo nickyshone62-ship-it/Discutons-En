@@ -104,6 +104,15 @@ export default function PostDetail({ postId }: { postId: string }) {
         setComments(data.comments || []);
         setCurrentUserIdentity(data.currentUserIdentity);
         setPostLikesCount(data.post.likesCount);
+        setLikedPost(!!data.hasLikedPost);
+
+        if (Array.isArray(data.userLikedCommentIds)) {
+          const map: Record<string, boolean> = {};
+          data.userLikedCommentIds.forEach((id: string) => {
+            map[id] = true;
+          });
+          setLikedComments(map);
+        }
       } catch {
         setError("Impossible de contacter le serveur. Vérifie ta connexion.");
       } finally {
@@ -168,39 +177,44 @@ export default function PostDetail({ postId }: { postId: string }) {
     }
   }
 
-  function toggleLikePost() {
-    if (!likedPost) {
-      setLikedPost(true);
-      setPostLikesCount((prev) => prev + 1);
-    } else {
-      setLikedPost(false);
-      setPostLikesCount((prev) => prev - 1);
+  async function toggleLikePost() {
+    try {
+      const response = await fetch(`/api/posts/${postId}/like`, {
+        method: "POST",
+      });
+
+      if (response.status === 401) {
+        window.location.href = "/connexion";
+        return;
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        setLikedPost(data.liked);
+        setPostLikesCount(data.likesCount);
+      }
+    } catch {
+      // Ignore transient errors
     }
   }
 
   async function handleLikeComment(commentId: string) {
-    const isLiked = likedComments[commentId];
-
-    // Optimistic UI update
-    setLikedComments((prev) => ({ ...prev, [commentId]: !isLiked }));
-    setComments((prev) =>
-      prev.map((c) =>
-        c.id === commentId
-          ? { ...c, likesCount: isLiked ? c.likesCount - 1 : c.likesCount + 1 }
-          : c
-      )
-    );
-
     try {
-      const res = await fetch(`/api/comments/${commentId}/like`, {
+      const response = await fetch(`/api/comments/${commentId}/like`, {
         method: "POST",
       });
-      if (res.status === 401) {
+
+      if (response.status === 401) {
         window.location.href = "/connexion";
         return;
       }
-      const data = await res.json();
+
+      const data = await response.json();
       if (data.success) {
+        setLikedComments((prev) => ({
+          ...prev,
+          [commentId]: data.liked,
+        }));
         setComments((prev) =>
           prev.map((c) =>
             c.id === commentId ? { ...c, likesCount: data.likesCount } : c
@@ -208,8 +222,7 @@ export default function PostDetail({ postId }: { postId: string }) {
         );
       }
     } catch {
-      // Revert if error
-      setLikedComments((prev) => ({ ...prev, [commentId]: isLiked }));
+      // Ignore transient errors
     }
   }
 
@@ -308,8 +321,9 @@ export default function PostDetail({ postId }: { postId: string }) {
 
             <button
               onClick={toggleLikePost}
+              title={likedPost ? "Retirer votre j'aime" : "J'aime"}
               className={`flex items-center gap-2 font-semibold transition ${
-                likedPost ? "text-rose-500" : "text-slate-400 hover:text-rose-500"
+                likedPost ? "text-rose-500 font-bold" : "text-slate-400 hover:text-rose-500"
               }`}
             >
               <Heart size={18} className={likedPost ? "fill-rose-500 text-rose-500" : ""} />
@@ -331,7 +345,7 @@ export default function PostDetail({ postId }: { postId: string }) {
             Pistes & Réponses ({comments.length})
           </h2>
           <p className="text-xs text-slate-400">
-            Votez pour guider vers la meilleure solution 💡
+            1 vote par membre pour faire émerger la meilleure voix 💡
           </p>
         </div>
 
@@ -415,7 +429,7 @@ export default function PostDetail({ postId }: { postId: string }) {
           <div className="space-y-4">
             {comments.map((comment) => {
               const isTop = comment.id === topCommentId;
-              const isLikedByMe = likedComments[comment.id];
+              const isLikedByMe = !!likedComments[comment.id];
 
               return (
                 <div
@@ -458,20 +472,21 @@ export default function PostDetail({ postId }: { postId: string }) {
                   <div className="flex items-center justify-between pl-12 pt-2 border-t border-slate-100">
                     <button
                       onClick={() => handleLikeComment(comment.id)}
+                      title={isLikedByMe ? "Retirer votre soutien" : "Soutenir cette piste"}
                       className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition ${
                         isLikedByMe
-                          ? "bg-sky-100 text-sky-700"
+                          ? "bg-sky-500 text-white shadow-sm"
                           : "bg-slate-100 text-slate-600 hover:bg-sky-50 hover:text-sky-600"
                       }`}
                     >
                       <ThumbsUp
                         size={14}
-                        className={isLikedByMe ? "fill-sky-700" : ""}
+                        className={isLikedByMe ? "fill-white text-white" : ""}
                       />
-                      <span>Utile ({comment.likesCount})</span>
+                      <span>{isLikedByMe ? "Soutenu" : "Utile"} ({comment.likesCount})</span>
                     </button>
 
-                    <span className="text-[11px] text-slate-400">
+                    <span className="text-[11px] text-slate-400 font-medium">
                       {comment.likesCount > 0
                         ? `Soutenu par ${comment.likesCount} membre${
                             comment.likesCount > 1 ? "s" : ""

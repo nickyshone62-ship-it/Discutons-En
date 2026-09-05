@@ -32,6 +32,27 @@ export async function GET(
       WHERE id = ${id}
     `;
 
+    // Ensure likes tables exist
+    await sql`
+      CREATE TABLE IF NOT EXISTS post_likes (
+        user_id UUID NOT NULL,
+        post_id UUID NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id, post_id)
+      )
+    `;
+    await sql`
+      CREATE TABLE IF NOT EXISTS comment_likes (
+        user_id UUID NOT NULL,
+        comment_id UUID NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id, comment_id)
+      )
+    `;
+    await sql`
+      ALTER TABLE comments ADD COLUMN IF NOT EXISTS likes_count INT DEFAULT 0
+    `;
+
     // Get post details with author identity and category
     const posts = await sql`
       SELECT
@@ -70,39 +91,53 @@ export async function GET(
 
     const post = posts[0];
 
-    // Try fetching comments with likes_count (ordered by most liked first)
-    let comments = [];
-    try {
-      comments = await sql`
-        SELECT
-          c.id,
-          c.content,
-          COALESCE(c.likes_count, 0) AS likes_count,
-          c.created_at,
-          ai.anonymous_name,
-          ai.avatar_seed
-        FROM comments c
-        INNER JOIN anonymous_identities ai
-          ON ai.user_id = c.user_id
-        WHERE c.post_id = ${id}
-        ORDER BY COALESCE(c.likes_count, 0) DESC, c.created_at ASC
+    // Get comments for this post ordered by likes count descending
+    const comments = await sql`
+      SELECT
+        c.id,
+        c.content,
+        COALESCE(c.likes_count, 0) AS likes_count,
+        c.created_at,
+        ai.anonymous_name,
+        ai.avatar_seed
+      FROM comments c
+      INNER JOIN anonymous_identities ai
+        ON ai.user_id = c.user_id
+      WHERE c.post_id = ${id}
+      ORDER BY COALESCE(c.likes_count, 0) DESC, c.created_at ASC
+    `;
+
+    // Check user liked status for post and comments
+    let hasLikedPost = false;
+    const userLikedCommentIds: string[] = [];
+
+    let currentUserIdentity = null;
+    if (user) {
+      const identity = await getOrCreateAnonymousIdentity(user.id as string);
+      currentUserIdentity = {
+        anonymousName: identity.anonymous_name,
+        avatarUrl: getAvatarUrl(
+          identity.avatar_seed,
+          identity.anonymous_name
+        ),
+      };
+
+      const postLikeRow = await sql`
+        SELECT post_id
+        FROM post_likes
+        WHERE user_id = ${user.id as string} AND post_id = ${id}
+        LIMIT 1
       `;
-    } catch {
-      // Fallback if likes_count column doesn't exist yet
-      comments = await sql`
-        SELECT
-          c.id,
-          c.content,
-          0 AS likes_count,
-          c.created_at,
-          ai.anonymous_name,
-          ai.avatar_seed
-        FROM comments c
-        INNER JOIN anonymous_identities ai
-          ON ai.user_id = c.user_id
-        WHERE c.post_id = ${id}
-        ORDER BY c.created_at ASC
+      hasLikedPost = postLikeRow.length > 0;
+
+      const commentLikeRows = await sql`
+        SELECT comment_id
+        FROM comment_likes
+        WHERE user_id = ${user.id as string}
       `;
+      for (const row of commentLikeRows) {
+        userLikedCommentIds.push(row.comment_id as string);
+      }
     }
 
     const formattedComments = comments.map((comment) => ({
@@ -119,21 +154,11 @@ export async function GET(
       },
     }));
 
-    let currentUserIdentity = null;
-    if (user) {
-      const identity = await getOrCreateAnonymousIdentity(user.id as string);
-      currentUserIdentity = {
-        anonymousName: identity.anonymous_name,
-        avatarUrl: getAvatarUrl(
-          identity.avatar_seed,
-          identity.anonymous_name
-        ),
-      };
-    }
-
     return NextResponse.json({
       success: true,
       currentUserIdentity,
+      hasLikedPost,
+      userLikedCommentIds,
       post: {
         id: post.id,
         title: post.title,

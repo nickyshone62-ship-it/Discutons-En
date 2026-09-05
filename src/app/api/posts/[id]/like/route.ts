@@ -7,49 +7,44 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: commentId } = await params;
+    const { id: postId } = await params;
     const user = await getCurrentUser();
 
     if (!user) {
       return NextResponse.json(
         {
           success: false,
-          message: "Tu dois être connecté pour soutenir une réponse.",
+          message: "Tu dois être connecté pour aimer une discussion.",
         },
         { status: 401 }
       );
     }
 
-    if (!commentId) {
+    if (!postId) {
       return NextResponse.json(
         {
           success: false,
-          message: "Identifiant de la réponse manquant.",
+          message: "Identifiant du problème manquant.",
         },
         { status: 400 }
       );
     }
 
-    // Ensure comment_likes table exists
+    // Ensure post_likes table exists
     await sql`
-      CREATE TABLE IF NOT EXISTS comment_likes (
+      CREATE TABLE IF NOT EXISTS post_likes (
         user_id UUID NOT NULL,
-        comment_id UUID NOT NULL,
+        post_id UUID NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (user_id, comment_id)
+        PRIMARY KEY (user_id, post_id)
       )
     `;
 
-    // Ensure likes_count column exists on comments table
-    await sql`
-      ALTER TABLE comments ADD COLUMN IF NOT EXISTS likes_count INT DEFAULT 0
-    `;
-
-    // Check if user already liked this comment
+    // Check if user already liked this post
     const existingLike = await sql`
       SELECT user_id
-      FROM comment_likes
-      WHERE user_id = ${user.id as string} AND comment_id = ${commentId}
+      FROM post_likes
+      WHERE user_id = ${user.id as string} AND post_id = ${postId}
       LIMIT 1
     `;
 
@@ -58,39 +53,39 @@ export async function POST(
     if (existingLike.length > 0) {
       // Remove like
       await sql`
-        DELETE FROM comment_likes
-        WHERE user_id = ${user.id as string} AND comment_id = ${commentId}
+        DELETE FROM post_likes
+        WHERE user_id = ${user.id as string} AND post_id = ${postId}
       `;
       await sql`
-        UPDATE comments
+        UPDATE posts
         SET likes_count = GREATEST(0, COALESCE(likes_count, 0) - 1)
-        WHERE id = ${commentId}
+        WHERE id = ${postId}
       `;
       liked = false;
     } else {
       // Add like
       await sql`
-        INSERT INTO comment_likes (user_id, comment_id)
-        VALUES (${user.id as string}, ${commentId})
-        ON CONFLICT (user_id, comment_id) DO NOTHING
+        INSERT INTO post_likes (user_id, post_id)
+        VALUES (${user.id as string}, ${postId})
+        ON CONFLICT (user_id, post_id) DO NOTHING
       `;
       await sql`
-        UPDATE comments
+        UPDATE posts
         SET likes_count = COALESCE(likes_count, 0) + 1
-        WHERE id = ${commentId}
+        WHERE id = ${postId}
       `;
       liked = true;
     }
 
     // Fetch updated likes count
-    const updatedComment = await sql`
+    const updatedPost = await sql`
       SELECT likes_count
-      FROM comments
-      WHERE id = ${commentId}
+      FROM posts
+      WHERE id = ${postId}
       LIMIT 1
     `;
 
-    const likesCount = updatedComment.length > 0 ? Number(updatedComment[0].likes_count ?? 0) : 0;
+    const likesCount = updatedPost.length > 0 ? Number(updatedPost[0].likes_count ?? 0) : 0;
 
     return NextResponse.json({
       success: true,
@@ -98,11 +93,11 @@ export async function POST(
       likesCount,
     });
   } catch (error) {
-    console.error("Toggle comment like error:", error);
+    console.error("Toggle post like error:", error);
     return NextResponse.json(
       {
         success: false,
-        message: "Impossible de modifier votre mention j'aime.",
+        message: "Impossible d'enregistrer votre mention j'aime.",
       },
       { status: 500 }
     );
