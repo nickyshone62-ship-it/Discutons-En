@@ -6,8 +6,6 @@ import {
   AlertTriangle,
   ArrowLeft,
   Calendar,
-  CheckCircle,
-  Clock,
   Loader2,
   Lock,
   LogOut,
@@ -118,26 +116,25 @@ export default function AccountProfile() {
   if (loading) {
     return (
       <div className="mx-auto max-w-3xl space-y-6">
-        <div className="h-10 w-36 animate-pulse rounded-xl bg-slate-200" />
-        <div className="h-48 animate-pulse rounded-3xl bg-white" />
-        <div className="h-64 animate-pulse rounded-3xl bg-white" />
+        <div className="h-10 w-36 animate-pulse rounded-full bg-white/10" />
+        <div className="h-48 animate-pulse rounded-3xl bg-white/10" />
       </div>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="mx-auto max-w-md my-12 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-500 font-bold text-xl">
+      <div className="mx-auto max-w-md my-12 rounded-3xl border border-white/20 bg-white/10 p-8 text-center backdrop-blur-xl shadow-2xl text-white">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/20 text-red-300 font-bold text-xl">
           !
         </div>
-        <h1 className="mt-4 text-xl font-bold text-slate-950">
+        <h1 className="mt-4 text-xl font-bold text-white">
           Une erreur est survenue
         </h1>
-        <p className="mt-2 text-sm text-slate-500">{error}</p>
+        <p className="mt-2 text-xs text-cyan-100/80">{error}</p>
         <Link
           href="/accueil"
-          className="mt-6 inline-flex rounded-2xl bg-slate-950 px-5 py-3 text-sm font-bold text-white"
+          className="mt-6 inline-flex rounded-full bg-cyan-400 px-6 py-3 text-xs font-black uppercase text-slate-950 shadow-lg shadow-cyan-400/40"
         >
           Retour à l'accueil
         </Link>
@@ -146,12 +143,12 @@ export default function AccountProfile() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 pb-20">
+    <div className="mx-auto max-w-3xl space-y-6 pb-20 text-white">
       {/* HEADER NAVIGATION */}
       <div className="flex items-center justify-between">
         <Link
           href="/accueil"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-900"
+          className="inline-flex items-center gap-2 text-xs font-bold text-cyan-200 transition hover:text-white"
         >
           <ArrowLeft size={16} />
           Retour à l'accueil
@@ -159,7 +156,7 @@ export default function AccountProfile() {
 
         <button
           onClick={handleLogout}
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-red-600 transition"
+          className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-slate-200 hover:bg-white/20 hover:text-red-400 transition"
         >
           <LogOut size={14} />
           Se déconnecter
@@ -167,27 +164,27 @@ export default function AccountProfile() {
       </div>
 
       {/* ANONYMOUS PROFILE CARD */}
-      <div className="overflow-hidden rounded-3xl bg-slate-950 p-6 text-white shadow-xl sm:p-8">
+      <div className="overflow-hidden rounded-3xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-xl sm:p-8">
         <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
           <img
             src={data.identity.avatarUrl}
             alt={data.identity.anonymousName}
-            className="h-20 w-20 rounded-full border-4 border-white/20 shadow-lg shrink-0"
+            className="h-20 w-20 rounded-full border-4 border-cyan-400/50 shadow-lg shrink-0"
           />
 
           <div className="space-y-1.5 flex-1">
             <div className="flex items-center justify-center sm:justify-start gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-sky-500/20 px-3 py-0.5 text-xs font-bold text-sky-400 border border-sky-500/30">
+              <span className="inline-flex items-center gap-1 rounded-full bg-cyan-400/20 px-3 py-0.5 text-xs font-bold text-cyan-300 border border-cyan-400/30">
                 <ShieldCheck size={14} />
                 Profil Anonyme Public
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight drop-shadow-md">
               {data.identity.anonymousName}
             </h1>
 
-            <p className="text-xs text-slate-400 flex items-center justify-center sm:justify-start gap-1.5">
+            <p className="text-xs text-cyan-200/80 flex items-center justify-center sm:justify-start gap-1.5">
               <Calendar size={13} />
               Membre depuis le {formatDate(data.account.createdAt)}
             </p>
@@ -197,69 +194,69 @@ export default function AccountProfile() {
 
       {/* ACTIVITY STATS */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="rounded-3xl border border-slate-200 bg-white p-5 text-center shadow-sm">
-          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 mb-2">
+        <div className="rounded-3xl border border-white/20 bg-white/10 p-5 text-center shadow-xl backdrop-blur-xl">
+          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-400/20 text-cyan-300 mb-2 border border-cyan-400/30">
             <MessageSquare size={20} />
           </div>
-          <p className="text-2xl font-black text-slate-950">
+          <p className="text-2xl font-black text-white">
             {data.stats.postsCount}
           </p>
-          <p className="text-xs font-medium text-slate-400">
+          <p className="text-xs font-medium text-cyan-200/80">
             Problèmes partagés
           </p>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-5 text-center shadow-sm">
-          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 mb-2">
+        <div className="rounded-3xl border border-white/20 bg-white/10 p-5 text-center shadow-xl backdrop-blur-xl">
+          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-400/20 text-emerald-300 mb-2 border border-emerald-400/30">
             <MessageCircle size={20} />
           </div>
-          <p className="text-2xl font-black text-slate-950">
+          <p className="text-2xl font-black text-white">
             {data.stats.commentsCount}
           </p>
-          <p className="text-xs font-medium text-slate-400">
+          <p className="text-xs font-medium text-cyan-200/80">
             Réponses apportées
           </p>
         </div>
       </div>
 
       {/* PRIVATE CONFIDENTIAL INFO */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 space-y-5">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+      <div className="rounded-3xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-xl sm:p-8 space-y-5">
+        <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
-            <h2 className="text-lg font-black text-slate-950 flex items-center gap-2">
+            <h2 className="text-base font-black text-white flex items-center gap-2 uppercase tracking-wider">
               Informations privées
-              <Lock size={16} className="text-slate-400" />
+              <Lock size={16} className="text-cyan-300" />
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-cyan-200/80">
               Ces informations sont strictement confidentielles et restent masquées aux autres membres.
             </p>
           </div>
         </div>
 
         <div className="space-y-4">
-          <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4 border border-slate-100">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-600 shadow-sm shrink-0">
+          <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-4 border border-white/15">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 text-cyan-300 shrink-0">
               <User size={18} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-slate-400">
+              <p className="text-[10px] font-bold text-cyan-200/80 uppercase">
                 Nom d'utilisateur privé
               </p>
-              <p className="text-sm font-bold text-slate-900">
+              <p className="text-sm font-bold text-white">
                 @{data.account.username}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4 border border-slate-100">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-600 shadow-sm shrink-0">
+          <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-4 border border-white/15">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 text-cyan-300 shrink-0">
               <Mail size={18} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-slate-400">
+              <p className="text-[10px] font-bold text-cyan-200/80 uppercase">
                 Adresse email
               </p>
-              <p className="text-sm font-bold text-slate-900">
+              <p className="text-sm font-bold text-white">
                 {data.account.email}
               </p>
             </div>
@@ -268,28 +265,28 @@ export default function AccountProfile() {
       </div>
 
       {/* DANGER ZONE - ACCOUNT DELETION */}
-      <div className="rounded-3xl border border-red-200 bg-red-50/50 p-6 shadow-sm sm:p-8 space-y-4">
+      <div className="rounded-3xl border border-red-500/40 bg-red-950/40 p-6 shadow-2xl backdrop-blur-xl sm:p-8 space-y-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-100 text-red-600 shrink-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-500/20 text-red-400 shrink-0 border border-red-500/40">
             <AlertTriangle size={20} />
           </div>
           <div>
-            <h3 className="text-base font-bold text-red-950">
+            <h3 className="text-sm font-black uppercase text-red-200 tracking-wider">
               Zone de danger — Suppression du compte
             </h3>
-            <p className="text-xs text-red-600/80">
+            <p className="text-xs text-red-300/80">
               La suppression de votre compte est définitive et irréversible.
             </p>
           </div>
         </div>
 
-        <p className="text-xs leading-relaxed text-red-800">
+        <p className="text-xs leading-relaxed text-red-200/90">
           En supprimant votre compte, votre profil, votre identité anonyme ainsi que vos publications et messages seront définitivement effacés de nos serveurs.
         </p>
 
         <button
           onClick={() => setShowDeleteModal(true)}
-          className="inline-flex items-center gap-2 rounded-2xl bg-red-600 px-5 py-3 text-xs font-bold text-white transition hover:bg-red-700 shadow-md shadow-red-600/20"
+          className="inline-flex items-center gap-2 rounded-full bg-red-600 hover:bg-red-500 px-6 py-3 text-xs font-black uppercase tracking-wider text-white transition shadow-lg shadow-red-600/30"
         >
           <Trash2 size={16} />
           Supprimer mon compte définitivement
@@ -298,17 +295,17 @@ export default function AccountProfile() {
 
       {/* DELETE CONFIRMATION MODAL */}
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-3xl bg-white p-6 sm:p-8 shadow-2xl space-y-5 border border-slate-200">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-600">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
+          <div className="w-full max-w-md rounded-3xl bg-slate-900 p-6 sm:p-8 shadow-2xl space-y-5 border border-white/20 text-white">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/20 text-red-400 border border-red-500/40">
               <AlertTriangle size={28} />
             </div>
 
             <div className="text-center space-y-2">
-              <h3 className="text-xl font-black text-slate-950">
+              <h3 className="text-xl font-black text-white">
                 Confirmer la suppression
               </h3>
-              <p className="text-xs leading-relaxed text-slate-500">
+              <p className="text-xs leading-relaxed text-slate-300">
                 Êtes-vous sûr de vouloir supprimer définitivement votre compte <strong>@{data.account.username}</strong> ? Cette action ne peut pas être annulée.
               </p>
             </div>
@@ -318,7 +315,7 @@ export default function AccountProfile() {
                 type="button"
                 onClick={() => setShowDeleteModal(false)}
                 disabled={deleting}
-                className="flex-1 rounded-2xl border border-slate-200 bg-white py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 transition"
+                className="flex-1 rounded-full border border-white/20 bg-white/10 py-3 text-xs font-bold text-white hover:bg-white/20 transition"
               >
                 Annuler
               </button>
@@ -327,7 +324,7 @@ export default function AccountProfile() {
                 type="button"
                 onClick={handleDeleteAccount}
                 disabled={deleting}
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-red-600 py-3 text-sm font-bold text-white hover:bg-red-700 transition disabled:opacity-60"
+                className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-red-600 py-3 text-xs font-black uppercase tracking-wider text-white hover:bg-red-500 transition disabled:opacity-60"
               >
                 {deleting ? (
                   <>

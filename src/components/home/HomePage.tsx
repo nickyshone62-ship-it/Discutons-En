@@ -139,17 +139,14 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-slate-50">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <div className="h-16 animate-pulse rounded-2xl bg-white" />
-
+      <main className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-950 p-6 text-white">
+        <div className="mx-auto max-w-7xl px-4 py-6">
+          <div className="h-16 animate-pulse rounded-3xl bg-white/10" />
           <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr]">
-            <div className="hidden h-96 animate-pulse rounded-3xl bg-white lg:block" />
-
+            <div className="hidden h-96 animate-pulse rounded-3xl bg-white/10 lg:block" />
             <div className="space-y-4">
-              <div className="h-40 animate-pulse rounded-3xl bg-white" />
-              <div className="h-48 animate-pulse rounded-3xl bg-white" />
-              <div className="h-48 animate-pulse rounded-3xl bg-white" />
+              <div className="h-40 animate-pulse rounded-3xl bg-white/10" />
+              <div className="h-48 animate-pulse rounded-3xl bg-white/10" />
             </div>
           </div>
         </div>
@@ -159,23 +156,20 @@ export default function HomePage() {
 
   if (error || !data) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
-        <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-500">
+      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-950 px-4 text-white">
+        <div className="w-full max-w-md rounded-3xl border border-white/20 bg-white/10 p-8 text-center backdrop-blur-xl shadow-2xl">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/20 text-red-300 font-bold text-xl">
             !
           </div>
-
-          <h1 className="mt-5 text-xl font-bold text-slate-950">
+          <h1 className="mt-5 text-xl font-black tracking-wide text-white">
             Une erreur est survenue
           </h1>
-
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-xs text-cyan-100/80">
             {error || "Impossible de charger votre espace."}
           </p>
-
           <button
             onClick={() => window.location.reload()}
-            className="mt-6 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-bold text-white"
+            className="mt-6 rounded-full bg-cyan-400 px-6 py-3 text-xs font-black text-slate-950 uppercase tracking-wider shadow-lg shadow-cyan-400/40 hover:bg-cyan-300 transition"
           >
             Réessayer
           </button>
@@ -185,61 +179,65 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 pb-24">
+    <main className="relative min-h-screen bg-gradient-to-br from-purple-950 via-indigo-900 to-blue-950 text-white pb-24 overflow-x-hidden">
+      {/* GEOMETRIC BACKGROUND DECORATIONS */}
+      <div className="pointer-events-none fixed -top-20 -left-20 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl" />
+      <div className="pointer-events-none fixed top-1/3 right-0 h-96 w-96 rounded-full bg-purple-600/20 blur-3xl" />
+      <div className="pointer-events-none fixed bottom-10 left-1/4 h-80 w-80 rounded-full bg-blue-600/20 blur-3xl" />
+
       {/* NAVBAR */}
-      <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-white/15 bg-slate-950/75 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
             href="/accueil"
-            className="flex items-center gap-2 text-xl font-black tracking-tight"
+            className="flex items-center gap-2 text-xl font-black tracking-wider"
           >
-            <span className="text-sky-500">DIS</span>
-            <span>cutons-En</span>
+            <span className="text-cyan-400">DIS</span>
+            <span className="text-white">cutons-En</span>
           </Link>
 
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center gap-3 md:flex">
             <Link
               href="/chat"
-              className="flex h-10 items-center gap-2 rounded-xl bg-sky-50 px-3 text-sm font-bold text-sky-700 transition hover:bg-sky-100"
+              className="flex h-10 items-center gap-2 rounded-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 px-4 text-xs font-black uppercase tracking-wider transition shadow-lg shadow-cyan-400/30"
             >
-              <MessageSquare size={18} />
+              <MessageSquare size={16} />
               Chat en direct
             </Link>
 
             <Link
               href="/recherche"
-              className="flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-medium text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+              className="flex h-10 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 text-xs font-bold text-white transition hover:bg-white/20"
             >
-              <Search size={18} />
+              <Search size={16} />
               Rechercher
             </Link>
 
             <button
-              className="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100"
+              className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20"
               aria-label="Notifications"
             >
-              <Bell size={19} />
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-sky-500" />
+              <Bell size={18} />
+              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
             </button>
 
-            <div className="ml-2 h-8 w-px bg-slate-200" />
+            <div className="h-6 w-px bg-white/20 mx-1" />
 
             <Link
               href="/compte"
-              className="ml-2 flex items-center gap-3 rounded-2xl p-1.5 px-2 hover:bg-slate-100 transition"
-              title="Gérer mon compte"
+              className="flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 p-1 px-3 hover:bg-white/20 transition"
+              title="Mon compte"
             >
               <img
                 src={data.identity.avatarUrl}
                 alt={data.identity.anonymousName}
-                className="h-9 w-9 rounded-full"
+                className="h-8 w-8 rounded-full border border-cyan-400/40"
               />
-
               <div className="hidden text-left lg:block">
-                <p className="text-xs font-bold text-slate-900">
+                <p className="text-xs font-bold text-white leading-tight">
                   {data.identity.anonymousName}
                 </p>
-                <p className="text-[11px] text-sky-600 font-semibold">
+                <p className="text-[10px] text-cyan-300 font-semibold">
                   Mon compte →
                 </p>
               </div>
@@ -247,7 +245,7 @@ export default function HomePage() {
 
             <button
               onClick={handleLogout}
-              className="ml-1 rounded-xl p-2 text-slate-400 transition hover:bg-slate-100 hover:text-red-500"
+              className="rounded-full p-2 text-slate-300 hover:bg-white/20 hover:text-red-400 transition"
               aria-label="Se déconnecter"
               title="Se déconnecter"
             >
@@ -257,45 +255,58 @@ export default function HomePage() {
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-600 md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white md:hidden"
             aria-label="Menu"
           >
-            {menuOpen ? <X size={21} /> : <Menu size={21} />}
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
         {menuOpen && (
-          <div className="border-t border-slate-100 bg-white px-4 py-4 md:hidden">
-            <div className="mb-4 flex items-center gap-3 rounded-2xl bg-slate-50 p-3">
+          <div className="border-t border-white/10 bg-slate-950/95 px-4 py-4 backdrop-blur-xl md:hidden">
+            <Link
+              href="/compte"
+              onClick={() => setMenuOpen(false)}
+              className="mb-4 flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 p-3"
+            >
               <img
                 src={data.identity.avatarUrl}
                 alt={data.identity.anonymousName}
-                className="h-11 w-11 rounded-full"
+                className="h-11 w-11 rounded-full border border-cyan-400"
               />
               <div>
-                <p className="text-sm font-bold text-slate-900">
+                <p className="text-sm font-bold text-white">
                   {data.identity.anonymousName}
                 </p>
-                <p className="text-xs text-slate-400">
-                  Identité anonyme
+                <p className="text-xs text-cyan-300 font-semibold">
+                  Gérer mon compte →
                 </p>
               </div>
-            </div>
+            </Link>
 
-            <div className="space-y-1">
+            <div className="space-y-2">
               <Link
                 href="/accueil"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-700"
+                className="flex items-center gap-3 rounded-2xl bg-white/15 px-4 py-3 text-sm font-bold text-white"
               >
                 <Home size={18} />
                 Accueil
               </Link>
 
               <Link
+                href="/chat"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-3 rounded-2xl bg-cyan-400 px-4 py-3 text-sm font-black text-slate-950 uppercase"
+              >
+                <MessageSquare size={18} />
+                Chat en direct
+              </Link>
+
+              <Link
                 href="/recherche"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-700"
+                className="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white"
               >
                 <Search size={18} />
                 Rechercher
@@ -303,7 +314,7 @@ export default function HomePage() {
 
               <button
                 onClick={handleLogout}
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold text-red-500"
+                className="flex w-full items-center gap-3 rounded-2xl bg-red-500/20 px-4 py-3 text-left text-sm font-bold text-red-300"
               >
                 <LogOut size={18} />
                 Se déconnecter
@@ -313,16 +324,16 @@ export default function HomePage() {
         )}
       </header>
 
-      {/* CONTENT */}
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      {/* CONTENT GRID */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-[250px_minmax(0,1fr)_260px]">
-          {/* SIDEBAR */}
+          {/* LEFT SIDEBAR */}
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-4">
-              <div className="rounded-3xl border border-slate-200 bg-white p-4">
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-4 backdrop-blur-xl shadow-xl space-y-2">
                 <Link
                   href="/accueil"
-                  className="flex items-center gap-3 rounded-2xl bg-sky-50 px-4 py-3 text-sm font-bold text-sky-700"
+                  className="flex items-center gap-3 rounded-2xl bg-cyan-400/20 border border-cyan-400/40 px-4 py-3 text-sm font-black text-cyan-300"
                 >
                   <Home size={18} />
                   Accueil
@@ -330,7 +341,7 @@ export default function HomePage() {
 
                 <Link
                   href="/chat"
-                  className="mt-1 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-sky-700 bg-sky-50 transition hover:bg-sky-100"
+                  className="flex items-center gap-3 rounded-2xl bg-cyan-400 hover:bg-cyan-300 px-4 py-3 text-sm font-black text-slate-950 uppercase tracking-wider transition shadow-lg shadow-cyan-400/30"
                 >
                   <MessageSquare size={18} />
                   Chat en direct
@@ -338,37 +349,29 @@ export default function HomePage() {
 
                 <Link
                   href="/recherche"
-                  className="mt-1 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                  className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
                 >
                   <Search size={18} />
                   Rechercher
                 </Link>
-
-                <button className="mt-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
-                  <Bell size={18} />
-                  Notifications
-                </button>
               </div>
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-4">
-                <div className="mb-3 flex items-center justify-between">
-                  <h2 className="text-sm font-bold text-slate-900">
-                    Catégories
-                  </h2>
-                </div>
+              {/* CATEGORIES CARD */}
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-4 backdrop-blur-xl shadow-xl">
+                <h2 className="mb-3 text-xs font-black uppercase tracking-widest text-cyan-300">
+                  Catégories
+                </h2>
 
                 <div className="space-y-1">
                   {data.categories.map((category) => (
                     <button
                       key={category.id}
-                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-slate-200 transition hover:bg-white/15 hover:text-white"
                     >
                       <span className="text-base">
                         {getCategoryIcon(category.icon)}
                       </span>
-                      <span className="truncate">
-                        {category.name}
-                      </span>
+                      <span className="truncate">{category.name}</span>
                     </button>
                   ))}
                 </div>
@@ -376,65 +379,57 @@ export default function HomePage() {
             </div>
           </aside>
 
-          {/* MAIN */}
-          <section className="min-w-0">
-            {/* WELCOME */}
-            <div className="overflow-hidden rounded-3xl bg-slate-950 p-6 text-white shadow-lg sm:p-8">
-              <div className="relative">
-                <div className="absolute -right-20 -top-24 h-48 w-48 rounded-full bg-sky-500/20 blur-3xl" />
+          {/* MAIN FEED SECTION */}
+          <section className="min-w-0 space-y-6">
+            {/* HERO WELCOME BANNER */}
+            <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-r from-purple-900/80 via-indigo-900/80 to-blue-900/80 p-6 text-white shadow-2xl backdrop-blur-xl sm:p-8">
+              <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-400/30 blur-2xl" />
 
-                <div className="relative">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={data.identity.avatarUrl}
-                      alt={data.identity.anonymousName}
-                      className="h-12 w-12 rounded-full border-2 border-white/20"
-                    />
-
-                    <div>
-                      <p className="text-xs font-medium text-slate-400">
-                        Bienvenue
-                      </p>
-                      <p className="font-bold">
-                        {data.identity.anonymousName}
-                      </p>
-                    </div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={data.identity.avatarUrl}
+                    alt={data.identity.anonymousName}
+                    className="h-12 w-12 rounded-full border-2 border-cyan-400 shadow-md"
+                  />
+                  <div>
+                    <p className="text-xs font-semibold text-cyan-200">
+                      Bienvenue
+                    </p>
+                    <p className="font-black text-white text-base">
+                      {data.identity.anonymousName}
+                    </p>
                   </div>
-
-                  <h1 className="mt-6 max-w-xl text-2xl font-black tracking-tight sm:text-3xl">
-                    Quel problème veux-tu partager aujourd'hui ?
-                  </h1>
-
-                  <p className="mt-2 max-w-xl text-sm leading-6 text-slate-400">
-                    Parle librement. La communauté est là pour
-                    t'écouter, échanger et chercher des solutions
-                    avec toi.
-                  </p>
-
-                  <Link
-                    href="/publier"
-                    className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-sky-50"
-                  >
-                    <Plus size={18} />
-                    Partager un problème
-                  </Link>
                 </div>
+
+                <h1 className="mt-5 max-w-xl text-2xl font-black tracking-tight sm:text-3xl drop-shadow-md">
+                  Quel problème veux-tu partager aujourd'hui ?
+                </h1>
+
+                <p className="mt-2 max-w-xl text-xs sm:text-sm leading-relaxed text-cyan-100/90">
+                  Exprime-toi librement. La communauté est là pour t'écouter, échanger et trouver la meilleure voie avec toi.
+                </p>
+
+                <Link
+                  href="/publier"
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-cyan-400 hover:bg-cyan-300 px-6 py-3.5 text-xs font-black uppercase tracking-wider text-slate-950 shadow-lg shadow-cyan-400/40 transition transform active:scale-95"
+                >
+                  <Plus size={18} />
+                  Partager un problème
+                </Link>
               </div>
             </div>
 
             {/* MOBILE CATEGORIES */}
-            <div className="mt-6 lg:hidden">
-              <div className="mb-3 flex items-center justify-between">
-                <h2 className="text-sm font-bold text-slate-900">
-                  Catégories
-                </h2>
-              </div>
-
+            <div className="lg:hidden">
+              <h2 className="mb-2 text-xs font-black uppercase tracking-widest text-cyan-300">
+                Catégories
+              </h2>
               <div className="flex gap-2 overflow-x-auto pb-2">
                 {data.categories.map((category) => (
                   <button
                     key={category.id}
-                    className="flex shrink-0 items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-600"
+                    className="flex shrink-0 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-white"
                   >
                     <span>{getCategoryIcon(category.icon)}</span>
                     {category.name}
@@ -443,44 +438,38 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* POSTS */}
-            <div className="mt-6">
+            {/* POSTS LIST */}
+            <div>
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-sky-500">
+                  <p className="text-xs font-black uppercase tracking-widest text-cyan-400">
                     Communauté
                   </p>
-                  <h2 className="mt-1 text-xl font-black text-slate-950">
+                  <h2 className="text-xl font-black text-white">
                     Problèmes récents
                   </h2>
                 </div>
 
-                <button className="flex items-center gap-1 text-sm font-semibold text-sky-600">
+                <button className="flex items-center gap-1 text-xs font-bold text-cyan-300 hover:text-white transition">
                   Voir tout
                   <ChevronRight size={16} />
                 </button>
               </div>
 
               {data.posts.length === 0 ? (
-                <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-50 text-sky-500">
-                    <MessageCircle size={24} />
-                  </div>
-
-                  <h3 className="mt-4 font-bold text-slate-900">
+                <div className="rounded-3xl border border-dashed border-white/20 bg-white/10 p-10 text-center backdrop-blur-xl">
+                  <MessageCircle size={32} className="mx-auto text-cyan-400 mb-3" />
+                  <h3 className="font-bold text-white text-base">
                     Aucun problème pour le moment
                   </h3>
-
-                  <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500">
-                    Sois le premier à partager quelque chose avec
-                    la communauté.
+                  <p className="mx-auto mt-2 max-w-sm text-xs text-cyan-100/80">
+                    Sois le premier à partager quelque chose avec la communauté.
                   </p>
-
                   <Link
                     href="/publier"
-                    className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-bold text-white"
+                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-cyan-400 px-5 py-3 text-xs font-black uppercase text-slate-950"
                   >
-                    <Plus size={17} />
+                    <Plus size={16} />
                     Publier un problème
                   </Link>
                 </div>
@@ -489,28 +478,26 @@ export default function HomePage() {
                   {data.posts.map((post) => (
                     <article
                       key={post.id}
-                      className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md sm:p-6"
+                      className="rounded-3xl border border-white/20 bg-white/10 p-5 sm:p-6 shadow-xl backdrop-blur-xl transition hover:border-cyan-400/50 hover:bg-white/15"
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex min-w-0 items-center gap-3">
                           <img
                             src={post.author.avatarUrl}
                             alt={post.author.anonymousName}
-                            className="h-10 w-10 shrink-0 rounded-full"
+                            className="h-10 w-10 shrink-0 rounded-full border border-cyan-400/30"
                           />
-
                           <div className="min-w-0">
-                            <p className="truncate text-sm font-bold text-slate-900">
+                            <p className="truncate text-xs font-bold text-white">
                               {post.author.anonymousName}
                             </p>
-
-                            <p className="text-xs text-slate-400">
+                            <p className="text-[10px] text-cyan-200/70">
                               {formatDate(post.createdAt)}
                             </p>
                           </div>
                         </div>
 
-                        <span className="shrink-0 rounded-xl bg-sky-50 px-3 py-1.5 text-xs font-bold text-sky-700">
+                        <span className="shrink-0 rounded-full bg-cyan-400/20 border border-cyan-400/30 px-3 py-1 text-xs font-bold text-cyan-300">
                           {getCategoryIcon(post.category.icon)}{" "}
                           {post.category.name}
                         </span>
@@ -518,38 +505,38 @@ export default function HomePage() {
 
                       <Link
                         href={`/probleme/${post.id}`}
-                        className="mt-4 block"
+                        className="mt-4 block group"
                       >
-                        <h3 className="text-lg font-black leading-7 text-slate-950 transition hover:text-sky-600">
+                        <h3 className="text-lg font-black leading-snug text-white transition group-hover:text-cyan-300">
                           {post.title}
                         </h3>
 
-                        <p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-500">
+                        <p className="mt-2 line-clamp-3 text-xs sm:text-sm leading-relaxed text-cyan-100/80">
                           {post.content}
                         </p>
                       </Link>
 
-                      <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
-                        <div className="flex items-center gap-4 text-xs font-medium text-slate-400">
+                      <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
+                        <div className="flex items-center gap-4 text-xs font-semibold text-cyan-200/80">
                           <span className="flex items-center gap-1.5">
-                            <MessageCircle size={15} />
+                            <MessageCircle size={15} className="text-cyan-400" />
                             {post.commentsCount}
                           </span>
 
                           <span className="flex items-center gap-1.5">
-                            <Heart size={15} />
+                            <Heart size={15} className="text-rose-400" />
                             {post.likesCount}
                           </span>
 
                           <span className="flex items-center gap-1.5">
-                            <Eye size={15} />
+                            <Eye size={15} className="text-cyan-300" />
                             {post.viewsCount}
                           </span>
                         </div>
 
                         <Link
                           href={`/probleme/${post.id}`}
-                          className="text-xs font-bold text-sky-600 hover:text-sky-700"
+                          className="text-xs font-bold text-cyan-300 hover:text-white transition"
                         >
                           Voir la discussion →
                         </Link>
@@ -564,68 +551,38 @@ export default function HomePage() {
           {/* RIGHT SIDEBAR */}
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-4">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5">
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-5 backdrop-blur-xl shadow-xl space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 text-sky-600">
-                    <ShieldCheck size={21} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-400/20 text-cyan-300 border border-cyan-400/30">
+                    <ShieldCheck size={20} />
                   </div>
-
                   <div>
-                    <h2 className="text-sm font-bold text-slate-900">
-                      Ton anonymat
+                    <h2 className="text-xs font-black uppercase text-white">
+                      Anonymat garanti
                     </h2>
-                    <p className="text-xs text-slate-400">
-                      Toujours protégé
-                    </p>
+                    <p className="text-[10px] text-cyan-200">Toujours protégé</p>
                   </div>
                 </div>
-
-                <p className="mt-4 text-xs leading-5 text-slate-500">
-                  Les autres membres voient uniquement ton identité
-                  anonyme. Ton email et ton compte restent privés.
+                <p className="text-xs leading-relaxed text-cyan-100/80">
+                  Les autres membres voient uniquement ton pseudonyme anonyme attribué. Tes données personnelles sont privées.
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5">
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-5 backdrop-blur-xl shadow-xl space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-50 text-amber-500">
-                    <Sparkles size={20} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                    <Sparkles size={19} />
                   </div>
-
                   <div>
-                    <h2 className="text-sm font-bold text-slate-900">
+                    <h2 className="text-xs font-black uppercase text-white">
                       Bienveillance
                     </h2>
-                    <p className="text-xs text-slate-400">
-                      Notre priorité
-                    </p>
+                    <p className="text-[10px] text-cyan-200">Notre priorité</p>
                   </div>
                 </div>
-
-                <p className="mt-4 text-xs leading-5 text-slate-500">
-                  Échange avec respect. Chaque problème mérite
-                  d'être écouté sans jugement.
+                <p className="text-xs leading-relaxed text-cyan-100/80">
+                  Échange avec respect et empathie. Chaque problème mérite d'être écouté sans jugement.
                 </p>
-              </div>
-
-              <div className="rounded-3xl bg-sky-500 p-5 text-white">
-                <Plus size={20} />
-
-                <h2 className="mt-4 text-lg font-black">
-                  Un problème ?
-                </h2>
-
-                <p className="mt-1 text-xs leading-5 text-sky-100">
-                  Partage-le avec la communauté et cherchons
-                  ensemble une solution.
-                </p>
-
-                <Link
-                  href="/publier"
-                  className="mt-4 inline-flex rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-sky-600"
-                >
-                  Publier maintenant
-                </Link>
               </div>
             </div>
           </aside>
@@ -633,11 +590,11 @@ export default function HomePage() {
       </div>
 
       {/* MOBILE BOTTOM NAV */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 bg-white/95 px-4 py-2 backdrop-blur lg:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/15 bg-slate-950/90 px-4 py-2 backdrop-blur-xl lg:hidden">
         <div className="mx-auto flex max-w-md items-center justify-around">
           <Link
             href="/accueil"
-            className="flex flex-col items-center gap-1 px-4 py-1.5 text-sky-600"
+            className="flex flex-col items-center gap-1 px-3 py-1.5 text-cyan-400"
           >
             <Home size={20} />
             <span className="text-[10px] font-bold">Accueil</span>
@@ -645,44 +602,35 @@ export default function HomePage() {
 
           <Link
             href="/chat"
-            className="flex flex-col items-center gap-1 px-4 py-1.5 text-slate-400 hover:text-sky-600"
+            className="flex flex-col items-center gap-1 px-3 py-1.5 text-slate-300 hover:text-cyan-300"
           >
             <MessageSquare size={20} />
             <span className="text-[10px] font-bold">Chat</span>
           </Link>
 
           <Link
+            href="/publier"
+            className="flex h-12 w-12 -translate-y-3 items-center justify-center rounded-full bg-cyan-400 text-slate-950 shadow-lg shadow-cyan-400/50"
+            aria-label="Publier"
+          >
+            <Plus size={24} />
+          </Link>
+
+          <Link
             href="/recherche"
-            className="flex flex-col items-center gap-1 px-4 py-1.5 text-slate-400"
+            className="flex flex-col items-center gap-1 px-3 py-1.5 text-slate-300"
           >
             <Search size={20} />
             <span className="text-[10px] font-bold">Recherche</span>
           </Link>
 
           <Link
-            href="/publier"
-            className="flex h-12 w-12 -translate-y-3 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-lg"
-            aria-label="Publier"
+            href="/compte"
+            className="flex flex-col items-center gap-1 px-3 py-1.5 text-slate-300"
           >
-            <Plus size={23} />
+            <ShieldCheck size={20} />
+            <span className="text-[10px] font-bold">Compte</span>
           </Link>
-
-          <button
-            className="flex flex-col items-center gap-1 px-4 py-1.5 text-slate-400"
-            aria-label="Notifications"
-          >
-            <Bell size={20} />
-            <span className="text-[10px] font-bold">Alertes</span>
-          </button>
-
-          <button
-            onClick={handleLogout}
-            className="flex flex-col items-center gap-1 px-4 py-1.5 text-slate-400"
-            aria-label="Se déconnecter"
-          >
-            <LogOut size={20} />
-            <span className="text-[10px] font-bold">Sortir</span>
-          </button>
         </div>
       </nav>
     </main>

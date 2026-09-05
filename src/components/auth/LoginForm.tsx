@@ -38,57 +38,45 @@ export default function LoginForm() {
 
       window.location.href = "/accueil";
     } catch {
-      setError(
-        "Impossible de contacter le serveur. Vérifie ta connexion."
-      );
+      setError("Impossible de contacter le serveur. Vérifie ta connexion.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="w-full max-w-md">
-      <div className="mb-8 text-center">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-2xl font-black tracking-tight"
-        >
-          <span className="text-sky-500">DIS</span>
-          <span>cutons-En</span>
-        </Link>
-
-        <h1 className="mt-8 text-3xl font-bold tracking-tight text-slate-950">
-          Bon retour parmi nous
-        </h1>
-
-        <p className="mt-2 text-sm leading-6 text-slate-500">
-          Connecte-toi pour retrouver la communauté et poursuivre
-          les discussions.
-        </p>
-      </div>
-
-      <form
-        onSubmit={handleSubmit}
-        className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 sm:p-8"
-      >
-        {error && (
-          <div
-            role="alert"
-            className="mb-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
+    <div className="relative w-full max-w-md mx-auto">
+      {/* GLASS CARD CONTAINER */}
+      <div className="rounded-3xl border border-white/20 bg-white/15 p-7 sm:p-9 shadow-2xl backdrop-blur-xl text-white">
+        <div className="mb-6 text-center">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-2xl font-black tracking-tight"
           >
-            {error}
-          </div>
-        )}
+            <span className="text-cyan-400">DIS</span>
+            <span>cutons-En</span>
+          </Link>
 
-        <div className="space-y-5">
-          <div>
-            <label
-              htmlFor="login-email"
-              className="mb-2 block text-sm font-semibold text-slate-700"
+          <h1 className="mt-6 text-3xl font-black tracking-widest text-white uppercase drop-shadow-md">
+            CONNEXION
+          </h1>
+
+          <p className="mt-2 text-xs font-medium leading-relaxed text-cyan-100/80">
+            Connecte-toi pour retrouver ton espace et la communauté.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div
+              role="alert"
+              className="rounded-2xl border border-red-400/40 bg-red-500/20 px-4 py-2.5 text-xs font-bold text-red-200 text-center"
             >
-              Adresse email
-            </label>
+              {error}
+            </div>
+          )}
 
+          <div>
             <input
               id="login-email"
               type="email"
@@ -96,79 +84,61 @@ export default function LoginForm() {
               required
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              placeholder="ton@email.com"
-              className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
+              placeholder="Adresse Email"
+              className="h-12 w-full rounded-full bg-white px-5 text-sm font-medium text-slate-800 placeholder-slate-400 outline-none transition shadow-inner focus:ring-4 focus:ring-cyan-300"
             />
           </div>
 
-          <div>
-            <label
-              htmlFor="login-password"
-              className="mb-2 block text-sm font-semibold text-slate-700"
+          <div className="relative">
+            <input
+              id="login-password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="Mot de passe"
+              className="h-12 w-full rounded-full bg-white px-5 pr-12 text-sm font-medium text-slate-800 placeholder-slate-400 outline-none transition shadow-inner focus:ring-4 focus:ring-cyan-300"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
             >
-              Mot de passe
-            </label>
-
-            <div className="relative">
-              <input
-                id="login-password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="Ton mot de passe"
-                className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 pr-12 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
-              />
-
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={
-                  showPassword
-                    ? "Masquer le mot de passe"
-                    : "Afficher le mot de passe"
-                }
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 hover:text-slate-700"
-              >
-                {showPassword ? (
-                  <EyeOff size={18} />
-                ) : (
-                  <Eye size={18} />
-                )}
-              </button>
-            </div>
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </div>
-        </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 text-sm font-bold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {loading ? (
-            <>
-              <Loader2 size={18} className="animate-spin" />
-              Connexion...
-            </>
-          ) : (
-            <>
-              Se connecter
-              <ArrowRight size={18} />
-            </>
-          )}
-        </button>
+          {/* LOGIN SUBMIT BUTTON */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="mt-4 flex h-13 w-full items-center justify-center gap-2 rounded-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black text-sm uppercase tracking-wider transition transform active:scale-95 shadow-lg shadow-cyan-400/40 disabled:opacity-60"
+          >
+            {loading ? (
+              <>
+                <Loader2 size={18} className="animate-spin" />
+                CONNEXION EN COURS...
+              </>
+            ) : (
+              <>
+                SE CONNECTER
+                <ArrowRight size={18} />
+              </>
+            )}
+          </button>
+        </form>
 
-        <p className="mt-6 text-center text-sm text-slate-500">
+        <p className="mt-6 text-center text-xs font-medium text-cyan-100/90">
           Pas encore de compte ?{" "}
           <Link
             href="/inscription"
-            className="font-bold text-sky-600 hover:text-sky-700"
+            className="font-extrabold text-cyan-300 hover:text-white underline tracking-wide"
           >
-            Créer un compte
+            CRÉER UN COMPTE
           </Link>
         </p>
-      </form>
+      </div>
     </div>
   );
 }

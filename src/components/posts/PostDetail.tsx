@@ -226,35 +226,31 @@ export default function PostDetail({ postId }: { postId: string }) {
     }
   }
 
-  // Find highest voted comment to highlight as best advice
   const maxLikes = Math.max(0, ...comments.map((c) => c.likesCount));
   const topCommentId = maxLikes > 0 ? comments.find((c) => c.likesCount === maxLikes)?.id : null;
 
   if (loading) {
     return (
       <div className="mx-auto max-w-3xl space-y-6">
-        <div className="h-10 w-36 animate-pulse rounded-xl bg-slate-200" />
-        <div className="h-64 animate-pulse rounded-3xl bg-white p-6" />
-        <div className="h-40 animate-pulse rounded-3xl bg-white p-6" />
+        <div className="h-10 w-36 animate-pulse rounded-full bg-white/10" />
+        <div className="h-64 animate-pulse rounded-3xl bg-white/10 p-6" />
       </div>
     );
   }
 
   if (error || !post) {
     return (
-      <div className="mx-auto max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-500 font-bold text-xl">
+      <div className="mx-auto max-w-md rounded-3xl border border-white/20 bg-white/10 p-8 text-center backdrop-blur-xl shadow-2xl text-white">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/20 text-red-300 font-bold text-xl">
           !
         </div>
-        <h1 className="mt-4 text-xl font-bold text-slate-950">
+        <h1 className="mt-4 text-xl font-bold text-white">
           Discussion introuvable
         </h1>
-        <p className="mt-2 text-sm text-slate-500">
-          {error || "Ce problème n'existe pas ou a été supprimé."}
-        </p>
+        <p className="mt-2 text-xs text-cyan-100/80">{error}</p>
         <Link
           href="/accueil"
-          className="mt-6 inline-flex rounded-2xl bg-slate-950 px-5 py-3 text-sm font-bold text-white"
+          className="mt-6 inline-flex rounded-full bg-cyan-400 px-6 py-3 text-xs font-black uppercase text-slate-950 shadow-lg shadow-cyan-400/40"
         >
           Retour à l'accueil
         </Link>
@@ -263,75 +259,74 @@ export default function PostDetail({ postId }: { postId: string }) {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 pb-20">
+    <div className="mx-auto max-w-3xl space-y-6 pb-20 text-white">
       {/* NAVIGATION HEADER */}
       <div className="flex items-center justify-between">
         <Link
           href="/accueil"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-900"
+          className="inline-flex items-center gap-2 text-xs font-bold text-cyan-200 transition hover:text-white"
         >
           <ArrowLeft size={16} />
           Retour aux discussions
         </Link>
 
-        <span className="shrink-0 rounded-xl bg-sky-50 px-3 py-1.5 text-xs font-bold text-sky-700">
+        <span className="shrink-0 rounded-full bg-cyan-400/20 border border-cyan-400/40 px-3.5 py-1 text-xs font-bold text-cyan-300">
           {post.category.icon || "💬"} {post.category.name}
         </span>
       </div>
 
       {/* POST CARD */}
-      <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      <article className="rounded-3xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-xl sm:p-8">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <img
               src={post.author.avatarUrl}
               alt={post.author.anonymousName}
-              className="h-11 w-11 rounded-full border border-slate-100"
+              className="h-11 w-11 rounded-full border border-cyan-400/30"
             />
             <div>
-              <p className="text-sm font-bold text-slate-900">
+              <p className="text-sm font-bold text-white">
                 {post.author.anonymousName}
               </p>
-              <p className="text-xs text-slate-400">
+              <p className="text-[11px] text-cyan-200/70">
                 Auteur · {formatDate(post.createdAt)}
               </p>
             </div>
           </div>
 
-          <span className="flex items-center gap-1 text-xs font-medium text-slate-400 bg-slate-50 px-2.5 py-1 rounded-lg">
-            <ShieldCheck size={14} className="text-sky-500" />
+          <span className="flex items-center gap-1 text-xs font-semibold text-cyan-300 bg-cyan-400/10 px-3 py-1 rounded-full border border-cyan-400/30">
+            <ShieldCheck size={14} />
             Anonyme
           </span>
         </div>
 
-        <h1 className="mt-6 text-2xl font-black leading-snug text-slate-950 sm:text-3xl">
+        <h1 className="mt-6 text-2xl font-black leading-snug text-white sm:text-3xl drop-shadow-md">
           {post.title}
         </h1>
 
-        <div className="mt-4 whitespace-pre-wrap text-base leading-relaxed text-slate-700">
+        <div className="mt-4 whitespace-pre-wrap text-sm sm:text-base leading-relaxed text-cyan-50">
           {post.content}
         </div>
 
-        <div className="mt-8 flex items-center justify-between border-t border-slate-100 pt-5 text-sm">
-          <div className="flex items-center gap-6 text-slate-400">
-            <span className="flex items-center gap-2 font-medium">
-              <MessageCircle size={18} />
+        <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-5 text-sm">
+          <div className="flex items-center gap-6 text-cyan-200/80">
+            <span className="flex items-center gap-2 font-semibold">
+              <MessageCircle size={18} className="text-cyan-400" />
               {post.commentsCount} réponses
             </span>
 
             <button
               onClick={toggleLikePost}
-              title={likedPost ? "Retirer votre j'aime" : "J'aime"}
-              className={`flex items-center gap-2 font-semibold transition ${
-                likedPost ? "text-rose-500 font-bold" : "text-slate-400 hover:text-rose-500"
+              className={`flex items-center gap-2 font-bold transition ${
+                likedPost ? "text-rose-400" : "text-cyan-200/80 hover:text-rose-400"
               }`}
             >
-              <Heart size={18} className={likedPost ? "fill-rose-500 text-rose-500" : ""} />
+              <Heart size={18} className={likedPost ? "fill-rose-400 text-rose-400" : ""} />
               {postLikesCount}
             </button>
 
-            <span className="flex items-center gap-2 font-medium">
-              <Eye size={18} />
+            <span className="flex items-center gap-2 font-semibold">
+              <Eye size={18} className="text-cyan-300" />
               {post.viewsCount} vues
             </span>
           </div>
@@ -341,23 +336,23 @@ export default function PostDetail({ postId }: { postId: string }) {
       {/* COMMENTS SECTION */}
       <section className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-black text-slate-950">
+          <h2 className="text-xl font-black text-white">
             Pistes & Réponses ({comments.length})
           </h2>
-          <p className="text-xs text-slate-400">
-            1 vote par membre pour faire émerger la meilleure voix 💡
+          <p className="text-xs text-cyan-200">
+            Votez pour guider vers la meilleure solution 💡
           </p>
         </div>
 
         {/* ADD COMMENT FORM */}
         <form
           onSubmit={handleCommentSubmit}
-          className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm space-y-4"
+          className="rounded-3xl border border-white/20 bg-white/10 p-5 shadow-xl backdrop-blur-xl space-y-4"
         >
           {commentError && (
             <div
               role="alert"
-              className="rounded-2xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-semibold text-red-700"
+              className="rounded-2xl border border-red-400/40 bg-red-500/20 px-4 py-2.5 text-xs font-bold text-red-200"
             >
               {commentError}
             </div>
@@ -368,10 +363,10 @@ export default function PostDetail({ postId }: { postId: string }) {
               <img
                 src={currentUserIdentity.avatarUrl}
                 alt={currentUserIdentity.anonymousName}
-                className="h-9 w-9 rounded-full mt-1 shrink-0"
+                className="h-9 w-9 rounded-full mt-1 shrink-0 border border-cyan-400/40"
               />
             ) : (
-              <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-400 mt-1 shrink-0">
+              <div className="h-9 w-9 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold text-white mt-1 shrink-0">
                 ?
               </div>
             )}
@@ -383,21 +378,21 @@ export default function PostDetail({ postId }: { postId: string }) {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Apporte ton aide, propose ta solution ou partage ton expérience..."
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
+                className="w-full rounded-2xl bg-white px-4 py-3 text-sm font-medium text-slate-800 placeholder-slate-400 outline-none transition focus:ring-4 focus:ring-cyan-300"
               />
             </div>
           </div>
 
           <div className="flex items-center justify-between pt-1">
-            <p className="text-xs text-slate-400 flex items-center gap-1">
-              <Sparkles size={14} className="text-amber-500" />
+            <p className="text-xs text-cyan-200 flex items-center gap-1">
+              <Sparkles size={14} className="text-amber-300" />
               Réponse publiée sous votre profil anonyme.
             </p>
 
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 rounded-2xl bg-slate-950 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-slate-800 disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-full bg-cyan-400 hover:bg-cyan-300 px-6 py-2.5 text-xs font-black uppercase tracking-wider text-slate-950 transition shadow-lg shadow-cyan-400/30 disabled:opacity-60"
             >
               {submitting ? (
                 <>
@@ -407,7 +402,7 @@ export default function PostDetail({ postId }: { postId: string }) {
               ) : (
                 <>
                   Partager cette piste
-                  <Send size={15} />
+                  <Send size={14} />
                 </>
               )}
             </button>
@@ -416,12 +411,12 @@ export default function PostDetail({ postId }: { postId: string }) {
 
         {/* COMMENTS LIST */}
         {comments.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-slate-200 bg-white p-8 text-center">
-            <MessageCircle size={28} className="mx-auto text-slate-300 mb-2" />
-            <p className="font-bold text-slate-700 text-sm">
+          <div className="rounded-3xl border border-dashed border-white/20 bg-white/10 p-8 text-center backdrop-blur-xl">
+            <MessageCircle size={28} className="mx-auto text-cyan-300 mb-2" />
+            <p className="font-bold text-white text-sm">
               Aucune réponse pour l'instant
             </p>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-cyan-200 mt-1">
               Sois le premier membre à proposer une solution ou un conseil éclairé !
             </p>
           </div>
@@ -434,10 +429,10 @@ export default function PostDetail({ postId }: { postId: string }) {
               return (
                 <div
                   key={comment.id}
-                  className={`rounded-3xl border p-5 shadow-sm space-y-3 transition ${
+                  className={`rounded-3xl border p-5 shadow-xl backdrop-blur-xl space-y-3 transition ${
                     isTop
-                      ? "border-emerald-200 bg-emerald-50/40 ring-1 ring-emerald-300/50"
-                      : "border-slate-200 bg-white"
+                      ? "border-emerald-400/60 bg-emerald-950/30 ring-1 ring-emerald-400/40"
+                      : "border-white/20 bg-white/10"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -445,48 +440,44 @@ export default function PostDetail({ postId }: { postId: string }) {
                       <img
                         src={comment.author.avatarUrl}
                         alt={comment.author.anonymousName}
-                        className="h-9 w-9 rounded-full"
+                        className="h-9 w-9 rounded-full border border-cyan-400/30"
                       />
                       <div>
-                        <p className="text-sm font-bold text-slate-900">
+                        <p className="text-xs font-bold text-white">
                           {comment.author.anonymousName}
                         </p>
-                        <p className="text-[11px] text-slate-400">
+                        <p className="text-[10px] text-cyan-200/70">
                           {formatDate(comment.createdAt)}
                         </p>
                       </div>
                     </div>
 
                     {isTop && (
-                      <span className="inline-flex items-center gap-1 rounded-xl bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
-                        <Award size={14} className="text-emerald-600" />
+                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/20 border border-emerald-400/40 px-3 py-1 text-xs font-bold text-emerald-300">
+                        <Award size={14} />
                         Meilleure piste conseillée
                       </span>
                     )}
                   </div>
 
-                  <p className="text-sm leading-relaxed text-slate-700 pl-12 whitespace-pre-wrap">
+                  <p className="text-xs sm:text-sm leading-relaxed text-cyan-50 pl-12 whitespace-pre-wrap">
                     {comment.content}
                   </p>
 
-                  <div className="flex items-center justify-between pl-12 pt-2 border-t border-slate-100">
+                  <div className="flex items-center justify-between pl-12 pt-2 border-t border-white/10">
                     <button
                       onClick={() => handleLikeComment(comment.id)}
-                      title={isLikedByMe ? "Retirer votre soutien" : "Soutenir cette piste"}
-                      className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition ${
+                      className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-bold transition ${
                         isLikedByMe
-                          ? "bg-sky-500 text-white shadow-sm"
-                          : "bg-slate-100 text-slate-600 hover:bg-sky-50 hover:text-sky-600"
+                          ? "bg-cyan-400 text-slate-950 shadow-md shadow-cyan-400/30"
+                          : "bg-white/10 text-cyan-200 hover:bg-white/20 hover:text-white"
                       }`}
                     >
-                      <ThumbsUp
-                        size={14}
-                        className={isLikedByMe ? "fill-white text-white" : ""}
-                      />
+                      <ThumbsUp size={13} className={isLikedByMe ? "fill-slate-950" : ""} />
                       <span>{isLikedByMe ? "Soutenu" : "Utile"} ({comment.likesCount})</span>
                     </button>
 
-                    <span className="text-[11px] text-slate-400 font-medium">
+                    <span className="text-[10px] text-cyan-200/70 font-medium">
                       {comment.likesCount > 0
                         ? `Soutenu par ${comment.likesCount} membre${
                             comment.likesCount > 1 ? "s" : ""
