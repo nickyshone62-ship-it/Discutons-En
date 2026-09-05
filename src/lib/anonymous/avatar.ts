@@ -10,22 +10,58 @@ export type SnapchatAvatarPreset = {
   name: string;
   seed: string;
   bg: string;
+  category: "Classic" | "Modern" | "Artistic" | "Cyber";
 };
 
-export const SNAPCHAT_AVATARS: SnapchatAvatarPreset[] = [
-  { id: "snap-1", name: "Bitmoji Casual", seed: "avataaars:snap-alex", bg: "from-cyan-400 to-sky-500" },
-  { id: "snap-2", name: "Bitmoji Cool", seed: "avataaars:snap-sam", bg: "from-rose-500 to-pink-500" },
-  { id: "snap-3", name: "Bitmoji Chill", seed: "micah:snap-jordan", bg: "from-purple-500 to-indigo-500" },
-  { id: "snap-4", name: "Bitmoji Chic", seed: "lorelei:snap-taylor", bg: "from-amber-400 to-yellow-500" },
-  { id: "snap-5", name: "Bitmoji Gamer", seed: "avataaars:snap-morgan", bg: "from-emerald-400 to-teal-500" },
-  { id: "snap-6", name: "Bitmoji Artist", seed: "micah:snap-riley", bg: "from-pink-500 to-rose-400" },
-  { id: "snap-7", name: "Bitmoji Cyber", seed: "bottts:snap-casey", bg: "from-blue-500 to-cyan-500" },
-  { id: "snap-8", name: "Bitmoji Star", seed: "lorelei:snap-avery", bg: "from-orange-400 to-amber-500" },
-  { id: "snap-9", name: "Bitmoji Pro", seed: "avataaars:snap-quinn", bg: "from-violet-500 to-purple-600" },
-  { id: "snap-10", name: "Bitmoji Trend", seed: "micah:snap-dakota", bg: "from-cyan-300 to-blue-600" },
-  { id: "snap-11", name: "Bitmoji Glow", seed: "lorelei:snap-skyler", bg: "from-teal-400 to-emerald-600" },
-  { id: "snap-12", name: "Bitmoji Tech", seed: "bottts:snap-reese", bg: "from-indigo-500 to-blue-700" },
+const BG_GRADIENTS = [
+  "from-cyan-400 to-sky-500",
+  "from-rose-500 to-pink-500",
+  "from-purple-500 to-indigo-500",
+  "from-amber-400 to-yellow-500",
+  "from-emerald-400 to-teal-500",
+  "from-pink-500 to-rose-400",
+  "from-blue-500 to-cyan-500",
+  "from-orange-400 to-amber-500",
+  "from-violet-500 to-purple-600",
+  "from-teal-400 to-emerald-600",
+  "from-fuchsia-500 to-pink-600",
+  "from-lime-400 to-emerald-500",
+  "from-sky-400 to-indigo-600",
+  "from-amber-500 to-red-500",
+  "from-indigo-400 to-purple-700",
+  "from-cyan-300 to-blue-600",
 ];
+
+const STYLES = ["avataaars", "micah", "lorelei", "bottts"] as const;
+
+const STYLE_NAMES = [
+  "Casual", "Cool", "Chill", "Chic", "Gamer", "Artist", "Cyber", "Star", "Pro", "Trend",
+  "Glow", "Tech", "Urban", "Hipster", "Retro", "Futuristic", "Minimal", "Neon", "Vintage", "Cosmic"
+];
+
+export const SNAPCHAT_AVATARS: SnapchatAvatarPreset[] = Array.from({ length: 100 }, (_, i) => {
+  const num = i + 1;
+  const style = STYLES[i % STYLES.length];
+  const bg = BG_GRADIENTS[i % BG_GRADIENTS.length];
+  const styleName = STYLE_NAMES[i % STYLE_NAMES.length];
+
+  const category: "Classic" | "Modern" | "Artistic" | "Cyber" =
+    style === "avataaars"
+      ? "Classic"
+      : style === "micah"
+      ? "Modern"
+      : style === "lorelei"
+      ? "Artistic"
+      : "Cyber";
+
+  return {
+    id: `snap-${num}`,
+    name: `Bitmoji #${num} ${styleName}`,
+    seed: `${style}:snapchat-avatar-seed-${num}`,
+    bg: bg,
+    category: category,
+  };
+});
 
 export function getAvatarUrl(seed: string, name: string) {
   const effectiveSeed = seed || name || "snapchat-default";
@@ -82,4 +118,5 @@ export function getAvatarUrl(seed: string, name: string) {
     }).toDataUri();
   }
 }
+
 

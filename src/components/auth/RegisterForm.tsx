@@ -33,6 +33,18 @@ export default function RegisterForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [activeCategory, setActiveCategory] = useState<string>("ALL");
+
+  const filteredAvatars =
+    activeCategory === "ALL"
+      ? SNAPCHAT_AVATARS
+      : SNAPCHAT_AVATARS.filter((a) => a.category === activeCategory);
+
+  function handleRandomize() {
+    const randomIndex = Math.floor(Math.random() * SNAPCHAT_AVATARS.length);
+    setSelectedAvatarSeed(SNAPCHAT_AVATARS[randomIndex].seed);
+  }
+
   const currentAvatarUrl = getAvatarUrl(selectedAvatarSeed, username || "avatar");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -110,7 +122,7 @@ export default function RegisterForm() {
           </h1>
 
           <p className="mt-2 text-xs font-semibold leading-relaxed text-cyan-100/90 max-w-sm mx-auto">
-            Crée ton compte privé avec ton nom & prénom et choisis ton Bitmoji Snapchat.
+            Crée ton compte privé avec ton nom & prénom et choisis parmi <strong>100 Avatars Bitmoji</strong>.
           </p>
         </div>
 
@@ -132,16 +144,28 @@ export default function RegisterForm() {
                   👻
                 </div>
                 <div>
-                  <h2 className="text-xs font-black font-display uppercase tracking-wider text-cyan-300">
-                    Avatar Bitmoji (Style Snapchat)
+                  <h2 className="text-xs font-black font-display uppercase tracking-wider text-cyan-300 flex items-center gap-2">
+                    100 Avatars Bitmoji Snapchat
+                    <span className="rounded-full bg-cyan-400/20 px-2 py-0.5 text-[10px] text-cyan-300 font-bold border border-cyan-400/30">
+                      100 au choix
+                    </span>
                   </h2>
                   <p className="text-[10px] text-cyan-100/70">
-                    Sélectionne ton avatar anonyme 3D
+                    Clique pour choisir ou mélange au hasard 🔀
                   </p>
                 </div>
               </div>
 
-              <div className="relative">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleRandomize}
+                  className="rounded-full bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-1 text-[11px] font-bold text-cyan-300 hover:text-white transition flex items-center gap-1"
+                  title="Choisir un avatar au hasard"
+                >
+                  🔀 Aleatoire
+                </button>
+
                 <img
                   src={currentAvatarUrl}
                   alt="Aperçu Bitmoji"
@@ -150,10 +174,33 @@ export default function RegisterForm() {
               </div>
             </div>
 
-            {/* AVATARS GRID */}
-            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2.5 max-h-48 overflow-y-auto pr-1">
-              {SNAPCHAT_AVATARS.map((avatar: SnapchatAvatarPreset) => {
+            {/* CATEGORY FILTER TABS */}
+            <div className="flex gap-1.5 overflow-x-auto pb-1 text-xs">
+              {[
+                { id: "ALL", label: "⭐ Tous (100)" },
+                { id: "Classic", label: "😎 Classic" },
+                { id: "Modern", label: "✨ Modern" },
+                { id: "Artistic", label: "🎨 Artistic" },
+                { id: "Cyber", label: "🤖 Cyber" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveCategory(tab.id)}
+                  className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-bold transition ${
+                    activeCategory === tab.id
+                      ? "bg-cyan-400 text-slate-950 font-black shadow-md"
+                      : "bg-white/10 text-cyan-200/80 hover:bg-white/20 hover:text-white"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
 
+            {/* AVATARS GRID */}
+            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2.5 max-h-56 overflow-y-auto pr-1">
+              {filteredAvatars.map((avatar: SnapchatAvatarPreset) => {
                 const isSelected = selectedAvatarSeed === avatar.seed;
                 const avatarUrl = getAvatarUrl(avatar.seed, avatar.name);
 
@@ -188,6 +235,9 @@ export default function RegisterForm() {
               })}
             </div>
           </div>
+
+
+
 
           {/* NAME & SURNAME INPUTS */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
