@@ -4,18 +4,29 @@ import Link from "next/link";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
+  Check,
+  Edit2,
   Loader2,
   MessageSquare,
+  Mic,
+  MicOff,
+  MoreVertical,
+  Play,
+  Pause,
   Send,
   ShieldCheck,
   Sparkles,
+  Trash2,
   Users,
+  X,
 } from "lucide-react";
 
 type ChatMessage = {
   id: string;
   userId: string;
   content: string;
+  audioUrl?: string | null;
+  isEdited?: boolean;
   createdAt: string;
   isMe: boolean;
   author: {
@@ -32,6 +43,46 @@ function formatTime(dateStr: string) {
   });
 }
 
+function VoicePlayer({ src }: { src: string }) {
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  function togglePlay() {
+    if (!audioRef.current) return;
+    if (playing) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setPlaying(!playing);
+  }
+
+  return (
+    <div className="flex items-center gap-3 bg-sky-900/40 text-white rounded-2xl p-2 px-3 border border-sky-500/30">
+      <audio
+        ref={audioRef}
+        src={src}
+        onEnded={() => setPlaying(false)}
+        className="hidden"
+      />
+      <button
+        type="button"
+        onClick={togglePlay}
+        className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-500 text-white hover:bg-sky-400 transition"
+      >
+        {playing ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
+      </button>
+
+      <div className="flex flex-col">
+        <span className="text-xs font-bold text-sky-200 flex items-center gap-1">
+          🎤 Message vocal
+        </span>
+        <span className="text-[10px] text-sky-300/80">Cliquez pour écouter</span>
+      </div>
+    </div>
+  );
+}
+
 export default function ChatSpace() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [currentUser, setCurrentUser] = useState<{
@@ -43,6 +94,17 @@ export default function ChatSpace() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+
+  // Editing state
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
+
+  // Voice recording state
+  const [recording, setRecording] = useState(false);
+  const [recordTimer, setRecordTimer] = useState(0);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -84,7 +146,6 @@ export default function ChatSpace() {
   useEffect(() => {
     fetchMessages(true);
 
-    // Poll every 3 seconds for new live messages
     const interval = setInterval(() => {
       fetchMessages(false);
     }, 3000);
@@ -129,6 +190,143 @@ export default function ChatSpace() {
       alert("Erreur de connexion. Message non envoyé.");
     } finally {
       setSending(false);
+    }
+  }
+
+  // Voice recording handlers
+  async function startRecording() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+      audioChunksRef.current = [];
+
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorderRef.current.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+        const reader = new FileReader();
+        reader.readAsDataURL(audioBlob);
+        reader.onloadend = async () => {
+          const base64Audio = reader.result as string;
+          await sendVoiceMessage(base64Audio);
+        };
+
+        // Stop all tracks
+        stream.getTracks().forEach((track) => track.stop());
+      };
+
+      mediaRecorderRef.current.start();
+      setRecording(true);
+      setRecordTimer(0);
+
+      timerIntervalRef.current = setInterval(() => {
+        setRecordTimer((prev) => prev + 1);
+      }, 1000);
+    } catch {
+      alert("Accès au micro refusé ou non supporté par votre navigateur.");
+    }
+  }
+
+  function stopRecording() {
+    if (mediaRecorderRef.current && recording) {
+      mediaRecorderRef.current.stop();
+      setRecording(false);
+      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+    }
+  }
+
+  function cancelRecording() {
+    if (mediaRecorderRef.current && recording) {
+      mediaRecorderRef.current.onstop = null;
+      mediaRecorderRef.current.stop();
+      setRecording(false);
+      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+    }
+  }
+
+  async function sendVoiceMessage(base64Audio: string) {
+    setSending(true);
+    try {
+      const response = await fetch("/api/chat/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: "🎤 Message vocal",
+          audioUrl: base64Audio,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setMessages((prev) => [...prev, data.message]);
+        setTimeout(scrollToBottom, 50);
+      }
+    } catch {
+      alert("Erreur lors de l'envoi du vocale.");
+    } finally {
+      setSending(false);
+    }
+  }
+
+  // Edit message handler
+  async function handleSaveEdit(messageId: string) {
+    if (!editText.trim()) return;
+
+    try {
+      const response = await fetch(`/api/chat/messages/${messageId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: editText,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId
+              ? { ...msg, content: editText, isEdited: true }
+              : msg
+          )
+        );
+        setEditingId(null);
+      } else {
+        alert(data.message || "Impossible de modifier.");
+      }
+    } catch {
+      alert("Erreur de connexion lors de la modification.");
+    }
+  }
+
+  // Delete message handler
+  async function handleDeleteMessage(messageId: string) {
+    if (!confirm("Voulez-vous vraiment supprimer ce message ?")) return;
+
+    try {
+      const response = await fetch(`/api/chat/messages/${messageId}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setMessages((prev) => prev.filter((msg) => msg.id !== messageId));
+      } else {
+        alert(data.message || "Impossible de supprimer.");
+      }
+    } catch {
+      alert("Erreur de connexion lors de la suppression.");
     }
   }
 
@@ -186,7 +384,7 @@ export default function ChatSpace() {
               <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             </div>
             <p className="text-xs text-slate-400">
-              Échanges instantanés en direct entre membres anonymes
+              Échanges instantanés texte & vocal entre membres anonymes
             </p>
           </div>
         </div>
@@ -233,83 +431,181 @@ export default function ChatSpace() {
               Soyez le premier à envoyer un message !
             </h3>
             <p className="text-xs text-slate-400 max-w-xs mt-1">
-              Ce salon permet à toute la communauté de discuter librement et en direct.
+              Ce salon permet à toute la communauté de discuter en texte ou vocal.
             </p>
           </div>
         ) : (
-          messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`flex gap-3 ${
-                msg.isMe ? "flex-row-reverse" : "flex-row"
-              }`}
-            >
-              <img
-                src={msg.author.avatarUrl}
-                alt={msg.author.anonymousName}
-                className="h-8 w-8 rounded-full shrink-0 mt-1"
-              />
+          messages.map((msg) => {
+            const isEditing = editingId === msg.id;
 
+            return (
               <div
-                className={`max-w-[78%] sm:max-w-[65%] space-y-1 ${
-                  msg.isMe ? "items-end text-right" : "items-start text-left"
+                key={msg.id}
+                className={`group flex gap-3 ${
+                  msg.isMe ? "flex-row-reverse" : "flex-row"
                 }`}
               >
-                <div
-                  className={`flex items-center gap-2 text-[11px] font-semibold text-slate-400 ${
-                    msg.isMe ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  <span>{msg.author.anonymousName}</span>
-                  <span>·</span>
-                  <span>{formatTime(msg.createdAt)}</span>
-                </div>
+                <img
+                  src={msg.author.avatarUrl}
+                  alt={msg.author.anonymousName}
+                  className="h-8 w-8 rounded-full shrink-0 mt-1"
+                />
 
                 <div
-                  className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap break-words inline-block shadow-sm ${
-                    msg.isMe
-                      ? "bg-slate-950 text-white rounded-tr-none font-medium"
-                      : "bg-slate-100 text-slate-800 rounded-tl-none font-medium"
+                  className={`max-w-[78%] sm:max-w-[65%] space-y-1 ${
+                    msg.isMe ? "items-end text-right" : "items-start text-left"
                   }`}
                 >
-                  {msg.content}
+                  <div
+                    className={`flex items-center gap-2 text-[11px] font-semibold text-slate-400 ${
+                      msg.isMe ? "justify-end" : "justify-start"
+                    }`}
+                  >
+                    <span>{msg.author.anonymousName}</span>
+                    <span>·</span>
+                    <span>{formatTime(msg.createdAt)}</span>
+                    {msg.isEdited && (
+                      <span className="italic text-slate-400">(modifié)</span>
+                    )}
+                  </div>
+
+                  {isEditing ? (
+                    <div className="flex items-center gap-1.5 bg-slate-900 p-2 rounded-2xl text-left">
+                      <input
+                        type="text"
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                        className="bg-transparent text-white text-sm outline-none flex-1 px-2"
+                        autoFocus
+                      />
+                      <button
+                        onClick={() => handleSaveEdit(msg.id)}
+                        className="p-1 text-emerald-400 hover:text-emerald-300"
+                        title="Enregistrer"
+                      >
+                        <Check size={16} />
+                      </button>
+                      <button
+                        onClick={() => setEditingId(null)}
+                        className="p-1 text-slate-400 hover:text-white"
+                        title="Annuler"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="relative inline-block text-left">
+                      {msg.audioUrl ? (
+                        <VoicePlayer src={msg.audioUrl} />
+                      ) : (
+                        <div
+                          className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap break-words inline-block shadow-sm ${
+                            msg.isMe
+                              ? "bg-slate-950 text-white rounded-tr-none font-medium"
+                              : "bg-slate-100 text-slate-800 rounded-tl-none font-medium"
+                          }`}
+                        >
+                          {msg.content}
+                        </div>
+                      )}
+
+                      {/* EDIT / DELETE ACTIONS FOR MY MESSAGES */}
+                      {msg.isMe && !msg.audioUrl && (
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-3 right-2 flex items-center gap-1 bg-white border border-slate-200 shadow-md rounded-xl px-1.5 py-0.5">
+                          <button
+                            onClick={() => {
+                              setEditingId(msg.id);
+                              setEditText(msg.content);
+                            }}
+                            className="p-1 text-slate-400 hover:text-sky-600 transition"
+                            title="Modifier"
+                          >
+                            <Edit2 size={13} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteMessage(msg.id)}
+                            className="p-1 text-slate-400 hover:text-red-500 transition"
+                            title="Supprimer"
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* CHAT INPUT */}
-      <form
-        onSubmit={handleSendMessage}
-        className="mt-3 flex items-center gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-md shrink-0"
-      >
-        <input
-          type="text"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          placeholder="Écris ton message anonyme..."
-          maxLength={1000}
-          className="flex-1 bg-transparent px-3 text-sm font-medium outline-none text-slate-900 placeholder:text-slate-400"
-        />
+      {/* CHAT INPUT / VOICE RECORDING */}
+      {recording ? (
+        <div className="mt-3 flex items-center justify-between rounded-2xl border border-red-200 bg-red-50 p-3 shadow-md shrink-0">
+          <div className="flex items-center gap-3">
+            <span className="h-3 w-3 rounded-full bg-red-500 animate-ping" />
+            <span className="text-xs font-bold text-red-700">
+              Enregistrement en cours... ({recordTimer}s)
+            </span>
+          </div>
 
-        <button
-          type="submit"
-          disabled={sending || !inputText.trim()}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-sky-500 px-4 text-xs font-bold text-white transition hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          <div className="flex items-center gap-2">
+            <button
+              onClick={cancelRecording}
+              className="rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-500 hover:bg-slate-200 transition"
+            >
+              Annuler
+            </button>
+            <button
+              onClick={stopRecording}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-red-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-red-700 transition"
+            >
+              Envoyer le vocal
+              <Send size={13} />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <form
+          onSubmit={handleSendMessage}
+          className="mt-3 flex items-center gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-md shrink-0"
         >
-          {sending ? (
-            <Loader2 size={16} className="animate-spin" />
-          ) : (
-            <>
-              Envoyer
-              <Send size={14} />
-            </>
-          )}
-        </button>
-      </form>
+          <input
+            type="text"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            placeholder="Écris ton message anonyme..."
+            maxLength={1000}
+            className="flex-1 bg-transparent px-3 text-sm font-medium outline-none text-slate-900 placeholder:text-slate-400"
+          />
+
+          <button
+            type="button"
+            onClick={startRecording}
+            className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600 hover:bg-sky-50 hover:text-sky-600 transition"
+            title="Enregistrer un message vocal"
+          >
+            <Mic size={18} />
+          </button>
+
+          <button
+            type="submit"
+            disabled={sending || !inputText.trim()}
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-sky-500 px-4 text-xs font-bold text-white transition hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {sending ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <>
+                Envoyer
+                <Send size={14} />
+              </>
+            )}
+          </button>
+        </form>
+      )}
     </div>
   );
 }

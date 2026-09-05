@@ -20,24 +20,34 @@ export async function GET() {
       );
     }
 
-    // Ensure table chat_messages exists
+    // Ensure table chat_messages exists with audio_url and is_edited columns
     await sql`
       CREATE TABLE IF NOT EXISTS chat_messages (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID NOT NULL,
         content TEXT NOT NULL,
+        audio_url TEXT NULL,
+        is_edited BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
+    `;
+    await sql`
+      ALTER TABLE chat_messages ADD COLUMN IF NOT EXISTS audio_url TEXT NULL
+    `;
+    await sql`
+      ALTER TABLE chat_messages ADD COLUMN IF NOT EXISTS is_edited BOOLEAN DEFAULT FALSE
     `;
 
     const identity = await getOrCreateAnonymousIdentity(user.id as string);
 
-    // Fetch the 50 most recent chat messages
+    // Fetch recent messages
     const messages = await sql`
       SELECT
         cm.id,
         cm.user_id,
         cm.content,
+        cm.audio_url,
+        COALESCE(cm.is_edited, FALSE) AS is_edited,
         cm.created_at,
         ai.anonymous_name,
         ai.avatar_seed
@@ -52,6 +62,8 @@ export async function GET() {
       id: msg.id,
       userId: msg.user_id,
       content: msg.content,
+      audioUrl: msg.audio_url || null,
+      isEdited: !!msg.is_edited,
       createdAt: msg.created_at,
       isMe: msg.user_id === user.id,
       author: {
@@ -103,31 +115,40 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const content = typeof body.content === "string" ? body.content.trim() : "";
+    const audioUrl = typeof body.audioUrl === "string" ? body.audioUrl : null;
 
-    if (!content || content.length < 1 || content.length > 1000) {
+    if (!audioUrl && (!content || content.length < 1 || content.length > 1000)) {
       return NextResponse.json(
         {
           success: false,
-          message: "Le message doit contenir entre 1 et 1000 caractères.",
+          message: "Le message texte doit contenir entre 1 et 1000 caractères.",
         },
         { status: 400 }
       );
     }
 
-    // Ensure table chat_messages exists
+    // Ensure columns exist
     await sql`
       CREATE TABLE IF NOT EXISTS chat_messages (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID NOT NULL,
         content TEXT NOT NULL,
+        audio_url TEXT NULL,
+        is_edited BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
     `;
+    await sql`
+      ALTER TABLE chat_messages ADD COLUMN IF NOT EXISTS audio_url TEXT NULL
+    `;
+    await sql`
+      ALTER TABLE chat_messages ADD COLUMN IF NOT EXISTS is_edited BOOLEAN DEFAULT FALSE
+    `;
 
     const inserted = await sql`
-      INSERT INTO chat_messages (user_id, content)
-      VALUES (${user.id as string}, ${content})
-      RETURNING id, user_id, content, created_at
+      INSERT INTO chat_messages (user_id, content, audio_url)
+      VALUES (${user.id as string}, ${content || "🎤 Message vocal"}, ${audioUrl})
+      RETURNING id, user_id, content, audio_url, is_edited, created_at
     `;
 
     if (inserted.length === 0) {
@@ -149,6 +170,8 @@ export async function POST(request: Request) {
         id: newMsg.id,
         userId: newMsg.user_id,
         content: newMsg.content,
+        audioUrl: newMsg.audio_url,
+        isEdited: !!newMsg.is_edited,
         createdAt: newMsg.created_at,
         isMe: true,
         author: {
