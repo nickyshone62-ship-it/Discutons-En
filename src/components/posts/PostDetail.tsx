@@ -419,17 +419,17 @@ export default function PostDetail({ postId }: { postId: string }) {
 
         {/* COMMENTS LIST */}
         {comments.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-white/20 bg-white/10 p-8 text-center backdrop-blur-xl">
-            <MessageCircle size={28} className="mx-auto text-cyan-300 mb-2" />
-            <p className="font-bold text-white text-sm">
+          <div className="rounded-3xl border border-dashed border-white/20 bg-slate-950/60 p-10 text-center backdrop-blur-2xl">
+            <MessageCircle size={32} className="mx-auto text-cyan-300 mb-3" />
+            <h3 className="font-black font-display text-white text-lg">
               Aucune réponse pour l'instant
-            </p>
-            <p className="text-xs text-cyan-200 mt-1">
-              Sois le premier membre à proposer une solution ou un conseil éclairé !
+            </h3>
+            <p className="text-xs font-medium text-cyan-100/80 max-w-sm mx-auto mt-1 leading-relaxed">
+              Soyez le premier membre de la communauté à proposer une piste de solution ou un conseil avisé !
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-5">
             {comments.map((comment) => {
               const isTop = comment.id === topCommentId;
               const isLikedByMe = !!likedComments[comment.id];
@@ -437,60 +437,65 @@ export default function PostDetail({ postId }: { postId: string }) {
               return (
                 <div
                   key={comment.id}
-                  className={`rounded-3xl border p-5 shadow-xl backdrop-blur-xl space-y-3 transition ${
+                  className={`rounded-3xl border p-5 sm:p-6 shadow-2xl backdrop-blur-2xl space-y-4 transition ${
                     isTop
-                      ? "border-emerald-400/60 bg-emerald-950/30 ring-1 ring-emerald-400/40"
-                      : "border-white/20 bg-white/10"
+                      ? "border-amber-400/80 bg-gradient-to-r from-amber-950/60 via-slate-950/90 to-slate-950/95 ring-2 ring-amber-400/40 shadow-[0_0_30px_rgba(251,191,36,0.25)]"
+                      : "border-cyan-400/30 bg-slate-950/80 hover:border-cyan-400/60"
                   }`}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <img
                         src={comment.author.avatarUrl}
                         alt={comment.author.anonymousName}
-                        className="h-9 w-9 rounded-full border border-cyan-400/30"
+                        className="h-10 w-10 rounded-full border-2 border-cyan-400/60 shadow-md"
                       />
                       <div>
-                        <p className="text-xs font-bold text-white">
+                        <p className="text-xs font-black font-display text-white">
                           {comment.author.anonymousName}
                         </p>
-                        <p className="text-[10px] text-cyan-200/70">
-                          {formatDate(comment.createdAt)}
+                        <p className="text-[10px] font-semibold text-cyan-200/70">
+                          Réponse · {formatDate(comment.createdAt)}
                         </p>
                       </div>
                     </div>
 
-                    {isTop && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/20 border border-emerald-400/40 px-3 py-1 text-xs font-bold text-emerald-300">
-                        <Award size={14} />
-                        Meilleure piste conseillée
+                    {isTop ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-300 px-3.5 py-1 text-xs font-black font-display uppercase tracking-wider text-slate-950 shadow-md shadow-amber-400/30">
+                        <Award size={15} />
+                        💡 Meilleure Piste Solution
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-cyan-400/10 border border-cyan-400/30 px-3 py-0.5 text-[11px] font-bold text-cyan-300">
+                        Piste de Conseil
                       </span>
                     )}
                   </div>
 
-                  <p className="text-xs sm:text-sm leading-relaxed text-cyan-50 pl-12 whitespace-pre-wrap">
+                  {/* ANSWER BODY - HIGHLY HIGHLIGHTED */}
+                  <div className="rounded-2xl border-l-4 border-cyan-400 bg-white/5 p-4 text-sm sm:text-base leading-relaxed text-slate-100 font-medium whitespace-pre-wrap shadow-inner">
                     {comment.content}
-                  </p>
+                  </div>
 
-                  <div className="flex items-center justify-between pl-12 pt-2 border-t border-white/10">
+                  <div className="flex items-center justify-between pt-2 border-t border-white/10">
                     <button
                       onClick={() => handleLikeComment(comment.id)}
-                      className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-bold transition ${
+                      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-black font-display uppercase tracking-wider transition transform active:scale-95 ${
                         isLikedByMe
-                          ? "bg-cyan-400 text-slate-950 shadow-md shadow-cyan-400/30"
-                          : "bg-white/10 text-cyan-200 hover:bg-white/20 hover:text-white"
+                          ? "bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 shadow-lg shadow-cyan-400/40"
+                          : "bg-white/10 text-cyan-200 hover:bg-white/20 hover:text-white border border-white/15"
                       }`}
                     >
-                      <ThumbsUp size={13} className={isLikedByMe ? "fill-slate-950" : ""} />
-                      <span>{isLikedByMe ? "Soutenu" : "Utile"} ({comment.likesCount})</span>
+                      <ThumbsUp size={14} className={isLikedByMe ? "fill-slate-950" : ""} />
+                      <span>{isLikedByMe ? "Soutenu" : "Soutenir cette piste"} ({comment.likesCount})</span>
                     </button>
 
-                    <span className="text-[10px] text-cyan-200/70 font-medium">
+                    <span className="text-[11px] text-cyan-200/80 font-bold">
                       {comment.likesCount > 0
                         ? `Soutenu par ${comment.likesCount} membre${
                             comment.likesCount > 1 ? "s" : ""
                           }`
-                        : "Soutenez cette réponse si elle vous semble utile"}
+                        : "Votez si ce conseil vous a aidé"}
                     </span>
                   </div>
                 </div>
@@ -498,6 +503,7 @@ export default function PostDetail({ postId }: { postId: string }) {
             })}
           </div>
         )}
+
       </section>
     </div>
   );

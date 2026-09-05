@@ -191,8 +191,12 @@ export default function ChatSpace() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
 
+  // Tap-to-open action menu state
+  const [activeMenuMsgId, setActiveMenuMsgId] = useState<string | null>(null);
+
   // Replying state
   const [replyingToMsg, setReplyingToMsg] = useState<ChatMessage | null>(null);
+
 
   // Voice recording state
   const [recording, setRecording] = useState(false);
@@ -615,25 +619,21 @@ export default function ChatSpace() {
                     )}
                   </div>
 
-                  {/* QUOTED REPLY PREVIEW INSIDE FEED */}
+                  {/* HIGHLY HIGHLIGHTED QUOTED REPLY PREVIEW */}
                   {msg.replyTo && (
-                    <div
-                      className={`flex items-center gap-2 text-xs p-2 px-3 rounded-xl border border-cyan-400/30 bg-cyan-400/10 text-cyan-100 mb-1 backdrop-blur-md ${
-                        msg.isMe ? "text-right justify-end" : "text-left"
-                      }`}
-                    >
-                      <CornerDownRight size={13} className="text-cyan-300 shrink-0" />
-                      <span className="font-black font-display text-cyan-300">
-                        {msg.replyTo.authorName}:
-                      </span>
-                      <span className="truncate max-w-[200px] italic font-medium">
+                    <div className="mb-2 rounded-2xl border-l-4 border-cyan-400 bg-gradient-to-r from-cyan-950/90 via-slate-950/90 to-purple-950/80 p-2.5 px-3.5 text-xs text-cyan-100 backdrop-blur-xl shadow-xl border border-cyan-400/40">
+                      <div className="flex items-center gap-2 font-black font-display text-cyan-300">
+                        <CornerDownRight size={14} className="text-cyan-400 shrink-0" />
+                        <span>En réponse à <span className="text-white underline decoration-cyan-400/80 font-black">{msg.replyTo.authorName}</span></span>
+                      </div>
+                      <p className="mt-1 text-xs text-cyan-100/90 italic truncate font-medium pl-4 border-l border-cyan-400/30">
                         "{msg.replyTo.content}"
-                      </span>
+                      </p>
                     </div>
                   )}
 
                   {isEditing ? (
-                    <div className="flex items-center gap-2 bg-slate-900/90 border border-cyan-400 p-2 rounded-2xl text-left shadow-lg backdrop-blur-xl">
+                    <div className="flex items-center gap-2 bg-slate-900/95 border border-cyan-400 p-2.5 rounded-2xl text-left shadow-2xl backdrop-blur-2xl">
                       <input
                         type="text"
                         value={editText}
@@ -641,17 +641,16 @@ export default function ChatSpace() {
                         className="bg-transparent text-white text-base outline-none flex-1 px-2 font-medium"
                         autoFocus
                       />
-
                       <button
                         onClick={() => handleSaveEdit(msg.id)}
-                        className="p-1.5 rounded-lg bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition font-bold"
+                        className="p-2 rounded-xl bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition font-bold shadow-md"
                         title="Enregistrer"
                       >
                         <Check size={16} />
                       </button>
                       <button
                         onClick={() => setEditingId(null)}
-                        className="p-1.5 rounded-lg bg-white/10 text-slate-300 hover:text-white transition"
+                        className="p-2 rounded-xl bg-white/10 text-slate-300 hover:text-white transition"
                         title="Annuler"
                       >
                         <X size={16} />
@@ -659,24 +658,34 @@ export default function ChatSpace() {
                     </div>
                   ) : (
                     <div className="relative inline-block text-left">
-                      {msg.audioUrl ? (
-                        <VoicePlayer src={msg.audioUrl} isMe={msg.isMe} />
-                      ) : (
-                        <div
-                          className={`rounded-3xl px-4.5 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words inline-block shadow-lg ${
-                            msg.isMe
-                              ? "bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 font-semibold rounded-tr-none shadow-[0_0_20px_rgba(34,211,238,0.25)]"
-                              : "bg-white/10 text-white font-medium rounded-tl-none border border-white/15 backdrop-blur-xl"
-                          }`}
-                        >
-                          {msg.content}
-                        </div>
-                      )}
+                      {/* MESSAGE BUBBLE - CLICK / TAP TO OPEN ACTION MENU */}
+                      <div
+                        onClick={() => setActiveMenuMsgId(activeMenuMsgId === msg.id ? null : msg.id)}
+                        className="cursor-pointer transition transform active:scale-[0.98]"
+                        title="Cliquer pour afficher les options"
+                      >
+                        {msg.audioUrl ? (
+                          <VoicePlayer src={msg.audioUrl} isMe={msg.isMe} />
+                        ) : (
+                          <div
+                            className={`rounded-3xl px-4.5 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words inline-block shadow-lg ${
+                              msg.isMe
+                                ? "bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 font-semibold rounded-tr-none shadow-[0_0_20px_rgba(34,211,238,0.25)]"
+                                : "bg-white/10 text-white font-medium rounded-tl-none border border-white/15 backdrop-blur-xl hover:bg-white/15"
+                            }`}
+                          >
+                            {msg.content}
+                          </div>
+                        )}
+                      </div>
 
                       {/* LIKES BADGE ON MESSAGE */}
                       {(msg.likesCount || 0) > 0 && (
                         <button
-                          onClick={() => handleLikeMessage(msg.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLikeMessage(msg.id);
+                          }}
                           className={`absolute -bottom-2 right-2 flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-black border shadow-lg transition transform active:scale-95 ${
                             msg.isLikedByMe
                               ? "bg-rose-500 text-white border-rose-400 shadow-rose-500/40"
@@ -688,82 +697,82 @@ export default function ChatSpace() {
                         </button>
                       )}
 
-                      {/* TOUCH & HOVER ACTIONS TOOLBAR */}
-                      <div className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all absolute -top-3.5 right-1 flex items-center gap-1 bg-slate-900/95 border border-cyan-400/50 backdrop-blur-xl shadow-2xl rounded-full px-2.5 py-1 z-10">
-                        {/* REPLY BUTTON */}
-                        <button
-                          onClick={() => setReplyingToMsg(msg)}
-                          className="p-1 text-cyan-300 hover:text-white transition active:scale-90"
-                          title="Répondre / Citer"
-                        >
-                          <Reply size={13} />
-                        </button>
+                      {/* TAP-TO-OPEN INTERACTIVE MENU PANEL */}
+                      {activeMenuMsgId === msg.id && (
+                        <div className="mt-2 flex items-center gap-1.5 rounded-full border border-cyan-400/60 bg-slate-950/95 p-1.5 px-3 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150 z-30">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setReplyingToMsg(msg);
+                              setActiveMenuMsgId(null);
+                            }}
+                            className="flex items-center gap-1 rounded-full bg-cyan-400/20 px-2.5 py-1 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition"
+                          >
+                            <Reply size={13} />
+                            <span>Répondre</span>
+                          </button>
 
-                        {/* LIKE BUTTON */}
-                        <button
-                          onClick={() => handleLikeMessage(msg.id)}
-                          className={`p-1 transition active:scale-90 ${
-                            msg.isLikedByMe
-                              ? "text-rose-400"
-                              : "text-slate-400 hover:text-rose-400"
-                          }`}
-                          title="Réagir"
-                        >
-                          <Heart size={13} className={msg.isLikedByMe ? "fill-rose-400" : ""} />
-                        </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleLikeMessage(msg.id);
+                              setActiveMenuMsgId(null);
+                            }}
+                            className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold transition ${
+                              msg.isLikedByMe
+                                ? "bg-rose-500/20 text-rose-300"
+                                : "bg-white/10 text-slate-200 hover:text-rose-400"
+                            }`}
+                          >
+                            <Heart size={13} className={msg.isLikedByMe ? "fill-rose-400" : ""} />
+                            <span>Aimer ({msg.likesCount || 0})</span>
+                          </button>
 
-                        {/* EDIT & DELETE FOR MY MESSAGES (TEXT & VOICE) */}
-                        {msg.isMe && (
-                          <>
-                            {!msg.audioUrl && (
+                          {msg.isMe && (
+                            <>
+                              {!msg.audioUrl && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setEditingId(msg.id);
+                                    setEditText(msg.content);
+                                    setActiveMenuMsgId(null);
+                                  }}
+                                  className="flex items-center gap-1 rounded-full bg-cyan-400/20 px-2.5 py-1 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition"
+                                >
+                                  <Edit2 size={13} />
+                                  <span>Modifier</span>
+                                </button>
+                              )}
                               <button
-                                onClick={() => {
-                                  setEditingId(msg.id);
-                                  setEditText(msg.content);
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteMessage(msg.id);
+                                  setActiveMenuMsgId(null);
                                 }}
-                                className="p-1 text-cyan-300 hover:text-white transition active:scale-90"
-                                title="Modifier le message"
+                                className="flex items-center gap-1 rounded-full bg-red-500/20 px-2.5 py-1 text-xs font-bold text-red-300 hover:bg-red-500/30 transition"
                               >
-                                <Edit2 size={13} />
+                                <Trash2 size={13} />
+                                <span>Supprimer</span>
                               </button>
-                            )}
-                            <button
-                              onClick={() => handleDeleteMessage(msg.id)}
-                              className="p-1 text-red-400 hover:text-red-300 transition active:scale-90"
-                              title="Supprimer le message"
-                            >
-                              <Trash2 size={13} />
-                            </button>
-                          </>
-                        )}
-                      </div>
+                            </>
+                          )}
+
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveMenuMsgId(null);
+                            }}
+                            className="p-1 text-slate-400 hover:text-white"
+                            title="Fermer"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   )}
 
-                  {/* MOBILE-SPECIFIC EXPLICIT ACTION BAR FOR MY MESSAGES */}
-                  {msg.isMe && !isEditing && (
-                    <div className="flex items-center justify-end gap-3 pt-0.5 text-[11px] text-cyan-200/80 font-bold sm:hidden">
-                      {!msg.audioUrl && (
-                        <button
-                          onClick={() => {
-                            setEditingId(msg.id);
-                            setEditText(msg.content);
-                          }}
-                          className="flex items-center gap-1 text-cyan-300 hover:text-white active:scale-95 transition"
-                        >
-                          <Edit2 size={12} />
-                          <span>Modifier</span>
-                        </button>
-                      )}
-                      <button
-                        onClick={() => handleDeleteMessage(msg.id)}
-                        className="flex items-center gap-1 text-red-400 hover:text-red-300 active:scale-95 transition"
-                      >
-                        <Trash2 size={12} />
-                        <span>Supprimer</span>
-                      </button>
-                    </div>
-                  )}
 
                 </div>
               </div>
