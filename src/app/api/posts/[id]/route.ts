@@ -25,11 +25,14 @@ export async function GET(
 
     const user = await getCurrentUser();
 
-    // Increment view count
+    // Ensure post_views table exists for tracking 1 unique view per user
     await sql`
-      UPDATE posts
-      SET views_count = COALESCE(views_count, 0) + 1
-      WHERE id = ${id}
+      CREATE TABLE IF NOT EXISTS post_views (
+        user_id UUID NOT NULL,
+        post_id UUID NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id, post_id)
+      )
     `;
 
     // Ensure likes tables exist
@@ -52,6 +55,24 @@ export async function GET(
     await sql`
       ALTER TABLE comments ADD COLUMN IF NOT EXISTS likes_count INT DEFAULT 0
     `;
+
+    // Unique view tracking per user
+    if (user) {
+      const insertedView = await sql`
+        INSERT INTO post_views (user_id, post_id)
+        VALUES (${user.id as string}, ${id})
+        ON CONFLICT (user_id, post_id) DO NOTHING
+        RETURNING user_id
+      `;
+
+      if (insertedView.length > 0) {
+        await sql`
+          UPDATE posts
+          SET views_count = COALESCE(views_count, 0) + 1
+          WHERE id = ${id}
+        `;
+      }
+    }
 
     // Get post details with author identity and category
     const posts = await sql`
