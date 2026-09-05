@@ -1,13 +1,11 @@
 import { neon } from "@neondatabase/serverless";
 
-const databaseUrl = process.env.DATABASE_URL;
+const DEFAULT_DATABASE_URL =
+  "postgresql://neondb_owner:npg_3HBMrzVEeXi8@ep-ancient-fire-ay9nsm0h-pooler.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require";
 
-if (!databaseUrl && process.env.NODE_ENV !== "production") {
-  console.warn(
-    "⚠️ DATABASE_URL n'est pas encore définie dans .env.local (Phase 2)."
-  );
-}
+const databaseUrl = process.env.DATABASE_URL && process.env.DATABASE_URL.trim()
+  ? process.env.DATABASE_URL.trim()
+  : DEFAULT_DATABASE_URL;
 
-export const sql = neon(
-  databaseUrl || "postgres://unconfigured:unconfigured@localhost:5432/discutons_en"
-);
+export const sql = neon(databaseUrl);
+
