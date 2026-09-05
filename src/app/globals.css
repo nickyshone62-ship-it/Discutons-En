@@ -1,48 +1,169 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: var(--font-display), 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
 @layer utilities {
+  .font-sans {
+    font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  .font-display {
+    font-family: var(--font-display), 'Outfit', system-ui, sans-serif;
+  }
+
+  /* Glassmorphism Styles */
   .bg-glass {
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.37);
   }
 
-  .bg-glass-dark {
-    background: rgba(15, 23, 42, 0.65);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+  .bg-glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 12px 35px 0 rgba(15, 23, 42, 0.4);
   }
 
-  .text-glow {
-    text-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+  .bg-glass-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .bg-glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.13);
+    border-color: rgba(34, 211, 238, 0.45);
+    box-shadow: 0 15px 45px 0 rgba(34, 211, 238, 0.25);
+    transform: translateY(-2px);
   }
 
-  .box-glow {
-    box-shadow: 0 0 30px rgba(0, 240, 255, 0.35);
+  .bg-glass-input {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    color: #ffffff;
+    transition: all 0.25s ease;
+  }
+  .bg-glass-input:focus {
+    outline: none;
+    border-color: #22d3ee;
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.35);
+    background: rgba(15, 23, 42, 0.85);
+  }
+
+  /* Text Effects & Typography Gradients */
+  .gradient-text-cyan {
+    background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 45%, #22d3ee 85%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-text-purple {
+    background: linear-gradient(135deg, #ffffff 0%, #e9d5ff 40%, #c084fc 80%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-text-gold {
+    background: linear-gradient(135deg, #ffffff 0%, #fef08a 45%, #fde047 75%, #eab308 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-shadow-glow {
+    text-shadow: 0 0 25px rgba(34, 211, 238, 0.7);
+  }
+
+  .text-shadow-purple-glow {
+    text-shadow: 0 0 25px rgba(192, 132, 252, 0.7);
+  }
+
+  .text-shadow-title {
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
   }
 }
 
+/* Animations */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(2deg);
+  }
+}
+
+@keyframes floatReverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(14px) rotate(-2deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 8s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: floatReverse 10s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 5s ease-in-out infinite;
+}
+
+/* Base Document Styles */
+html {
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
 body {
-  background: linear-gradient(135deg, #6b21a8 0%, #4c1d95 30%, #312e81 60%, #1e1b4b 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #3b0764 0%, #1e1b4b 35%, #0f172a 75%, #020617 100%);
+  color: #f8fafc;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
   overflow-x: hidden;
+  letter-spacing: -0.012em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), 'Outfit', system-ui, sans-serif;
+  letter-spacing: -0.025em;
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba(15, 23, 42, 0.9);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(6, 182, 212, 0.6);
+  background: linear-gradient(180deg, #22d3ee 0%, #3b82f6 100%);
   border-radius: 9999px;
+  border: 2px solid rgba(15, 23, 42, 0.9);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(6, 182, 212, 0.9);
+  background: linear-gradient(180deg, #67e8f9 0%, #60a5fa 100%);
 }
+

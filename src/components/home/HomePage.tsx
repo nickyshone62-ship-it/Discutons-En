@@ -139,7 +139,7 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-950 p-6 text-white">
+      <main className="min-h-screen bg-gradient-to-br from-purple-950 via-indigo-950 to-slate-950 p-6 text-white">
         <div className="mx-auto max-w-7xl px-4 py-6">
           <div className="h-16 animate-pulse rounded-3xl bg-white/10" />
           <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr]">
@@ -156,20 +156,20 @@ export default function HomePage() {
 
   if (error || !data) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-950 px-4 text-white">
+      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple-950 via-indigo-950 to-slate-950 px-4 text-white">
         <div className="w-full max-w-md rounded-3xl border border-white/20 bg-white/10 p-8 text-center backdrop-blur-xl shadow-2xl">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/20 text-red-300 font-bold text-xl">
             !
           </div>
-          <h1 className="mt-5 text-xl font-black tracking-wide text-white">
+          <h1 className="mt-5 text-xl font-black font-display tracking-wide text-white">
             Une erreur est survenue
           </h1>
-          <p className="mt-2 text-xs text-cyan-100/80">
+          <p className="mt-2 text-xs font-semibold text-cyan-100/80">
             {error || "Impossible de charger votre espace."}
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-6 rounded-full bg-cyan-400 px-6 py-3 text-xs font-black text-slate-950 uppercase tracking-wider shadow-lg shadow-cyan-400/40 hover:bg-cyan-300 transition"
+            className="mt-6 rounded-full bg-cyan-400 px-6 py-3 text-xs font-black font-display text-slate-950 uppercase tracking-widest shadow-lg shadow-cyan-400/40 hover:bg-cyan-300 transition"
           >
             Réessayer
           </button>
@@ -179,27 +179,27 @@ export default function HomePage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-gradient-to-br from-purple-950 via-indigo-900 to-blue-950 text-white pb-24 overflow-x-hidden">
+    <main className="relative min-h-screen bg-gradient-to-br from-purple-950 via-indigo-950 to-blue-950 text-white pb-24 overflow-x-hidden font-sans">
       {/* GEOMETRIC BACKGROUND DECORATIONS */}
       <div className="pointer-events-none fixed -top-20 -left-20 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl" />
       <div className="pointer-events-none fixed top-1/3 right-0 h-96 w-96 rounded-full bg-purple-600/20 blur-3xl" />
       <div className="pointer-events-none fixed bottom-10 left-1/4 h-80 w-80 rounded-full bg-blue-600/20 blur-3xl" />
 
       {/* NAVBAR */}
-      <header className="sticky top-0 z-40 border-b border-white/15 bg-slate-950/75 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-white/15 bg-slate-950/80 backdrop-blur-2xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
             href="/accueil"
-            className="flex items-center gap-2 text-xl font-black tracking-wider"
+            className="flex items-center gap-2 text-xl font-black font-display tracking-wider hover:scale-105 transition duration-300"
           >
-            <span className="text-cyan-400">DIS</span>
+            <span className="text-cyan-400 text-shadow-glow">DIS</span>
             <span className="text-white">cutons-En</span>
           </Link>
 
           <div className="hidden items-center gap-3 md:flex">
             <Link
               href="/chat"
-              className="flex h-10 items-center gap-2 rounded-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 px-4 text-xs font-black uppercase tracking-wider transition shadow-lg shadow-cyan-400/30"
+              className="flex h-10 items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 px-4.5 text-xs font-black font-display uppercase tracking-wider transition shadow-lg shadow-cyan-400/35 transform active:scale-95"
             >
               <MessageSquare size={16} />
               Chat en direct
@@ -225,19 +225,19 @@ export default function HomePage() {
 
             <Link
               href="/compte"
-              className="flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 p-1 px-3 hover:bg-white/20 transition"
+              className="flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 p-1 px-3.5 hover:bg-white/20 transition hover:scale-105 duration-300"
               title="Mon compte"
             >
               <img
                 src={data.identity.avatarUrl}
                 alt={data.identity.anonymousName}
-                className="h-8 w-8 rounded-full border border-cyan-400/40"
+                className="h-8 w-8 rounded-full border border-cyan-400/60"
               />
               <div className="hidden text-left lg:block">
-                <p className="text-xs font-bold text-white leading-tight">
+                <p className="text-xs font-black text-white leading-tight font-display">
                   {data.identity.anonymousName}
                 </p>
-                <p className="text-[10px] text-cyan-300 font-semibold">
+                <p className="text-[10px] text-cyan-300 font-bold">
                   Mon compte →
                 </p>
               </div>
@@ -263,7 +263,7 @@ export default function HomePage() {
         </div>
 
         {menuOpen && (
-          <div className="border-t border-white/10 bg-slate-950/95 px-4 py-4 backdrop-blur-xl md:hidden">
+          <div className="border-t border-white/10 bg-slate-950/95 px-4 py-4 backdrop-blur-2xl md:hidden">
             <Link
               href="/compte"
               onClick={() => setMenuOpen(false)}
@@ -278,7 +278,7 @@ export default function HomePage() {
                 <p className="text-sm font-bold text-white">
                   {data.identity.anonymousName}
                 </p>
-                <p className="text-xs text-cyan-300 font-semibold">
+                <p className="text-xs text-cyan-300 font-bold">
                   Gérer mon compte →
                 </p>
               </div>
@@ -297,7 +297,7 @@ export default function HomePage() {
               <Link
                 href="/chat"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 rounded-2xl bg-cyan-400 px-4 py-3 text-sm font-black text-slate-950 uppercase"
+                className="flex items-center gap-3 rounded-2xl bg-cyan-400 px-4 py-3 text-sm font-black text-slate-950 uppercase font-display"
               >
                 <MessageSquare size={18} />
                 Chat en direct
@@ -306,7 +306,7 @@ export default function HomePage() {
               <Link
                 href="/recherche"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white"
+                className="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-3 text-sm font-bold text-white"
               >
                 <Search size={18} />
                 Rechercher
@@ -330,10 +330,10 @@ export default function HomePage() {
           {/* LEFT SIDEBAR */}
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-4">
-              <div className="rounded-3xl border border-white/20 bg-white/10 p-4 backdrop-blur-xl shadow-xl space-y-2">
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-4 backdrop-blur-2xl shadow-xl space-y-2">
                 <Link
                   href="/accueil"
-                  className="flex items-center gap-3 rounded-2xl bg-cyan-400/20 border border-cyan-400/40 px-4 py-3 text-sm font-black text-cyan-300"
+                  className="flex items-center gap-3 rounded-2xl bg-cyan-400/20 border border-cyan-400/40 px-4 py-3 text-sm font-black font-display text-cyan-300"
                 >
                   <Home size={18} />
                   Accueil
@@ -341,7 +341,7 @@ export default function HomePage() {
 
                 <Link
                   href="/chat"
-                  className="flex items-center gap-3 rounded-2xl bg-cyan-400 hover:bg-cyan-300 px-4 py-3 text-sm font-black text-slate-950 uppercase tracking-wider transition shadow-lg shadow-cyan-400/30"
+                  className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 px-4 py-3 text-sm font-black font-display text-slate-950 uppercase tracking-wider transition shadow-lg shadow-cyan-400/30 hover:scale-[1.02] duration-300"
                 >
                   <MessageSquare size={18} />
                   Chat en direct
@@ -349,7 +349,7 @@ export default function HomePage() {
 
                 <Link
                   href="/recherche"
-                  className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                  className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold text-slate-200 transition hover:bg-white/10"
                 >
                   <Search size={18} />
                   Rechercher
@@ -357,8 +357,8 @@ export default function HomePage() {
               </div>
 
               {/* CATEGORIES CARD */}
-              <div className="rounded-3xl border border-white/20 bg-white/10 p-4 backdrop-blur-xl shadow-xl">
-                <h2 className="mb-3 text-xs font-black uppercase tracking-widest text-cyan-300">
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-4.5 backdrop-blur-2xl shadow-xl">
+                <h2 className="mb-3 text-xs font-black font-display uppercase tracking-widest text-cyan-300">
                   Catégories
                 </h2>
 
@@ -366,7 +366,7 @@ export default function HomePage() {
                   {data.categories.map((category) => (
                     <button
                       key={category.id}
-                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-slate-200 transition hover:bg-white/15 hover:text-white"
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-slate-200 transition hover:bg-white/15 hover:text-white"
                     >
                       <span className="text-base">
                         {getCategoryIcon(category.icon)}
@@ -382,37 +382,37 @@ export default function HomePage() {
           {/* MAIN FEED SECTION */}
           <section className="min-w-0 space-y-6">
             {/* HERO WELCOME BANNER */}
-            <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-r from-purple-900/80 via-indigo-900/80 to-blue-900/80 p-6 text-white shadow-2xl backdrop-blur-xl sm:p-8">
-              <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-400/30 blur-2xl" />
+            <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-r from-purple-900/90 via-indigo-900/90 to-blue-900/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:p-8">
+              <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-cyan-400/30 blur-3xl" />
 
               <div className="relative z-10">
                 <div className="flex items-center gap-3">
                   <img
                     src={data.identity.avatarUrl}
                     alt={data.identity.anonymousName}
-                    className="h-12 w-12 rounded-full border-2 border-cyan-400 shadow-md"
+                    className="h-12 w-12 rounded-full border-2 border-cyan-400 shadow-lg"
                   />
                   <div>
                     <p className="text-xs font-semibold text-cyan-200">
                       Bienvenue
                     </p>
-                    <p className="font-black text-white text-base">
+                    <p className="font-black font-display text-white text-base">
                       {data.identity.anonymousName}
                     </p>
                   </div>
                 </div>
 
-                <h1 className="mt-5 max-w-xl text-2xl font-black tracking-tight sm:text-3xl drop-shadow-md">
+                <h1 className="mt-5 max-w-xl text-2xl font-black font-display tracking-tight sm:text-3xl gradient-text-cyan text-shadow-glow">
                   Quel problème veux-tu partager aujourd'hui ?
                 </h1>
 
-                <p className="mt-2 max-w-xl text-xs sm:text-sm leading-relaxed text-cyan-100/90">
+                <p className="mt-2.5 max-w-xl text-xs sm:text-sm leading-relaxed text-cyan-100/90 font-medium">
                   Exprime-toi librement. La communauté est là pour t'écouter, échanger et trouver la meilleure voie avec toi.
                 </p>
 
                 <Link
                   href="/publier"
-                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-cyan-400 hover:bg-cyan-300 px-6 py-3.5 text-xs font-black uppercase tracking-wider text-slate-950 shadow-lg shadow-cyan-400/40 transition transform active:scale-95"
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 via-cyan-300 to-sky-400 hover:from-cyan-300 hover:to-cyan-200 px-7 py-3.5 text-xs font-black font-display uppercase tracking-widest text-slate-950 shadow-[0_0_25px_rgba(34,211,238,0.5)] transition transform hover:scale-[1.03] active:scale-95 duration-300"
                 >
                   <Plus size={18} />
                   Partager un problème
@@ -422,7 +422,7 @@ export default function HomePage() {
 
             {/* MOBILE CATEGORIES */}
             <div className="lg:hidden">
-              <h2 className="mb-2 text-xs font-black uppercase tracking-widest text-cyan-300">
+              <h2 className="mb-2 text-xs font-black font-display uppercase tracking-widest text-cyan-300">
                 Catégories
               </h2>
               <div className="flex gap-2 overflow-x-auto pb-2">
@@ -442,10 +442,10 @@ export default function HomePage() {
             <div>
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-cyan-400">
+                  <p className="text-xs font-black font-display uppercase tracking-widest text-cyan-400 text-shadow-glow">
                     Communauté
                   </p>
-                  <h2 className="text-xl font-black text-white">
+                  <h2 className="text-2xl font-black font-display text-white">
                     Problèmes récents
                   </h2>
                 </div>
@@ -457,17 +457,17 @@ export default function HomePage() {
               </div>
 
               {data.posts.length === 0 ? (
-                <div className="rounded-3xl border border-dashed border-white/20 bg-white/10 p-10 text-center backdrop-blur-xl">
-                  <MessageCircle size={32} className="mx-auto text-cyan-400 mb-3" />
-                  <h3 className="font-bold text-white text-base">
+                <div className="rounded-3xl border border-dashed border-white/20 bg-white/10 p-10 text-center backdrop-blur-2xl">
+                  <MessageCircle size={36} className="mx-auto text-cyan-300 mb-3" />
+                  <h3 className="font-black font-display text-white text-lg">
                     Aucun problème pour le moment
                   </h3>
-                  <p className="mx-auto mt-2 max-w-sm text-xs text-cyan-100/80">
+                  <p className="mx-auto mt-2 max-w-sm text-xs font-medium text-cyan-100/80">
                     Sois le premier à partager quelque chose avec la communauté.
                   </p>
                   <Link
                     href="/publier"
-                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-cyan-400 px-5 py-3 text-xs font-black uppercase text-slate-950"
+                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-cyan-400 px-6 py-3 text-xs font-black font-display uppercase text-slate-950 shadow-lg shadow-cyan-400/40"
                   >
                     <Plus size={16} />
                     Publier un problème
@@ -478,26 +478,26 @@ export default function HomePage() {
                   {data.posts.map((post) => (
                     <article
                       key={post.id}
-                      className="rounded-3xl border border-white/20 bg-white/10 p-5 sm:p-6 shadow-xl backdrop-blur-xl transition hover:border-cyan-400/50 hover:bg-white/15"
+                      className="rounded-3xl border border-white/20 bg-white/10 p-5 sm:p-6 shadow-xl backdrop-blur-2xl transition-all duration-300 hover:border-cyan-400/50 hover:bg-white/15 hover:-translate-y-0.5"
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex min-w-0 items-center gap-3">
                           <img
                             src={post.author.avatarUrl}
                             alt={post.author.anonymousName}
-                            className="h-10 w-10 shrink-0 rounded-full border border-cyan-400/30"
+                            className="h-10 w-10 shrink-0 rounded-full border border-cyan-400/40 shadow-sm"
                           />
                           <div className="min-w-0">
-                            <p className="truncate text-xs font-bold text-white">
+                            <p className="truncate text-xs font-black font-display text-white">
                               {post.author.anonymousName}
                             </p>
-                            <p className="text-[10px] text-cyan-200/70">
+                            <p className="text-[10px] font-semibold text-cyan-200/70">
                               {formatDate(post.createdAt)}
                             </p>
                           </div>
                         </div>
 
-                        <span className="shrink-0 rounded-full bg-cyan-400/20 border border-cyan-400/30 px-3 py-1 text-xs font-bold text-cyan-300">
+                        <span className="shrink-0 rounded-full bg-cyan-400/20 border border-cyan-400/40 px-3.5 py-1 text-xs font-extrabold text-cyan-300">
                           {getCategoryIcon(post.category.icon)}{" "}
                           {post.category.name}
                         </span>
@@ -507,36 +507,36 @@ export default function HomePage() {
                         href={`/probleme/${post.id}`}
                         className="mt-4 block group"
                       >
-                        <h3 className="text-lg font-black leading-snug text-white transition group-hover:text-cyan-300">
+                        <h3 className="text-lg sm:text-xl font-black font-display leading-snug text-white transition group-hover:text-cyan-300">
                           {post.title}
                         </h3>
 
-                        <p className="mt-2 line-clamp-3 text-xs sm:text-sm leading-relaxed text-cyan-100/80">
+                        <p className="mt-2 line-clamp-3 text-xs sm:text-sm leading-relaxed text-cyan-100/85 font-medium">
                           {post.content}
                         </p>
                       </Link>
 
                       <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-                        <div className="flex items-center gap-4 text-xs font-semibold text-cyan-200/80">
+                        <div className="flex items-center gap-5 text-xs font-bold text-cyan-200/80">
                           <span className="flex items-center gap-1.5">
-                            <MessageCircle size={15} className="text-cyan-400" />
+                            <MessageCircle size={16} className="text-cyan-400" />
                             {post.commentsCount}
                           </span>
 
                           <span className="flex items-center gap-1.5">
-                            <Heart size={15} className="text-rose-400" />
+                            <Heart size={16} className="text-rose-400" />
                             {post.likesCount}
                           </span>
 
                           <span className="flex items-center gap-1.5">
-                            <Eye size={15} className="text-cyan-300" />
+                            <Eye size={16} className="text-cyan-300" />
                             {post.viewsCount}
                           </span>
                         </div>
 
                         <Link
                           href={`/probleme/${post.id}`}
-                          className="text-xs font-bold text-cyan-300 hover:text-white transition"
+                          className="text-xs font-black font-display text-cyan-300 hover:text-white transition"
                         >
                           Voir la discussion →
                         </Link>
@@ -551,36 +551,36 @@ export default function HomePage() {
           {/* RIGHT SIDEBAR */}
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-4">
-              <div className="rounded-3xl border border-white/20 bg-white/10 p-5 backdrop-blur-xl shadow-xl space-y-3">
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-5 backdrop-blur-2xl shadow-xl space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-400/20 text-cyan-300 border border-cyan-400/30">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-400/20 text-cyan-300 border border-cyan-400/40">
                     <ShieldCheck size={20} />
                   </div>
                   <div>
-                    <h2 className="text-xs font-black uppercase text-white">
+                    <h2 className="text-xs font-black font-display uppercase text-white">
                       Anonymat garanti
                     </h2>
-                    <p className="text-[10px] text-cyan-200">Toujours protégé</p>
+                    <p className="text-[10px] font-bold text-cyan-300">Toujours protégé</p>
                   </div>
                 </div>
-                <p className="text-xs leading-relaxed text-cyan-100/80">
+                <p className="text-xs leading-relaxed text-cyan-100/80 font-medium">
                   Les autres membres voient uniquement ton pseudonyme anonyme attribué. Tes données personnelles sont privées.
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-white/20 bg-white/10 p-5 backdrop-blur-xl shadow-xl space-y-3">
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-5 backdrop-blur-2xl shadow-xl space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-400/20 text-amber-300 border border-amber-400/40">
                     <Sparkles size={19} />
                   </div>
                   <div>
-                    <h2 className="text-xs font-black uppercase text-white">
+                    <h2 className="text-xs font-black font-display uppercase text-white">
                       Bienveillance
                     </h2>
-                    <p className="text-[10px] text-cyan-200">Notre priorité</p>
+                    <p className="text-[10px] font-bold text-amber-300">Notre priorité</p>
                   </div>
                 </div>
-                <p className="text-xs leading-relaxed text-cyan-100/80">
+                <p className="text-xs leading-relaxed text-cyan-100/80 font-medium">
                   Échange avec respect et empathie. Chaque problème mérite d'être écouté sans jugement.
                 </p>
               </div>
@@ -590,7 +590,7 @@ export default function HomePage() {
       </div>
 
       {/* MOBILE BOTTOM NAV */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/15 bg-slate-950/90 px-4 py-2 backdrop-blur-xl lg:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/15 bg-slate-950/95 px-4 py-2 backdrop-blur-2xl lg:hidden">
         <div className="mx-auto flex max-w-md items-center justify-around">
           <Link
             href="/accueil"
