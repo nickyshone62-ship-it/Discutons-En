@@ -178,10 +178,10 @@ export default function RegisterForm() {
             <div className="flex gap-1.5 overflow-x-auto pb-1 text-xs">
               {[
                 { id: "ALL", label: "⭐ Tous (100)" },
-                { id: "Classic", label: "😎 Classic" },
-                { id: "Modern", label: "✨ Modern" },
-                { id: "Artistic", label: "🎨 Artistic" },
-                { id: "Cyber", label: "🤖 Cyber" },
+                { id: "Réaliste 3D", label: "👤 Réaliste 3D" },
+                { id: "Portraits", label: "🖼️ Portraits" },
+                { id: "Classique", label: "✨ Classique" },
+                { id: "Moderne", label: "🎨 Moderne" },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -197,6 +197,7 @@ export default function RegisterForm() {
                 </button>
               ))}
             </div>
+
 
             {/* AVATARS GRID */}
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2.5 max-h-56 overflow-y-auto pr-1">

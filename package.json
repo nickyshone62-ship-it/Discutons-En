@@ -9,12 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@dicebear/adventurer": "^9.4.2",
     "@dicebear/avataaars": "^9.4.2",
     "@dicebear/bottts-neutral": "^9.4.2",
     "@dicebear/core": "^9.4.3",
     "@dicebear/initials": "^9.4.2",
     "@dicebear/lorelei": "^9.4.2",
     "@dicebear/micah": "^9.4.2",
+    "@dicebear/open-peeps": "^9.4.2",
+    "@dicebear/personas": "^9.4.2",
     "@neondatabase/serverless": "^1.1.0",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
