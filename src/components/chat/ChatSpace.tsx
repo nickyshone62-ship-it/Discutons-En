@@ -105,14 +105,14 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
   }
 
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
-  const waveformHeights = [40, 70, 45, 90, 60, 30, 85, 50, 95, 40, 75, 55, 80, 35, 65];
+  const waveformHeights = [40, 75, 45, 90, 60, 35, 85, 50, 95, 40, 75, 55, 80];
 
   return (
     <div
-      className={`relative flex items-center gap-3.5 rounded-3xl p-3.5 px-4 shadow-md transition-all border min-w-[250px] sm:min-w-[280px] ${
+      className={`relative flex items-center gap-2.5 rounded-2xl p-2 px-3 shadow-sm transition-all border min-w-[180px] sm:min-w-[210px] ${
         isMe
-          ? "bg-gradient-to-r from-slate-900 via-sky-950 to-slate-950 text-white border-sky-500/30"
-          : "bg-gradient-to-r from-white via-slate-50 to-sky-50 text-slate-800 border-slate-200"
+          ? "bg-slate-950 text-white border-slate-800"
+          : "bg-slate-100 text-slate-800 border-slate-200"
       }`}
     >
       <audio ref={audioRef} src={src} preload="metadata" />
@@ -121,27 +121,27 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
       <button
         type="button"
         onClick={togglePlay}
-        className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-md transition transform active:scale-95 ${
+        className={`relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition transform active:scale-95 ${
           isMe
-            ? "bg-sky-500 text-white hover:bg-sky-400 shadow-sky-500/30"
-            : "bg-sky-600 text-white hover:bg-sky-500 shadow-sky-600/20"
+            ? "bg-sky-500 text-white hover:bg-sky-400"
+            : "bg-sky-600 text-white hover:bg-sky-500"
         }`}
       >
         {playing && (
-          <span className="absolute inset-0 rounded-2xl bg-sky-400 opacity-40 animate-ping" />
+          <span className="absolute inset-0 rounded-xl bg-sky-400 opacity-40 animate-ping" />
         )}
         {playing ? (
-          <Pause size={20} className="relative z-10" />
+          <Pause size={14} className="relative z-10" />
         ) : (
-          <Play size={20} className="relative z-10 ml-0.5" />
+          <Play size={14} className="relative z-10 ml-0.5" />
         )}
       </button>
 
       {/* WAVEFORM AND PROGRESS BAR */}
-      <div className="flex-1 space-y-1.5">
-        <div className="flex items-center justify-between text-[11px] font-bold tracking-tight">
-          <span className={isMe ? "text-sky-300" : "text-sky-700"}>
-            🎙️ Message Vocal
+      <div className="flex-1 space-y-1">
+        <div className="flex items-center justify-between text-[10px] font-bold tracking-tight">
+          <span className={isMe ? "text-sky-400" : "text-sky-600"}>
+            🎙️ Vocal
           </span>
           <span className={isMe ? "text-slate-400" : "text-slate-500"}>
             {formatAudioTime(currentTime)} / {formatAudioTime(duration || 0)}
@@ -149,7 +149,7 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
         </div>
 
         {/* WAVEFORM BARS */}
-        <div className="flex items-center gap-1 h-5 py-0.5">
+        <div className="flex items-center gap-0.5 h-3">
           {waveformHeights.map((h, index) => {
             const barProgress = (index / waveformHeights.length) * 100;
             const isPassed = progressPercent >= barProgress;
@@ -157,16 +157,14 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
             return (
               <div
                 key={index}
-                className={`flex-1 rounded-full transition-all duration-200 ${
-                  playing ? "animate-pulse" : ""
-                } ${
+                className={`flex-1 rounded-full transition-all duration-150 ${
                   isPassed
                     ? isMe
-                      ? "bg-sky-400 shadow-sm shadow-sky-400/50"
+                      ? "bg-sky-400"
                       : "bg-sky-600"
                     : isMe
-                    ? "bg-slate-700/60"
-                    : "bg-slate-200"
+                    ? "bg-slate-700"
+                    : "bg-slate-300"
                 }`}
                 style={{
                   height: `${playing ? Math.max(30, h) : h}%`,
@@ -175,16 +173,6 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
             );
           })}
         </div>
-
-        {/* SCRUBBER */}
-        <input
-          type="range"
-          min={0}
-          max={duration || 100}
-          value={currentTime}
-          onChange={handleSeek}
-          className="w-full h-1 bg-transparent accent-sky-400 cursor-pointer opacity-30 hover:opacity-100 transition"
-        />
       </div>
     </div>
   );
