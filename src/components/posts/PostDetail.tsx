@@ -87,7 +87,7 @@ export default function PostDetail({ postId }: { postId: string }) {
   const [likedComments, setLikedComments] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    async function loadPostDetail() {
+    async function fetchPostDetail(isFirstLoad = false) {
       try {
         const response = await fetch(`/api/posts/${postId}`, {
           cache: "no-store",
@@ -95,33 +95,41 @@ export default function PostDetail({ postId }: { postId: string }) {
 
         const data = await response.json();
 
-        if (!response.ok || !data.success) {
+        if (response.ok && data.success) {
+          setPost(data.post);
+          setComments(data.comments || []);
+          setCurrentUserIdentity(data.currentUserIdentity);
+          setPostLikesCount(data.post.likesCount);
+          setLikedPost(!!data.hasLikedPost);
+
+          if (Array.isArray(data.userLikedCommentIds)) {
+            const map: Record<string, boolean> = {};
+            data.userLikedCommentIds.forEach((id: string) => {
+              map[id] = true;
+            });
+            setLikedComments(map);
+          }
+        } else if (isFirstLoad) {
           setError(data.message || "Impossible de charger la discussion.");
-          return;
-        }
-
-        setPost(data.post);
-        setComments(data.comments || []);
-        setCurrentUserIdentity(data.currentUserIdentity);
-        setPostLikesCount(data.post.likesCount);
-        setLikedPost(!!data.hasLikedPost);
-
-        if (Array.isArray(data.userLikedCommentIds)) {
-          const map: Record<string, boolean> = {};
-          data.userLikedCommentIds.forEach((id: string) => {
-            map[id] = true;
-          });
-          setLikedComments(map);
         }
       } catch {
-        setError("Impossible de contacter le serveur. Vérifie ta connexion.");
+        if (isFirstLoad) {
+          setError("Impossible de contacter le serveur. Vérifie ta connexion.");
+        }
       } finally {
-        setLoading(false);
+        if (isFirstLoad) setLoading(false);
       }
     }
 
-    loadPostDetail();
+    fetchPostDetail(true);
+
+    const interval = setInterval(() => {
+      fetchPostDetail(false);
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, [postId]);
+
 
   async function handleCommentSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

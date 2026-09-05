@@ -93,7 +93,7 @@ export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    async function loadHome() {
+    async function fetchHome(isFirstLoad = false) {
       try {
         const response = await fetch("/api/home", {
           cache: "no-store",
@@ -106,26 +106,33 @@ export default function HomePage() {
           return;
         }
 
-        if (!response.ok || !result.success) {
+        if (response.ok && result.success) {
+          setData(result);
+        } else if (isFirstLoad) {
           setError(
-            result.message ||
-              "Impossible de charger votre espace."
+            result.message || "Impossible de charger votre espace."
           );
-          return;
         }
-
-        setData(result);
       } catch {
-        setError(
-          "Impossible de contacter le serveur. Vérifie ta connexion."
-        );
+        if (isFirstLoad) {
+          setError(
+            "Impossible de contacter le serveur. Vérifie ta connexion."
+          );
+        }
       } finally {
-        setLoading(false);
+        if (isFirstLoad) setLoading(false);
       }
     }
 
-    loadHome();
+    fetchHome(true);
+
+    const interval = setInterval(() => {
+      fetchHome(false);
+    }, 4000);
+
+    return () => clearInterval(interval);
   }, []);
+
 
   async function handleLogout() {
     try {
