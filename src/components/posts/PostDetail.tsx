@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import {
   ArrowLeft,
+  Award,
   Eye,
   Heart,
   Loader2,
@@ -11,11 +12,13 @@ import {
   Send,
   ShieldCheck,
   Sparkles,
+  ThumbsUp,
 } from "lucide-react";
 
 type Comment = {
   id: string;
   content: string;
+  likesCount: number;
   createdAt: string;
   author: {
     anonymousName: string;
@@ -79,8 +82,9 @@ export default function PostDetail({ postId }: { postId: string }) {
   const [newComment, setNewComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [commentError, setCommentError] = useState("");
-  const [liked, setLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState(0);
+  const [likedPost, setLikedPost] = useState(false);
+  const [postLikesCount, setPostLikesCount] = useState(0);
+  const [likedComments, setLikedComments] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     async function loadPostDetail() {
@@ -99,7 +103,7 @@ export default function PostDetail({ postId }: { postId: string }) {
         setPost(data.post);
         setComments(data.comments || []);
         setCurrentUserIdentity(data.currentUserIdentity);
-        setLikesCount(data.post.likesCount);
+        setPostLikesCount(data.post.likesCount);
       } catch {
         setError("Impossible de contacter le serveur. Vérifie ta connexion.");
       } finally {
@@ -144,7 +148,12 @@ export default function PostDetail({ postId }: { postId: string }) {
         return;
       }
 
-      setComments((prev) => [...prev, data.comment]);
+      const createdComment: Comment = {
+        ...data.comment,
+        likesCount: 0,
+      };
+
+      setComments((prev) => [...prev, createdComment]);
       setNewComment("");
       if (post) {
         setPost({
@@ -159,15 +168,54 @@ export default function PostDetail({ postId }: { postId: string }) {
     }
   }
 
-  function toggleLike() {
-    if (!liked) {
-      setLiked(true);
-      setLikesCount((prev) => prev + 1);
+  function toggleLikePost() {
+    if (!likedPost) {
+      setLikedPost(true);
+      setPostLikesCount((prev) => prev + 1);
     } else {
-      setLiked(false);
-      setLikesCount((prev) => prev - 1);
+      setLikedPost(false);
+      setPostLikesCount((prev) => prev - 1);
     }
   }
+
+  async function handleLikeComment(commentId: string) {
+    const isLiked = likedComments[commentId];
+
+    // Optimistic UI update
+    setLikedComments((prev) => ({ ...prev, [commentId]: !isLiked }));
+    setComments((prev) =>
+      prev.map((c) =>
+        c.id === commentId
+          ? { ...c, likesCount: isLiked ? c.likesCount - 1 : c.likesCount + 1 }
+          : c
+      )
+    );
+
+    try {
+      const res = await fetch(`/api/comments/${commentId}/like`, {
+        method: "POST",
+      });
+      if (res.status === 401) {
+        window.location.href = "/connexion";
+        return;
+      }
+      const data = await res.json();
+      if (data.success) {
+        setComments((prev) =>
+          prev.map((c) =>
+            c.id === commentId ? { ...c, likesCount: data.likesCount } : c
+          )
+        );
+      }
+    } catch {
+      // Revert if error
+      setLikedComments((prev) => ({ ...prev, [commentId]: isLiked }));
+    }
+  }
+
+  // Find highest voted comment to highlight as best advice
+  const maxLikes = Math.max(0, ...comments.map((c) => c.likesCount));
+  const topCommentId = maxLikes > 0 ? comments.find((c) => c.likesCount === maxLikes)?.id : null;
 
   if (loading) {
     return (
@@ -259,13 +307,13 @@ export default function PostDetail({ postId }: { postId: string }) {
             </span>
 
             <button
-              onClick={toggleLike}
+              onClick={toggleLikePost}
               className={`flex items-center gap-2 font-semibold transition ${
-                liked ? "text-rose-500" : "text-slate-400 hover:text-rose-500"
+                likedPost ? "text-rose-500" : "text-slate-400 hover:text-rose-500"
               }`}
             >
-              <Heart size={18} className={liked ? "fill-rose-500 text-rose-500" : ""} />
-              {likesCount}
+              <Heart size={18} className={likedPost ? "fill-rose-500 text-rose-500" : ""} />
+              {postLikesCount}
             </button>
 
             <span className="flex items-center gap-2 font-medium">
@@ -278,9 +326,14 @@ export default function PostDetail({ postId }: { postId: string }) {
 
       {/* COMMENTS SECTION */}
       <section className="space-y-6">
-        <h2 className="text-xl font-black text-slate-950">
-          Réponses ({comments.length})
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-black text-slate-950">
+            Pistes & Réponses ({comments.length})
+          </h2>
+          <p className="text-xs text-slate-400">
+            Votez pour guider vers la meilleure solution 💡
+          </p>
+        </div>
 
         {/* ADD COMMENT FORM */}
         <form
@@ -315,7 +368,7 @@ export default function PostDetail({ postId }: { postId: string }) {
                 rows={3}
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Apporte ton aide, tes conseils ou partage ton expérience avec bienveillance..."
+                placeholder="Apporte ton aide, propose ta solution ou partage ton expérience..."
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
               />
             </div>
@@ -339,7 +392,7 @@ export default function PostDetail({ postId }: { postId: string }) {
                 </>
               ) : (
                 <>
-                  Répondre
+                  Partager cette piste
                   <Send size={15} />
                 </>
               )}
@@ -355,39 +408,80 @@ export default function PostDetail({ postId }: { postId: string }) {
               Aucune réponse pour l'instant
             </p>
             <p className="text-xs text-slate-400 mt-1">
-              Sois le premier membre à conseiller ou soutenir cette personne !
+              Sois le premier membre à proposer une solution ou un conseil éclairé !
             </p>
           </div>
         ) : (
           <div className="space-y-4">
-            {comments.map((comment) => (
-              <div
-                key={comment.id}
-                className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm space-y-3"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={comment.author.avatarUrl}
-                      alt={comment.author.anonymousName}
-                      className="h-9 w-9 rounded-full"
-                    />
-                    <div>
-                      <p className="text-sm font-bold text-slate-900">
-                        {comment.author.anonymousName}
-                      </p>
-                      <p className="text-[11px] text-slate-400">
-                        {formatDate(comment.createdAt)}
-                      </p>
+            {comments.map((comment) => {
+              const isTop = comment.id === topCommentId;
+              const isLikedByMe = likedComments[comment.id];
+
+              return (
+                <div
+                  key={comment.id}
+                  className={`rounded-3xl border p-5 shadow-sm space-y-3 transition ${
+                    isTop
+                      ? "border-emerald-200 bg-emerald-50/40 ring-1 ring-emerald-300/50"
+                      : "border-slate-200 bg-white"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={comment.author.avatarUrl}
+                        alt={comment.author.anonymousName}
+                        className="h-9 w-9 rounded-full"
+                      />
+                      <div>
+                        <p className="text-sm font-bold text-slate-900">
+                          {comment.author.anonymousName}
+                        </p>
+                        <p className="text-[11px] text-slate-400">
+                          {formatDate(comment.createdAt)}
+                        </p>
+                      </div>
                     </div>
+
+                    {isTop && (
+                      <span className="inline-flex items-center gap-1 rounded-xl bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
+                        <Award size={14} className="text-emerald-600" />
+                        Meilleure piste conseillée
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="text-sm leading-relaxed text-slate-700 pl-12 whitespace-pre-wrap">
+                    {comment.content}
+                  </p>
+
+                  <div className="flex items-center justify-between pl-12 pt-2 border-t border-slate-100">
+                    <button
+                      onClick={() => handleLikeComment(comment.id)}
+                      className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition ${
+                        isLikedByMe
+                          ? "bg-sky-100 text-sky-700"
+                          : "bg-slate-100 text-slate-600 hover:bg-sky-50 hover:text-sky-600"
+                      }`}
+                    >
+                      <ThumbsUp
+                        size={14}
+                        className={isLikedByMe ? "fill-sky-700" : ""}
+                      />
+                      <span>Utile ({comment.likesCount})</span>
+                    </button>
+
+                    <span className="text-[11px] text-slate-400">
+                      {comment.likesCount > 0
+                        ? `Soutenu par ${comment.likesCount} membre${
+                            comment.likesCount > 1 ? "s" : ""
+                          }`
+                        : "Soutenez cette réponse si elle vous semble utile"}
+                    </span>
                   </div>
                 </div>
-
-                <p className="text-sm leading-relaxed text-slate-700 pl-12 whitespace-pre-wrap">
-                  {comment.content}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>

@@ -70,24 +70,45 @@ export async function GET(
 
     const post = posts[0];
 
-    // Get comments for this post
-    const comments = await sql`
-      SELECT
-        c.id,
-        c.content,
-        c.created_at,
-        ai.anonymous_name,
-        ai.avatar_seed
-      FROM comments c
-      INNER JOIN anonymous_identities ai
-        ON ai.user_id = c.user_id
-      WHERE c.post_id = ${id}
-      ORDER BY c.created_at ASC
-    `;
+    // Try fetching comments with likes_count (ordered by most liked first)
+    let comments = [];
+    try {
+      comments = await sql`
+        SELECT
+          c.id,
+          c.content,
+          COALESCE(c.likes_count, 0) AS likes_count,
+          c.created_at,
+          ai.anonymous_name,
+          ai.avatar_seed
+        FROM comments c
+        INNER JOIN anonymous_identities ai
+          ON ai.user_id = c.user_id
+        WHERE c.post_id = ${id}
+        ORDER BY COALESCE(c.likes_count, 0) DESC, c.created_at ASC
+      `;
+    } catch {
+      // Fallback if likes_count column doesn't exist yet
+      comments = await sql`
+        SELECT
+          c.id,
+          c.content,
+          0 AS likes_count,
+          c.created_at,
+          ai.anonymous_name,
+          ai.avatar_seed
+        FROM comments c
+        INNER JOIN anonymous_identities ai
+          ON ai.user_id = c.user_id
+        WHERE c.post_id = ${id}
+        ORDER BY c.created_at ASC
+      `;
+    }
 
     const formattedComments = comments.map((comment) => ({
       id: comment.id,
       content: comment.content,
+      likesCount: Number(comment.likes_count ?? 0),
       createdAt: comment.created_at,
       author: {
         anonymousName: comment.anonymous_name,
