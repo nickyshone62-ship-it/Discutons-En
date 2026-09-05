@@ -638,9 +638,10 @@ export default function ChatSpace() {
                         type="text"
                         value={editText}
                         onChange={(e) => setEditText(e.target.value)}
-                        className="bg-transparent text-white text-sm outline-none flex-1 px-2 font-medium"
+                        className="bg-transparent text-white text-base outline-none flex-1 px-2 font-medium"
                         autoFocus
                       />
+
                       <button
                         onClick={() => handleSaveEdit(msg.id)}
                         className="p-1.5 rounded-lg bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition font-bold"

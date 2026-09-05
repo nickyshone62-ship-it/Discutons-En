@@ -167,3 +167,13 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(180deg, #67e8f9 0%, #60a5fa 100%);
 }
 
+/* Prevent iOS / Mobile Safari / Chrome auto-zoom on input focus */
+@media screen and (max-width: 768px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+
