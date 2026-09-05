@@ -224,7 +224,11 @@ export default function HomePage() {
 
             <div className="ml-2 h-8 w-px bg-slate-200" />
 
-            <div className="ml-2 flex items-center gap-3">
+            <Link
+              href="/compte"
+              className="ml-2 flex items-center gap-3 rounded-2xl p-1.5 px-2 hover:bg-slate-100 transition"
+              title="Gérer mon compte"
+            >
               <img
                 src={data.identity.avatarUrl}
                 alt={data.identity.anonymousName}
@@ -235,20 +239,20 @@ export default function HomePage() {
                 <p className="text-xs font-bold text-slate-900">
                   {data.identity.anonymousName}
                 </p>
-                <p className="text-[11px] text-slate-400">
-                  Identité anonyme
+                <p className="text-[11px] text-sky-600 font-semibold">
+                  Mon compte →
                 </p>
               </div>
+            </Link>
 
-              <button
-                onClick={handleLogout}
-                className="ml-1 rounded-xl p-2 text-slate-400 transition hover:bg-slate-100 hover:text-red-500"
-                aria-label="Se déconnecter"
-                title="Se déconnecter"
-              >
-                <LogOut size={18} />
-              </button>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="ml-1 rounded-xl p-2 text-slate-400 transition hover:bg-slate-100 hover:text-red-500"
+              aria-label="Se déconnecter"
+              title="Se déconnecter"
+            >
+              <LogOut size={18} />
+            </button>
           </div>
 
           <button
