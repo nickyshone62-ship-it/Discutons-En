@@ -20,43 +20,69 @@ export async function GET() {
       );
     }
 
-    // Ensure table chat_messages exists with audio_url and is_edited columns
+    // Ensure columns exist
     await sql`
       CREATE TABLE IF NOT EXISTS chat_messages (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID NOT NULL,
         content TEXT NOT NULL,
         audio_url TEXT NULL,
+        reply_to_id UUID NULL,
         is_edited BOOLEAN DEFAULT FALSE,
+        likes_count INT DEFAULT 0,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
     `;
     await sql`
-      ALTER TABLE chat_messages ADD COLUMN IF NOT EXISTS audio_url TEXT NULL
+      ALTER TABLE chat_messages ADD COLUMN IF NOT EXISTS reply_to_id UUID NULL
     `;
     await sql`
-      ALTER TABLE chat_messages ADD COLUMN IF NOT EXISTS is_edited BOOLEAN DEFAULT FALSE
+      ALTER TABLE chat_messages ADD COLUMN IF NOT EXISTS likes_count INT DEFAULT 0
+    `;
+    await sql`
+      CREATE TABLE IF NOT EXISTS chat_message_likes (
+        user_id UUID NOT NULL,
+        message_id UUID NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id, message_id)
+      )
     `;
 
     const identity = await getOrCreateAnonymousIdentity(user.id as string);
 
-    // Fetch recent messages
+    // Fetch messages joining parent message info if replying
     const messages = await sql`
       SELECT
         cm.id,
         cm.user_id,
         cm.content,
         cm.audio_url,
+        cm.reply_to_id,
         COALESCE(cm.is_edited, FALSE) AS is_edited,
+        COALESCE(cm.likes_count, 0) AS likes_count,
         cm.created_at,
         ai.anonymous_name,
-        ai.avatar_seed
+        ai.avatar_seed,
+        parent.content AS parent_content,
+        parent_ai.anonymous_name AS parent_author_name
       FROM chat_messages cm
       INNER JOIN anonymous_identities ai
         ON ai.user_id = cm.user_id
+      LEFT JOIN chat_messages parent
+        ON parent.id = cm.reply_to_id
+      LEFT JOIN anonymous_identities parent_ai
+        ON parent_ai.user_id = parent.user_id
       ORDER BY cm.created_at ASC
       LIMIT 50
     `;
+
+    // Fetch user liked message ids
+    const likedRows = await sql`
+      SELECT message_id
+      FROM chat_message_likes
+      WHERE user_id = ${user.id as string}
+    `;
+    const likedMessageIds = new Set(likedRows.map((r) => r.message_id as string));
 
     const formattedMessages = messages.map((msg) => ({
       id: msg.id,
@@ -64,6 +90,15 @@ export async function GET() {
       content: msg.content,
       audioUrl: msg.audio_url || null,
       isEdited: !!msg.is_edited,
+      likesCount: Number(msg.likes_count ?? 0),
+      isLikedByMe: likedMessageIds.has(msg.id as string),
+      replyTo: msg.reply_to_id
+        ? {
+            id: msg.reply_to_id,
+            authorName: msg.parent_author_name || "Membre",
+            content: msg.parent_content || "Message",
+          }
+        : null,
       createdAt: msg.created_at,
       isMe: msg.user_id === user.id,
       author: {
@@ -116,6 +151,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const content = typeof body.content === "string" ? body.content.trim() : "";
     const audioUrl = typeof body.audioUrl === "string" ? body.audioUrl : null;
+    const replyToId = typeof body.replyToId === "string" ? body.replyToId : null;
 
     if (!audioUrl && (!content || content.length < 1 || content.length > 1000)) {
       return NextResponse.json(
@@ -127,28 +163,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Ensure columns exist
-    await sql`
-      CREATE TABLE IF NOT EXISTS chat_messages (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        user_id UUID NOT NULL,
-        content TEXT NOT NULL,
-        audio_url TEXT NULL,
-        is_edited BOOLEAN DEFAULT FALSE,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-      )
-    `;
-    await sql`
-      ALTER TABLE chat_messages ADD COLUMN IF NOT EXISTS audio_url TEXT NULL
-    `;
-    await sql`
-      ALTER TABLE chat_messages ADD COLUMN IF NOT EXISTS is_edited BOOLEAN DEFAULT FALSE
-    `;
-
     const inserted = await sql`
-      INSERT INTO chat_messages (user_id, content, audio_url)
-      VALUES (${user.id as string}, ${content || "🎤 Message vocal"}, ${audioUrl})
-      RETURNING id, user_id, content, audio_url, is_edited, created_at
+      INSERT INTO chat_messages (user_id, content, audio_url, reply_to_id)
+      VALUES (${user.id as string}, ${content || "🎤 Message vocal"}, ${audioUrl}, ${replyToId})
+      RETURNING id, user_id, content, audio_url, reply_to_id, is_edited, likes_count, created_at
     `;
 
     if (inserted.length === 0) {
@@ -164,6 +182,28 @@ export async function POST(request: Request) {
     const identity = await getOrCreateAnonymousIdentity(user.id as string);
     const newMsg = inserted[0];
 
+    // Fetch parent details if replying
+    let replyTo = null;
+    if (replyToId) {
+      const parentRows = await sql`
+        SELECT
+          cm.id,
+          cm.content,
+          ai.anonymous_name
+        FROM chat_messages cm
+        INNER JOIN anonymous_identities ai ON ai.user_id = cm.user_id
+        WHERE cm.id = ${replyToId}
+        LIMIT 1
+      `;
+      if (parentRows.length > 0) {
+        replyTo = {
+          id: parentRows[0].id,
+          authorName: parentRows[0].anonymous_name,
+          content: parentRows[0].content,
+        };
+      }
+    }
+
     return NextResponse.json({
       success: true,
       message: {
@@ -172,6 +212,9 @@ export async function POST(request: Request) {
         content: newMsg.content,
         audioUrl: newMsg.audio_url,
         isEdited: !!newMsg.is_edited,
+        likesCount: 0,
+        isLikedByMe: false,
+        replyTo,
         createdAt: newMsg.created_at,
         isMe: true,
         author: {

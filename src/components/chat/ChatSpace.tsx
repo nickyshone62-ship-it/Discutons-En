@@ -5,14 +5,15 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   Check,
+  CornerDownRight,
   Edit2,
+  Heart,
   Loader2,
   MessageSquare,
   Mic,
-  MicOff,
-  MoreVertical,
-  Play,
   Pause,
+  Play,
+  Reply,
   Send,
   ShieldCheck,
   Sparkles,
@@ -27,6 +28,13 @@ type ChatMessage = {
   content: string;
   audioUrl?: string | null;
   isEdited?: boolean;
+  likesCount?: number;
+  isLikedByMe?: boolean;
+  replyTo?: {
+    id: string;
+    authorName: string;
+    content: string;
+  } | null;
   createdAt: string;
   isMe: boolean;
   author: {
@@ -90,13 +98,6 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
     }
   }
 
-  function handleSeek(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!audioRef.current) return;
-    const seekTime = Number(e.target.value);
-    audioRef.current.currentTime = seekTime;
-    setCurrentTime(seekTime);
-  }
-
   function formatAudioTime(seconds: number) {
     if (isNaN(seconds) || seconds === 0) return "0:00";
     const mins = Math.floor(seconds / 60);
@@ -117,7 +118,6 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
     >
       <audio ref={audioRef} src={src} preload="metadata" />
 
-      {/* PLAY / PAUSE BUTTON */}
       <button
         type="button"
         onClick={togglePlay}
@@ -137,7 +137,6 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
         )}
       </button>
 
-      {/* WAVEFORM AND PROGRESS BAR */}
       <div className="flex-1 space-y-1">
         <div className="flex items-center justify-between text-[10px] font-bold tracking-tight">
           <span className={isMe ? "text-sky-400" : "text-sky-600"}>
@@ -148,7 +147,6 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
           </span>
         </div>
 
-        {/* WAVEFORM BARS */}
         <div className="flex items-center gap-0.5 h-3">
           {waveformHeights.map((h, index) => {
             const barProgress = (index / waveformHeights.length) * 100;
@@ -193,6 +191,9 @@ export default function ChatSpace() {
   // Editing state
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
+
+  // Replying state
+  const [replyingToMsg, setReplyingToMsg] = useState<ChatMessage | null>(null);
 
   // Voice recording state
   const [recording, setRecording] = useState(false);
@@ -256,6 +257,8 @@ export default function ChatSpace() {
 
     setSending(true);
     setInputText("");
+    const replyToId = replyingToMsg ? replyingToMsg.id : null;
+    setReplyingToMsg(null);
 
     try {
       const response = await fetch("/api/chat/messages", {
@@ -265,6 +268,7 @@ export default function ChatSpace() {
         },
         body: JSON.stringify({
           content: textToSend,
+          replyToId,
         }),
       });
 
@@ -310,7 +314,6 @@ export default function ChatSpace() {
           await sendVoiceMessage(base64Audio);
         };
 
-        // Stop all tracks
         stream.getTracks().forEach((track) => track.stop());
       };
 
@@ -345,6 +348,9 @@ export default function ChatSpace() {
 
   async function sendVoiceMessage(base64Audio: string) {
     setSending(true);
+    const replyToId = replyingToMsg ? replyingToMsg.id : null;
+    setReplyingToMsg(null);
+
     try {
       const response = await fetch("/api/chat/messages", {
         method: "POST",
@@ -354,6 +360,7 @@ export default function ChatSpace() {
         body: JSON.stringify({
           content: "🎤 Message vocal",
           audioUrl: base64Audio,
+          replyToId,
         }),
       });
 
@@ -364,7 +371,7 @@ export default function ChatSpace() {
         setTimeout(scrollToBottom, 50);
       }
     } catch {
-      alert("Erreur lors de l'envoi du vocale.");
+      alert("Erreur lors de l'envoi du vocal.");
     } finally {
       setSending(false);
     }
@@ -425,6 +432,28 @@ export default function ChatSpace() {
     }
   }
 
+  // Like message handler
+  async function handleLikeMessage(messageId: string) {
+    try {
+      const response = await fetch(`/api/chat/messages/${messageId}/like`, {
+        method: "POST",
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === messageId
+              ? { ...m, likesCount: data.likesCount, isLikedByMe: data.liked }
+              : m
+          )
+        );
+      }
+    } catch {
+      // transient error ignore
+    }
+  }
+
   if (loading) {
     return (
       <div className="mx-auto max-w-4xl px-4 py-8">
@@ -479,7 +508,7 @@ export default function ChatSpace() {
               <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             </div>
             <p className="text-xs text-slate-400">
-              Échanges instantanés texte & vocal entre membres anonymes
+              Échanges instantanés en direct entre membres anonymes
             </p>
           </div>
         </div>
@@ -564,6 +593,23 @@ export default function ChatSpace() {
                     )}
                   </div>
 
+                  {/* QUOTED REPLY PREVIEW INSIDE FEED */}
+                  {msg.replyTo && (
+                    <div
+                      className={`flex items-center gap-1.5 text-xs p-2 px-3 rounded-xl border border-sky-100 bg-sky-50/70 text-slate-600 mb-1 ${
+                        msg.isMe ? "text-right justify-end" : "text-left"
+                      }`}
+                    >
+                      <CornerDownRight size={13} className="text-sky-500 shrink-0" />
+                      <span className="font-bold text-sky-800">
+                        {msg.replyTo.authorName}:
+                      </span>
+                      <span className="truncate max-w-[180px] italic">
+                        "{msg.replyTo.content}"
+                      </span>
+                    </div>
+                  )}
+
                   {isEditing ? (
                     <div className="flex items-center gap-1.5 bg-slate-900 p-2 rounded-2xl text-left">
                       <input
@@ -604,30 +650,70 @@ export default function ChatSpace() {
                         </div>
                       )}
 
-                      {/* EDIT / DELETE ACTIONS FOR MY MESSAGES */}
-                      {msg.isMe && (
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-3 right-2 flex items-center gap-1 bg-white border border-slate-200 shadow-md rounded-xl px-1.5 py-0.5 z-10">
-                          {!msg.audioUrl && (
-                            <button
-                              onClick={() => {
-                                setEditingId(msg.id);
-                                setEditText(msg.content);
-                              }}
-                              className="p-1 text-slate-400 hover:text-sky-600 transition"
-                              title="Modifier"
-                            >
-                              <Edit2 size={13} />
-                            </button>
-                          )}
-                          <button
-                            onClick={() => handleDeleteMessage(msg.id)}
-                            className="p-1 text-slate-400 hover:text-red-500 transition"
-                            title="Supprimer le message"
-                          >
-                            <Trash2 size={13} />
-                          </button>
-                        </div>
+                      {/* LIKES BADGE ON MESSAGE */}
+                      {(msg.likesCount || 0) > 0 && (
+                        <button
+                          onClick={() => handleLikeMessage(msg.id)}
+                          className={`absolute -bottom-2 right-2 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border shadow-sm ${
+                            msg.isLikedByMe
+                              ? "bg-rose-500 text-white border-rose-600"
+                              : "bg-white text-rose-500 border-slate-200"
+                          }`}
+                        >
+                          <Heart size={10} className="fill-current" />
+                          <span>{msg.likesCount}</span>
+                        </button>
                       )}
+
+                      {/* HOVER OVERLAY ACTIONS */}
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-3 right-2 flex items-center gap-1 bg-white border border-slate-200 shadow-md rounded-xl px-1.5 py-0.5 z-10">
+                        {/* REPLY BUTTON */}
+                        <button
+                          onClick={() => setReplyingToMsg(msg)}
+                          className="p-1 text-slate-400 hover:text-sky-600 transition"
+                          title="Répondre / Citer"
+                        >
+                          <Reply size={13} />
+                        </button>
+
+                        {/* LIKE BUTTON */}
+                        <button
+                          onClick={() => handleLikeMessage(msg.id)}
+                          className={`p-1 transition ${
+                            msg.isLikedByMe
+                              ? "text-rose-500"
+                              : "text-slate-400 hover:text-rose-500"
+                          }`}
+                          title="Réagir"
+                        >
+                          <Heart size={13} className={msg.isLikedByMe ? "fill-rose-500" : ""} />
+                        </button>
+
+                        {/* EDIT / DELETE FOR MY MESSAGES */}
+                        {msg.isMe && (
+                          <>
+                            {!msg.audioUrl && (
+                              <button
+                                onClick={() => {
+                                  setEditingId(msg.id);
+                                  setEditText(msg.content);
+                                }}
+                                className="p-1 text-slate-400 hover:text-sky-600 transition"
+                                title="Modifier"
+                              >
+                                <Edit2 size={13} />
+                              </button>
+                            )}
+                            <button
+                              onClick={() => handleDeleteMessage(msg.id)}
+                              className="p-1 text-slate-400 hover:text-red-500 transition"
+                              title="Supprimer le message"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -637,6 +723,30 @@ export default function ChatSpace() {
         )}
         <div ref={messagesEndRef} />
       </div>
+
+      {/* REPLIES PREVIEW BAR */}
+      {replyingToMsg && (
+        <div className="mt-2 flex items-center justify-between rounded-2xl bg-sky-50 border border-sky-100 p-2.5 px-4 text-xs text-sky-900 shrink-0">
+          <div className="flex items-center gap-2 truncate">
+            <Reply size={15} className="text-sky-600 shrink-0" />
+            <span>
+              En réponse à <strong className="font-bold">{replyingToMsg.author.anonymousName}</strong>:{" "}
+              <span className="italic truncate max-w-[200px] text-slate-600">
+                "{replyingToMsg.content}"
+              </span>
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setReplyingToMsg(null)}
+            className="p-1 text-slate-400 hover:text-slate-700"
+            title="Annuler la réponse"
+          >
+            <X size={15} />
+          </button>
+        </div>
+      )}
 
       {/* CHAT INPUT / VOICE RECORDING */}
       {recording ? (
@@ -673,7 +783,11 @@ export default function ChatSpace() {
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Écris ton message anonyme..."
+            placeholder={
+              replyingToMsg
+                ? `Répondre à ${replyingToMsg.author.anonymousName}...`
+                : "Écris ton message anonyme..."
+            }
             maxLength={1000}
             className="flex-1 bg-transparent px-3 text-sm font-medium outline-none text-slate-900 placeholder:text-slate-400"
           />
