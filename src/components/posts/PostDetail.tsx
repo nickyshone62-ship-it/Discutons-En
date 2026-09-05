@@ -386,7 +386,7 @@ export default function PostDetail({ postId }: { postId: string }) {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Apporte ton aide, propose ta solution ou partage ton expérience..."
-                className="w-full rounded-2xl bg-white px-4 py-3 text-sm font-medium text-slate-800 placeholder-slate-400 outline-none transition focus:ring-4 focus:ring-cyan-300"
+                className="w-full rounded-2xl bg-white px-4 py-3 text-base font-medium text-slate-800 placeholder-slate-400 outline-none transition focus:ring-4 focus:ring-cyan-300"
               />
             </div>
           </div>

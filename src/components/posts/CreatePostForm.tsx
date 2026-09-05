@@ -151,14 +151,14 @@ export default function CreatePostForm() {
 
         {/* CATEGORY SELECTOR */}
         <div>
-          <label className="mb-2 block text-xs font-black uppercase text-cyan-300">
-            Catégorie du problème
+          <label className="mb-2 block text-xs font-black font-display uppercase tracking-wider text-cyan-300">
+            Catégorie du problème (Choisis le domaine concerné)
           </label>
 
           {loadingCategories ? (
-            <div className="h-12 w-full animate-pulse rounded-2xl bg-white/10" />
+            <div className="h-16 w-full animate-pulse rounded-2xl bg-white/10" />
           ) : (
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
               {categories.map((cat) => {
                 const isSelected = categoryId === cat.id;
                 return (
@@ -166,14 +166,30 @@ export default function CreatePostForm() {
                     key={cat.id}
                     type="button"
                     onClick={() => setCategoryId(cat.id)}
-                    className={`flex items-center gap-2.5 rounded-2xl border px-3.5 py-3 text-left transition ${
+                    className={`flex items-center gap-3 rounded-2xl border p-3.5 px-4 text-left transition transform active:scale-95 ${
                       isSelected
-                        ? "border-cyan-400 bg-cyan-400/20 text-white font-bold ring-2 ring-cyan-400/50"
-                        : "border-white/15 bg-white/5 text-cyan-100/90 hover:bg-white/10 hover:text-white"
+                        ? "border-cyan-300 bg-gradient-to-r from-cyan-400 via-cyan-300 to-sky-400 text-slate-950 font-black shadow-[0_0_20px_rgba(34,211,238,0.45)] ring-2 ring-cyan-300 scale-[1.02]"
+                        : "border-white/25 bg-slate-900/90 text-white font-bold hover:border-cyan-400/60 hover:bg-slate-800/90 shadow-md"
                     }`}
                   >
-                    <span className="text-lg">{cat.icon || "💬"}</span>
-                    <span className="truncate text-xs font-bold">{cat.name}</span>
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-950/30 text-xl backdrop-blur-sm">
+                      {cat.icon || "💬"}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className={`text-sm font-black font-display leading-tight ${isSelected ? "text-slate-950" : "text-white"}`}>
+                        {cat.name}
+                      </p>
+                      {cat.description && (
+                        <p className={`text-[10px] truncate mt-0.5 ${isSelected ? "text-slate-900/80 font-medium" : "text-cyan-200/70"}`}>
+                          {cat.description}
+                        </p>
+                      )}
+                    </div>
+                    {isSelected && (
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-950 text-cyan-300 shadow">
+                        ✓
+                      </span>
+                    )}
                   </button>
                 );
               })}
@@ -199,7 +215,7 @@ export default function CreatePostForm() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Ex: Comment gérer le stress des examens sans paniquer ?"
-            className="h-12 w-full rounded-full bg-white px-5 text-sm font-medium text-slate-800 placeholder-slate-400 outline-none transition shadow-inner focus:ring-4 focus:ring-cyan-300"
+            className="h-12 w-full rounded-full bg-white px-5 text-base font-medium text-slate-800 placeholder-slate-400 outline-none transition shadow-inner focus:ring-4 focus:ring-cyan-300"
           />
         </div>
 
@@ -221,9 +237,10 @@ export default function CreatePostForm() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Raconte ta situation, tes ressentis ou les questions précises que tu te poses..."
-            className="w-full rounded-3xl bg-white p-4 text-sm font-medium text-slate-800 placeholder-slate-400 outline-none transition shadow-inner focus:ring-4 focus:ring-cyan-300 leading-relaxed"
+            className="w-full rounded-3xl bg-white p-4 text-base font-medium text-slate-800 placeholder-slate-400 outline-none transition shadow-inner focus:ring-4 focus:ring-cyan-300 leading-relaxed"
           />
         </div>
+
 
         {/* ANONYMITY INFO BOX */}
         <div className="rounded-2xl bg-cyan-400/10 p-4 border border-cyan-400/30 flex items-start gap-3 text-cyan-100">

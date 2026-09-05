@@ -837,7 +837,7 @@ export default function ChatSpace() {
                 : "Écris ton message anonyme..."
             }
             maxLength={1000}
-            className="flex-1 bg-transparent px-4 text-sm font-medium outline-none text-white placeholder:text-cyan-200/50"
+            className="flex-1 bg-transparent px-4 text-base font-medium outline-none text-white placeholder:text-cyan-200/50"
           />
 
           <button
