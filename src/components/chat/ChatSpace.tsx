@@ -57,44 +57,28 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  useEffect(() => {
+  function togglePlay() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const handleLoaded = () => {
-      if (audio.duration && !isNaN(audio.duration)) {
-        setDuration(audio.duration);
-      }
-    };
-
-    const handleTimeUpdate = () => {
-      setCurrentTime(audio.currentTime);
-    };
-
-    const handleEnded = () => {
-      setPlaying(false);
-      setCurrentTime(0);
-    };
-
-    audio.addEventListener("loadedmetadata", handleLoaded);
-    audio.addEventListener("timeupdate", handleTimeUpdate);
-    audio.addEventListener("ended", handleEnded);
-
-    return () => {
-      audio.removeEventListener("loadedmetadata", handleLoaded);
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, [src]);
-
-  function togglePlay() {
-    if (!audioRef.current) return;
     if (playing) {
-      audioRef.current.pause();
+      audio.pause();
       setPlaying(false);
     } else {
-      audioRef.current.play();
-      setPlaying(true);
+      if (audio.readyState === 0) {
+        audio.load();
+      }
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => setPlaying(true))
+          .catch((err) => {
+            console.error("Audio play error on mobile:", err);
+            setPlaying(false);
+          });
+      } else {
+        setPlaying(true);
+      }
     }
   }
 
@@ -116,7 +100,26 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
           : "bg-slate-900/80 text-slate-100 border-white/20"
       }`}
     >
-      <audio ref={audioRef} src={src} preload="metadata" />
+      <audio
+        ref={audioRef}
+        src={src}
+        preload="auto"
+        playsInline
+        onLoadedMetadata={() => {
+          if (audioRef.current && audioRef.current.duration) {
+            setDuration(audioRef.current.duration);
+          }
+        }}
+        onTimeUpdate={() => {
+          if (audioRef.current) {
+            setCurrentTime(audioRef.current.currentTime);
+          }
+        }}
+        onEnded={() => {
+          setPlaying(false);
+          setCurrentTime(0);
+        }}
+      />
 
       <button
         type="button"
@@ -137,7 +140,7 @@ function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
         )}
       </button>
 
-      <div className="flex-1 space-y-1.5">
+      <div className="flex-1 space-y-1.5 cursor-pointer" onClick={togglePlay}>
         <div className="flex items-center justify-between text-[11px] font-black font-display tracking-wide">
           <span className="text-cyan-300 flex items-center gap-1">
             🎙️ Vocal
@@ -288,21 +291,43 @@ export default function ChatSpace() {
     }
   }
 
+  function getSupportedMimeType() {
+    if (typeof MediaRecorder === "undefined") return "";
+    const candidateTypes = [
+      "audio/mp4",
+      "audio/aac",
+      "audio/webm;codecs=opus",
+      "audio/webm",
+      "audio/ogg",
+    ];
+    for (const type of candidateTypes) {
+      if (MediaRecorder.isTypeSupported(type)) {
+        return type;
+      }
+    }
+    return "";
+  }
+
   // Voice recording handlers
   async function startRecording() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
+      const mimeType = getSupportedMimeType();
+      const options = mimeType ? { mimeType } : undefined;
+
+      const mediaRecorder = new MediaRecorder(stream, options);
+      mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
-      mediaRecorderRef.current.ondataavailable = (event) => {
-        if (event.data.size > 0) {
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
           audioChunksRef.current.push(event.data);
         }
       };
 
-      mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+      mediaRecorder.onstop = async () => {
+        const actualType = mediaRecorder.mimeType || mimeType || "audio/mp4";
+        const audioBlob = new Blob(audioChunksRef.current, { type: actualType });
         const reader = new FileReader();
         reader.readAsDataURL(audioBlob);
         reader.onloadend = async () => {
@@ -313,15 +338,16 @@ export default function ChatSpace() {
         stream.getTracks().forEach((track) => track.stop());
       };
 
-      mediaRecorderRef.current.start();
+      mediaRecorder.start(100);
       setRecording(true);
       setRecordTimer(0);
 
       timerIntervalRef.current = setInterval(() => {
         setRecordTimer((prev) => prev + 1);
       }, 1000);
-    } catch {
-      alert("Accès au micro refusé ou non supporté par votre navigateur.");
+    } catch (e) {
+      console.error("Microphone error:", e);
+      alert("Accès au microphone refusé ou non supporté par votre téléphone.");
     }
   }
 
@@ -661,12 +687,12 @@ export default function ChatSpace() {
                         </button>
                       )}
 
-                      {/* HOVER OVERLAY ACTIONS */}
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-3.5 right-2 flex items-center gap-1 bg-slate-900/90 border border-white/20 backdrop-blur-xl shadow-xl rounded-full px-2 py-0.5 z-10">
+                      {/* TOUCH & HOVER ACTIONS TOOLBAR */}
+                      <div className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all absolute -top-3.5 right-1 flex items-center gap-1 bg-slate-900/95 border border-cyan-400/50 backdrop-blur-xl shadow-2xl rounded-full px-2.5 py-1 z-10">
                         {/* REPLY BUTTON */}
                         <button
                           onClick={() => setReplyingToMsg(msg)}
-                          className="p-1 text-cyan-300 hover:text-white transition"
+                          className="p-1 text-cyan-300 hover:text-white transition active:scale-90"
                           title="Répondre / Citer"
                         >
                           <Reply size={13} />
@@ -675,7 +701,7 @@ export default function ChatSpace() {
                         {/* LIKE BUTTON */}
                         <button
                           onClick={() => handleLikeMessage(msg.id)}
-                          className={`p-1 transition ${
+                          className={`p-1 transition active:scale-90 ${
                             msg.isLikedByMe
                               ? "text-rose-400"
                               : "text-slate-400 hover:text-rose-400"
@@ -685,7 +711,7 @@ export default function ChatSpace() {
                           <Heart size={13} className={msg.isLikedByMe ? "fill-rose-400" : ""} />
                         </button>
 
-                        {/* EDIT / DELETE FOR MY MESSAGES */}
+                        {/* EDIT & DELETE FOR MY MESSAGES (TEXT & VOICE) */}
                         {msg.isMe && (
                           <>
                             {!msg.audioUrl && (
@@ -694,15 +720,15 @@ export default function ChatSpace() {
                                   setEditingId(msg.id);
                                   setEditText(msg.content);
                                 }}
-                                className="p-1 text-cyan-300 hover:text-white transition"
-                                title="Modifier"
+                                className="p-1 text-cyan-300 hover:text-white transition active:scale-90"
+                                title="Modifier le message"
                               >
                                 <Edit2 size={13} />
                               </button>
                             )}
                             <button
                               onClick={() => handleDeleteMessage(msg.id)}
-                              className="p-1 text-red-400 hover:text-red-300 transition"
+                              className="p-1 text-red-400 hover:text-red-300 transition active:scale-90"
                               title="Supprimer le message"
                             >
                               <Trash2 size={13} />
@@ -712,6 +738,32 @@ export default function ChatSpace() {
                       </div>
                     </div>
                   )}
+
+                  {/* MOBILE-SPECIFIC EXPLICIT ACTION BAR FOR MY MESSAGES */}
+                  {msg.isMe && !isEditing && (
+                    <div className="flex items-center justify-end gap-3 pt-0.5 text-[11px] text-cyan-200/80 font-bold sm:hidden">
+                      {!msg.audioUrl && (
+                        <button
+                          onClick={() => {
+                            setEditingId(msg.id);
+                            setEditText(msg.content);
+                          }}
+                          className="flex items-center gap-1 text-cyan-300 hover:text-white active:scale-95 transition"
+                        >
+                          <Edit2 size={12} />
+                          <span>Modifier</span>
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleDeleteMessage(msg.id)}
+                        className="flex items-center gap-1 text-red-400 hover:text-red-300 active:scale-95 transition"
+                      >
+                        <Trash2 size={12} />
+                        <span>Supprimer</span>
+                      </button>
+                    </div>
+                  )}
+
                 </div>
               </div>
             );
