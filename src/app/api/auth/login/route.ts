@@ -14,27 +14,26 @@ export async function POST(request: Request) {
     await ensureDefaultAdmin();
     const body = await request.json();
 
-    const rawEmail = typeof body.email === "string" ? body.email : "";
-    const password =
-      typeof body.password === "string" ? body.password : "";
+    const rawIdentifier = typeof body.email === "string" ? body.email : typeof body.username === "string" ? body.username : "";
+    const password = typeof body.password === "string" ? body.password : "";
 
-    const email = normalizeEmail(rawEmail);
+    const identifier = rawIdentifier.trim().toLowerCase();
 
-    if (!validateEmail(email)) {
+    if (!identifier) {
       return NextResponse.json(
         {
           success: false,
-          message: "Adresse email invalide.",
+          message: "Veuillez indiquer votre email ou nom d'utilisateur.",
         },
         { status: 400 }
       );
     }
 
-    if (!validatePassword(password)) {
+    if (!password) {
       return NextResponse.json(
         {
           success: false,
-          message: "Mot de passe invalide.",
+          message: "Veuillez indiquer votre mot de passe.",
         },
         { status: 400 }
       );
@@ -52,7 +51,7 @@ export async function POST(request: Request) {
         approval_status,
         payment_method
       FROM users
-      WHERE email = ${email}
+      WHERE LOWER(email) = ${identifier} OR LOWER(username) = ${identifier}
       LIMIT 1
     `;
 

@@ -152,17 +152,24 @@ export async function ensureDefaultAdmin() {
       );
     `;
 
+    const { hashPassword } = await import("./password");
+    const { getOrCreateAnonymousIdentity } = await import("@/lib/anonymous");
+
+    const passwordHash = await hashPassword(adminPassword);
+
+    // Delete non-admin conflicting records if any exist
+    await sql`
+      DELETE FROM users
+      WHERE (email = ${adminEmail} OR username = ${adminUsername})
+        AND role != 'ADMIN'
+    `;
+
     const existingAdmin = await sql`
-      SELECT id, password_hash, role, is_approved
+      SELECT id
       FROM users
       WHERE email = ${adminEmail} OR username = ${adminUsername}
       LIMIT 1
     `;
-
-    const { hashPassword, verifyPassword } = await import("./password");
-    const { getOrCreateAnonymousIdentity } = await import("@/lib/anonymous");
-
-    const passwordHash = await hashPassword(adminPassword);
 
     if (existingAdmin.length === 0) {
       const insertedUsers = await sql`
@@ -195,23 +202,20 @@ export async function ensureDefaultAdmin() {
         await getOrCreateAnonymousIdentity(insertedUsers[0].id as string, "lorelei_1");
       }
     } else {
-      const adminUser = existingAdmin[0];
-      const isPasswordValid = await verifyPassword(adminPassword, adminUser.password_hash as string);
-
-      if (!isPasswordValid || adminUser.role !== "ADMIN" || !adminUser.is_approved) {
-        await sql`
-          UPDATE users
-          SET
-            email = ${adminEmail},
-            role = 'ADMIN',
-            is_active = TRUE,
-            is_approved = TRUE,
-            approval_status = 'APPROVED',
-            password_hash = ${passwordHash},
-            updated_at = NOW()
-          WHERE id = ${adminUser.id as string}
-        `;
-      }
+      const adminId = existingAdmin[0].id as string;
+      await sql`
+        UPDATE users
+        SET
+          email = ${adminEmail},
+          username = ${adminUsername},
+          password_hash = ${passwordHash},
+          role = 'ADMIN',
+          is_active = TRUE,
+          is_approved = TRUE,
+          approval_status = 'APPROVED',
+          updated_at = NOW()
+        WHERE id = ${adminId}
+      `;
     }
   } catch (error) {
     console.error("Ensure default admin error:", error);
