@@ -5,66 +5,35 @@ import React from "react";
 export function OrangeMoneyLogo({ className = "h-8 w-8" }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 100 100"
+      viewBox="0 0 120 120"
       className={className}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect width="100" height="100" rx="22" fill="#FF7900" />
-      <path
-        d="M20 20H80V80H20V20Z"
-        fill="#FF7900"
-      />
-      <circle cx="50" cy="50" r="28" fill="#000000" />
-      <path
-        d="M38 50C38 43.3726 43.3726 38 50 38C56.6274 38 62 43.3726 62 50C62 56.6274 56.6274 62 50 62C43.3726 62 38 56.6274 38 50Z"
-        stroke="#FF7900"
-        strokeWidth="6"
-      />
-      <text
-        x="50"
-        y="88"
-        textAnchor="middle"
-        fill="#FFFFFF"
-        fontSize="12"
-        fontWeight="900"
-        fontFamily="sans-serif"
-        letterSpacing="0.5"
-      >
-        ORANGE
-      </text>
-    </svg>
-  );
-}
+      {/* Background card - Official Orange Black */}
+      <rect width="120" height="120" rx="24" fill="#000000" />
 
-export function MoovMoneyLogo({ className = "h-8 w-8" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      className={className}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect width="100" height="100" rx="22" fill="#005B94" />
-      <circle cx="50" cy="45" r="30" fill="#00A859" />
-      <path
-        d="M32 55L42 35L50 48L58 35L68 55"
-        stroke="#FFFFFF"
-        strokeWidth="7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      {/* Main Orange Square */}
+      <rect x="18" y="18" width="84" height="84" rx="14" fill="#FF7900" />
+
+      {/* Inner Black Square */}
+      <rect x="34" y="34" width="52" height="52" rx="8" fill="#000000" />
+
+      {/* Signature Orange Corner Badge */}
+      <rect x="58" y="58" width="28" height="28" rx="5" fill="#FF7900" />
+
+      {/* Text Label */}
       <text
-        x="50"
-        y="88"
+        x="60"
+        y="112"
         textAnchor="middle"
-        fill="#FFFFFF"
-        fontSize="12"
+        fill="#FF7900"
+        fontSize="10"
         fontWeight="900"
         fontFamily="sans-serif"
-        letterSpacing="0.5"
+        letterSpacing="0.8"
       >
-        MOOV
+        ORANGE MONEY
       </text>
     </svg>
   );
@@ -73,36 +42,92 @@ export function MoovMoneyLogo({ className = "h-8 w-8" }: { className?: string })
 export function WaveLogo({ className = "h-8 w-8" }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 100 100"
+      viewBox="0 0 120 120"
       className={className}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect width="100" height="100" rx="22" fill="#1DC3F4" />
+      {/* Official Wave Cyan Background */}
+      <rect width="120" height="120" rx="24" fill="#1DC3F4" />
+
+      {/* Wave Penguin Body (Dark Navy) */}
       <path
-        d="M25 58C30 50 38 42 50 42C62 42 70 50 75 58"
-        stroke="#FFFFFF"
-        strokeWidth="8"
-        strokeLinecap="round"
+        d="M60 18C44 18 34 32 34 54C34 74 44 90 60 90C76 90 86 74 86 54C86 32 76 18 60 18Z"
+        fill="#0F172A"
       />
+
+      {/* White Belly */}
       <path
-        d="M25 44C30 36 38 28 50 28C62 28 70 36 75 44"
-        stroke="#103B5C"
-        strokeWidth="8"
-        strokeLinecap="round"
+        d="M60 38C50 38 43 48 43 62C43 74 50 84 60 84C70 84 77 74 77 62C77 48 70 38 60 38Z"
+        fill="#FFFFFF"
       />
-      <circle cx="50" cy="70" r="7" fill="#FFFFFF" />
+
+      {/* Penguin Eyes */}
+      <circle cx="52" cy="32" r="3.5" fill="#FFFFFF" />
+      <circle cx="68" cy="32" r="3.5" fill="#FFFFFF" />
+      <circle cx="53" cy="32" r="1.8" fill="#0F172A" />
+      <circle cx="69" cy="32" r="1.8" fill="#0F172A" />
+
+      {/* Beak (Bright Orange) */}
+      <path
+        d="M54 40L60 49L66 40Z"
+        fill="#FF9F1C"
+      />
+
+      {/* Feet (Bright Orange) */}
+      <ellipse cx="48" cy="90" rx="7" ry="3.5" fill="#FF9F1C" />
+      <ellipse cx="72" cy="90" rx="7" ry="3.5" fill="#FF9F1C" />
+
+      {/* Wave Typography */}
       <text
-        x="50"
-        y="90"
+        x="60"
+        y="112"
         textAnchor="middle"
-        fill="#103B5C"
-        fontSize="12"
+        fill="#0F172A"
+        fontSize="11"
+        fontWeight="900"
+        fontFamily="sans-serif"
+        letterSpacing="1"
+      >
+        wave
+      </text>
+    </svg>
+  );
+}
+
+export function MoovMoneyLogo({ className = "h-8 w-8" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 120 120"
+      className={className}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Background card - Moov Blue */}
+      <rect width="120" height="120" rx="24" fill="#003D7C" />
+
+      {/* Green Swirl */}
+      <path
+        d="M25 65C25 40 45 25 72 25C88 25 98 33 98 33L88 45C88 45 80 37 68 37C48 37 38 48 38 65C38 80 48 92 68 92C80 92 88 84 88 84L98 96C98 96 88 105 68 105C42 105 25 88 25 65Z"
+        fill="#80C21C"
+      />
+
+      {/* Inner Dot Accent */}
+      <circle cx="68" cy="65" r="14" fill="#005CA9" />
+      <circle cx="68" cy="65" r="6" fill="#FFFFFF" />
+
+      {/* Text Label */}
+      <text
+        x="60"
+        y="112"
+        textAnchor="middle"
+        fill="#FFFFFF"
+        fontSize="10"
         fontWeight="900"
         fontFamily="sans-serif"
         letterSpacing="0.5"
       >
-        WAVE
+        MOOV MONEY
       </text>
     </svg>
   );
