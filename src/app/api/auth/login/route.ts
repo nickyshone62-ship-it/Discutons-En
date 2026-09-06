@@ -45,7 +45,10 @@ export async function POST(request: Request) {
         username,
         password_hash,
         role,
-        is_active
+        is_active,
+        is_approved,
+        approval_status,
+        payment_method
       FROM users
       WHERE email = ${email}
       LIMIT 1
@@ -85,6 +88,36 @@ export async function POST(request: Request) {
           message: "Email ou mot de passe incorrect.",
         },
         { status: 401 }
+      );
+    }
+
+    // Check approval status unless the user is an admin or is explicitly approved
+    const isApproved = user.is_approved === true || user.role === 'ADMIN' || user.role === 'SUPER_ADMIN';
+    if (!isApproved) {
+      if (user.approval_status === 'REJECTED') {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Votre demande d'inscription a été rejetée par l'administrateur. Veuillez contacter le support.",
+          },
+          { status: 403 }
+        );
+      }
+
+      const methodLabel = user.payment_method === 'ORANGE_MONEY'
+        ? 'Orange Money'
+        : user.payment_method === 'MOOV_MONEY'
+        ? 'Moov Money'
+        : user.payment_method === 'WAVE'
+        ? 'Wave'
+        : 'Paiement mobile';
+
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Votre compte est en attente d'approbation par un administrateur après vérification de votre paiement (${methodLabel}). Veuillez patienter.`,
+        },
+        { status: 403 }
       );
     }
 

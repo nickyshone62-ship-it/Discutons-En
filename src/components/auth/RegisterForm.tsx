@@ -12,9 +12,13 @@ import {
   Check,
   User,
   Ghost,
+  PhoneCall,
+  ExternalLink,
+  CreditCard,
+  Clock,
 } from "lucide-react";
 import { SNAPCHAT_AVATARS, getAvatarUrl, SnapchatAvatarPreset } from "@/lib/anonymous";
-
+import { OrangeMoneyLogo, MoovMoneyLogo, WaveLogo } from "@/components/auth/PaymentLogos";
 
 export default function RegisterForm() {
   const [firstName, setFirstName] = useState("");
@@ -23,6 +27,9 @@ export default function RegisterForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<"ORANGE_MONEY" | "MOOV_MONEY" | "WAVE">("ORANGE_MONEY");
+  const [paymentPhone, setPaymentPhone] = useState("");
+  const [paymentRef, setPaymentRef] = useState("");
   const [selectedAvatarSeed, setSelectedAvatarSeed] = useState(
     SNAPCHAT_AVATARS[0].seed
   );
@@ -32,6 +39,8 @@ export default function RegisterForm() {
   const [termsAccepted, setTermsAccepted] = useState(true);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [pendingSuccess, setPendingSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const [activeCategory, setActiveCategory] = useState<string>("ALL");
 
@@ -71,6 +80,16 @@ export default function RegisterForm() {
       return;
     }
 
+    if (!paymentPhone.trim() || paymentPhone.trim().length < 8) {
+      setError("Indique le numéro de téléphone valide utilisé pour effectuer le paiement.");
+      return;
+    }
+
+    if (!paymentRef.trim() || paymentRef.trim().length < 3) {
+      setError("Indique l'ID de transaction ou la référence de ton paiement.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -86,6 +105,9 @@ export default function RegisterForm() {
           username,
           password,
           avatarSeed: selectedAvatarSeed,
+          paymentMethod,
+          paymentPhone,
+          paymentRef,
         }),
       });
 
@@ -96,12 +118,71 @@ export default function RegisterForm() {
         return;
       }
 
-      window.location.href = "/accueil";
+      if (data.requiresApproval) {
+        setPendingSuccess(true);
+        setSuccessMessage(data.message);
+      } else {
+        window.location.href = "/accueil";
+      }
     } catch {
       setError("Impossible de contacter le serveur. Vérifie ta connexion.");
     } finally {
       setLoading(false);
     }
+  }
+
+  if (pendingSuccess) {
+    return (
+      <div className="relative w-full max-w-lg mx-auto my-10">
+        <div className="rounded-[36px] border border-cyan-400/30 bg-slate-950/80 p-8 sm:p-10 shadow-[0_25px_70px_rgba(0,0,0,0.7)] backdrop-blur-2xl text-white text-center space-y-6">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-amber-500/20 border-2 border-amber-400/80 text-amber-300 animate-pulse">
+            <Clock size={40} />
+          </div>
+
+          <div className="space-y-2">
+            <span className="inline-block rounded-full bg-amber-400/20 px-3 py-1 text-xs font-black text-amber-300 uppercase tracking-widest border border-amber-400/30">
+              En attente d'approbation
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black font-display text-white uppercase tracking-wide">
+              Compte Créé avec Succès !
+            </h2>
+          </div>
+
+          <p className="text-sm text-cyan-100/90 leading-relaxed font-medium">
+            {successMessage || "Votre compte a été enregistré. Un administrateur va vérifier votre paiement et activer votre compte sous peu."}
+          </p>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-left space-y-2 text-xs">
+            <div className="flex justify-between items-center text-cyan-200">
+              <span className="font-semibold text-cyan-100/70">Moyen de paiement :</span>
+              <span className="font-black text-white flex items-center gap-1.5">
+                {paymentMethod === "ORANGE_MONEY" && <><OrangeMoneyLogo className="h-5 w-5" /> Orange Money</>}
+                {paymentMethod === "MOOV_MONEY" && <><MoovMoneyLogo className="h-5 w-5" /> Moov Money</>}
+                {paymentMethod === "WAVE" && <><WaveLogo className="h-5 w-5" /> Wave</>}
+              </span>
+            </div>
+            <div className="flex justify-between items-center text-cyan-200">
+              <span className="font-semibold text-cyan-100/70">Numéro de paiement :</span>
+              <span className="font-mono font-bold text-cyan-300">{paymentPhone}</span>
+            </div>
+            <div className="flex justify-between items-center text-cyan-200">
+              <span className="font-semibold text-cyan-100/70">Référence transaction :</span>
+              <span className="font-mono font-bold text-amber-300">{paymentRef}</span>
+            </div>
+          </div>
+
+          <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/connexion"
+              className="flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 font-black text-xs uppercase tracking-wider hover:brightness-110 transition shadow-lg px-6"
+            >
+              Aller à la Connexion
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -198,7 +279,6 @@ export default function RegisterForm() {
               ))}
             </div>
 
-
             {/* AVATARS GRID */}
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2.5 max-h-56 overflow-y-auto pr-1">
               {filteredAvatars.map((avatar: SnapchatAvatarPreset) => {
@@ -236,9 +316,6 @@ export default function RegisterForm() {
               })}
             </div>
           </div>
-
-
-
 
           {/* NAME & SURNAME INPUTS */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -364,6 +441,164 @@ export default function RegisterForm() {
             </div>
           </div>
 
+          {/* MOYEN DE PAIEMENT SECTION */}
+          <div className="rounded-3xl border border-cyan-400/30 bg-slate-950/70 p-5 backdrop-blur-xl space-y-4">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-400 text-slate-950 font-black shadow-md">
+                <CreditCard size={20} />
+              </div>
+              <div>
+                <h2 className="text-xs font-black font-display uppercase tracking-wider text-cyan-300">
+                  Moyen de Paiement à l'inscription
+                </h2>
+                <p className="text-[10px] text-cyan-100/70">
+                  Sélectionne ton moyen de paiement et effectue le transfert vers le numéro <strong>06887330</strong>.
+                </p>
+              </div>
+            </div>
+
+            {/* PAYMENT LOGO SELECTOR TABS */}
+            <div className="grid grid-cols-3 gap-2.5">
+              <button
+                type="button"
+                onClick={() => setPaymentMethod("ORANGE_MONEY")}
+                className={`flex flex-col items-center justify-center rounded-2xl p-3 border transition duration-300 ${
+                  paymentMethod === "ORANGE_MONEY"
+                    ? "border-orange-500 bg-orange-500/20 shadow-[0_0_20px_rgba(255,121,0,0.4)] scale-102"
+                    : "border-white/10 bg-white/5 hover:bg-white/15"
+                }`}
+              >
+                <OrangeMoneyLogo className="h-9 w-9 mb-1" />
+                <span className="text-[11px] font-black text-orange-300">Orange Money</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setPaymentMethod("MOOV_MONEY")}
+                className={`flex flex-col items-center justify-center rounded-2xl p-3 border transition duration-300 ${
+                  paymentMethod === "MOOV_MONEY"
+                    ? "border-emerald-500 bg-emerald-500/20 shadow-[0_0_20px_rgba(0,168,89,0.4)] scale-102"
+                    : "border-white/10 bg-white/5 hover:bg-white/15"
+                }`}
+              >
+                <MoovMoneyLogo className="h-9 w-9 mb-1" />
+                <span className="text-[11px] font-black text-emerald-300">Moov Money</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setPaymentMethod("WAVE")}
+                className={`flex flex-col items-center justify-center rounded-2xl p-3 border transition duration-300 ${
+                  paymentMethod === "WAVE"
+                    ? "border-sky-400 bg-sky-400/20 shadow-[0_0_20px_rgba(29,195,244,0.4)] scale-102"
+                    : "border-white/10 bg-white/5 hover:bg-white/15"
+                }`}
+              >
+                <WaveLogo className="h-9 w-9 mb-1" />
+                <span className="text-[11px] font-black text-sky-300">Wave</span>
+              </button>
+            </div>
+
+            {/* PAYMENT METHOD DETAILS & DIRECT ACTION BUTTONS */}
+            {paymentMethod === "ORANGE_MONEY" && (
+              <div className="rounded-2xl border border-orange-500/40 bg-orange-950/30 p-4 space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-orange-200">Code USSD Orange Money :</span>
+                  <span className="font-mono font-black text-amber-300 bg-black/40 px-2 py-1 rounded-lg border border-orange-500/30 select-all">
+                    *144*2*1*06887330*500#
+                  </span>
+                </div>
+                <p className="text-[11px] text-orange-100/80 leading-relaxed">
+                  Clique sur le bouton ci-dessous pour composer automatiquement le code USSD sur ton téléphone.
+                </p>
+                <a
+                  href="tel:*144*2*1*06887330*500%23"
+                  className="flex items-center justify-center gap-2 h-11 w-full rounded-xl bg-orange-500 hover:bg-orange-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
+                >
+                  <PhoneCall size={16} />
+                  Composer *144*2*1*06887330*500#
+                </a>
+              </div>
+            )}
+
+            {paymentMethod === "MOOV_MONEY" && (
+              <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/30 p-4 space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-emerald-200">Numéro Moov Money :</span>
+                  <span className="font-mono font-black text-emerald-300 bg-black/40 px-2 py-1 rounded-lg border border-emerald-500/30 select-all">
+                    06887330
+                  </span>
+                </div>
+                <p className="text-[11px] text-emerald-100/80 leading-relaxed">
+                  Effectue ton transfert Moov Money au numéro <strong>06887330</strong> (USSD *155#).
+                </p>
+                <a
+                  href="tel:*155%23"
+                  className="flex items-center justify-center gap-2 h-11 w-full rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
+                >
+                  <PhoneCall size={16} />
+                  Composer *155# sur téléphone
+                </a>
+              </div>
+            )}
+
+            {paymentMethod === "WAVE" && (
+              <div className="rounded-2xl border border-sky-400/40 bg-sky-950/30 p-4 space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-sky-200">Compte Wave :</span>
+                  <span className="font-mono font-black text-sky-300 bg-black/40 px-2 py-1 rounded-lg border border-sky-400/30 select-all">
+                    06887330
+                  </span>
+                </div>
+                <p className="text-[11px] text-sky-100/80 leading-relaxed">
+                  Clique ci-dessous pour ouvrir directement ton compte Wave et faire le transfert vers <strong>06887330</strong>.
+                </p>
+                <a
+                  href="https://wave.com/send?phone=06887330"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 h-11 w-full rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
+                >
+                  <ExternalLink size={16} />
+                  Payer directement via l'application Wave (06887330)
+                </a>
+              </div>
+            )}
+
+            {/* PAYMENT TRANSACTION INPUTS */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
+              <div>
+                <label htmlFor="paymentPhone" className="mb-1.5 block text-xs font-black uppercase text-cyan-300">
+                  Numéro ayant payé
+                </label>
+                <input
+                  id="paymentPhone"
+                  type="tel"
+                  required
+                  value={paymentPhone}
+                  onChange={(e) => setPaymentPhone(e.target.value)}
+                  placeholder="Ex: 06887330"
+                  className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-cyan-300/80 focus:border-cyan-300 transition"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="paymentRef" className="mb-1.5 block text-xs font-black uppercase text-cyan-300">
+                  ID / Réf Transaction
+                </label>
+                <input
+                  id="paymentRef"
+                  type="text"
+                  required
+                  value={paymentRef}
+                  onChange={(e) => setPaymentRef(e.target.value)}
+                  placeholder="Ex: PP240906.1420..."
+                  className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-cyan-300/80 focus:border-cyan-300 transition"
+                />
+              </div>
+            </div>
+          </div>
+
           {/* TERMS CHECKBOX */}
           <div className="flex items-center justify-center gap-2 pt-1">
             <label className="flex items-center gap-2 text-xs font-semibold text-cyan-100 cursor-pointer select-none">
@@ -391,11 +626,11 @@ export default function RegisterForm() {
             {loading ? (
               <>
                 <Loader2 size={20} className="animate-spin" />
-                CREATION DU COMPTE...
+                CREATION DU COMPTE & VERIFICATION...
               </>
             ) : (
               <>
-                CREER MON COMPTE & BITMOJI
+                VALIDER L'INSCRIPTION & LE PAIEMENT
                 <ArrowRight size={20} />
               </>
             )}
@@ -415,4 +650,5 @@ export default function RegisterForm() {
     </div>
   );
 }
+
 

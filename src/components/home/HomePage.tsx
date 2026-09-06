@@ -51,6 +51,7 @@ type HomeData = {
     id: string;
     username: string;
     email: string;
+    role?: string;
   };
   identity: {
     anonymousName: string;
@@ -204,6 +205,16 @@ export default function HomePage() {
           </Link>
 
           <div className="hidden items-center gap-3 md:flex">
+            {(data.user.role === "ADMIN" || data.user.role === "SUPER_ADMIN") && (
+              <Link
+                href="/admin"
+                className="flex h-10 items-center gap-2 rounded-full border border-purple-400/50 bg-purple-500/20 px-4 text-xs font-black font-display uppercase tracking-wider text-purple-300 hover:bg-purple-500/30 hover:text-white transition shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+              >
+                <ShieldCheck size={16} />
+                Admin
+              </Link>
+            )}
+
             <Link
               href="/chat"
               className="flex h-10 items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 px-4.5 text-xs font-black font-display uppercase tracking-wider transition shadow-lg shadow-cyan-400/35 transform active:scale-95"
@@ -292,6 +303,17 @@ export default function HomePage() {
             </Link>
 
             <div className="space-y-2">
+              {(data.user.role === "ADMIN" || data.user.role === "SUPER_ADMIN") && (
+                <Link
+                  href="/admin"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-2xl bg-purple-500/20 border border-purple-400/50 px-4 py-3 text-sm font-black text-purple-300"
+                >
+                  <ShieldCheck size={18} />
+                  Espace Administrateur 🛡️
+                </Link>
+              )}
+
               <Link
                 href="/accueil"
                 onClick={() => setMenuOpen(false)}

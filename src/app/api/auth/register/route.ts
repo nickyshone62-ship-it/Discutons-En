@@ -27,6 +27,13 @@ export async function POST(request: Request) {
     const avatarSeed =
       typeof body.avatarSeed === "string" ? body.avatarSeed.trim() : "";
 
+    const paymentMethod =
+      typeof body.paymentMethod === "string" ? body.paymentMethod.trim() : "";
+    const paymentPhone =
+      typeof body.paymentPhone === "string" ? body.paymentPhone.trim() : "";
+    const paymentRef =
+      typeof body.paymentRef === "string" ? body.paymentRef.trim() : "";
+
     const email = normalizeEmail(rawEmail);
     const username = normalizeUsername(rawUsername);
 
@@ -81,6 +88,39 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!["ORANGE_MONEY", "MOOV_MONEY", "WAVE"].includes(paymentMethod)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Veuillez choisir un moyen de paiement valide (Orange Money, Moov Money ou Wave).",
+          field: "paymentMethod",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!paymentPhone || paymentPhone.length < 8) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Veuillez entrer le numéro de téléphone valide utilisé pour le paiement.",
+          field: "paymentPhone",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!paymentRef || paymentRef.length < 3) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Veuillez indiquer la référence de transaction ou l'ID de paiement.",
+          field: "paymentRef",
+        },
+        { status: 400 }
+      );
+    }
+
     // Ensure all database tables & columns exist before querying
     await sql`
       CREATE TABLE IF NOT EXISTS users (
@@ -92,6 +132,11 @@ export async function POST(request: Request) {
         password_hash TEXT NOT NULL,
         role TEXT DEFAULT 'USER',
         is_active BOOLEAN DEFAULT TRUE,
+        is_approved BOOLEAN DEFAULT FALSE,
+        approval_status TEXT DEFAULT 'PENDING',
+        payment_method TEXT,
+        payment_phone TEXT,
+        payment_ref TEXT,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
       );
@@ -99,6 +144,14 @@ export async function POST(request: Request) {
 
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name TEXT`;
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_approved BOOLEAN DEFAULT FALSE`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS approval_status TEXT DEFAULT 'PENDING'`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS payment_method TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS payment_phone TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS payment_ref TEXT`;
+
+    // Migration: approve any existing legacy users without status
+    await sql`UPDATE users SET is_approved = TRUE, approval_status = 'APPROVED' WHERE is_approved IS NULL`;
 
     await sql`
       CREATE TABLE IF NOT EXISTS sessions (
@@ -158,6 +211,15 @@ export async function POST(request: Request) {
       );
     }
 
+    // Check if this is the very first user in the database
+    const userCountResult = await sql`SELECT COUNT(*) AS count FROM users`;
+    const userCount = Number(userCountResult[0]?.count ?? 0);
+    const isFirstUser = userCount === 0;
+
+    const userRole = isFirstUser ? 'ADMIN' : 'USER';
+    const isApproved = isFirstUser;
+    const approvalStatus = isFirstUser ? 'APPROVED' : 'PENDING';
+
     const passwordHash = await hashPassword(password);
 
     const users = await sql`
@@ -168,7 +230,12 @@ export async function POST(request: Request) {
         last_name,
         password_hash,
         role,
-        is_active
+        is_active,
+        is_approved,
+        approval_status,
+        payment_method,
+        payment_phone,
+        payment_ref
       )
       VALUES (
         ${email},
@@ -176,10 +243,15 @@ export async function POST(request: Request) {
         ${firstName},
         ${lastName},
         ${passwordHash},
-        'USER',
-        TRUE
+        ${userRole},
+        TRUE,
+        ${isApproved},
+        ${approvalStatus},
+        ${paymentMethod},
+        ${paymentPhone},
+        ${paymentRef}
       )
-      RETURNING id, email, username, first_name, last_name, role, is_active, created_at
+      RETURNING id, email, username, first_name, last_name, role, is_active, is_approved, approval_status, payment_method, created_at
     `;
 
     if (users.length === 0) {
@@ -196,11 +268,16 @@ export async function POST(request: Request) {
 
     await getOrCreateAnonymousIdentity(user.id as string, avatarSeed);
 
-    await createSession(user.id as string);
+    if (isApproved) {
+      await createSession(user.id as string);
+    }
 
     return NextResponse.json({
       success: true,
-      message: "Compte créé avec succès.",
+      message: isApproved
+        ? "Compte administrateur créé et connecté avec succès."
+        : "Votre compte a été créé avec succès. Votre paiement est en attente d'approbation par un administrateur.",
+      requiresApproval: !isApproved,
       user: {
         id: user.id,
         email: user.email,
@@ -208,6 +285,8 @@ export async function POST(request: Request) {
         firstName: user.first_name,
         lastName: user.last_name,
         role: user.role,
+        isApproved: user.is_approved,
+        approvalStatus: user.approval_status,
       },
     });
   } catch (error) {
