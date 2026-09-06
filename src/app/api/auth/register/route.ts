@@ -88,11 +88,22 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!["ORANGE_MONEY", "MOOV_MONEY", "WAVE"].includes(paymentMethod)) {
+    if (paymentMethod === "MOOV_MONEY") {
       return NextResponse.json(
         {
           success: false,
-          message: "Veuillez choisir un moyen de paiement valide (Orange Money, Moov Money ou Wave).",
+          message: "Moov Money est temporairement indisponible. Veuillez utiliser Orange Money ou Wave.",
+          field: "paymentMethod",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!["ORANGE_MONEY", "WAVE"].includes(paymentMethod)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Veuillez choisir un moyen de paiement valide (Orange Money ou Wave).",
           field: "paymentMethod",
         },
         { status: 400 }

@@ -458,7 +458,7 @@ export default function RegisterForm() {
             </div>
 
             {/* PAYMENT LOGO SELECTOR TABS */}
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
               <button
                 type="button"
                 onClick={() => setPaymentMethod("ORANGE_MONEY")}
@@ -474,19 +474,6 @@ export default function RegisterForm() {
 
               <button
                 type="button"
-                onClick={() => setPaymentMethod("MOOV_MONEY")}
-                className={`flex flex-col items-center justify-center rounded-2xl p-3 border transition duration-300 ${
-                  paymentMethod === "MOOV_MONEY"
-                    ? "border-emerald-500 bg-emerald-500/20 shadow-[0_0_20px_rgba(0,168,89,0.4)] scale-102"
-                    : "border-white/10 bg-white/5 hover:bg-white/15"
-                }`}
-              >
-                <MoovMoneyLogo className="h-9 w-9 mb-1" />
-                <span className="text-[11px] font-black text-emerald-300">Moov Money</span>
-              </button>
-
-              <button
-                type="button"
                 onClick={() => setPaymentMethod("WAVE")}
                 className={`flex flex-col items-center justify-center rounded-2xl p-3 border transition duration-300 ${
                   paymentMethod === "WAVE"
@@ -497,6 +484,11 @@ export default function RegisterForm() {
                 <WaveLogo className="h-9 w-9 mb-1" />
                 <span className="text-[11px] font-black text-sky-300">Wave</span>
               </button>
+
+              <div className="col-span-2 sm:col-span-1 opacity-50 cursor-not-allowed flex flex-col items-center justify-center rounded-2xl p-3 border border-white/10 bg-white/5">
+                <MoovMoneyLogo className="h-9 w-9 mb-1 grayscale" />
+                <span className="text-[10px] font-bold text-slate-400">Moov (Bientôt)</span>
+              </div>
             </div>
 
             {/* PAYMENT METHOD DETAILS & DIRECT ACTION BUTTONS */}
@@ -517,27 +509,6 @@ export default function RegisterForm() {
                 >
                   <PhoneCall size={16} />
                   Composer *144*2*1*06887330*500#
-                </a>
-              </div>
-            )}
-
-            {paymentMethod === "MOOV_MONEY" && (
-              <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/30 p-4 space-y-3">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-emerald-200">Numéro Moov Money :</span>
-                  <span className="font-mono font-black text-emerald-300 bg-black/40 px-2 py-1 rounded-lg border border-emerald-500/30 select-all">
-                    06887330
-                  </span>
-                </div>
-                <p className="text-[11px] text-emerald-100/80 leading-relaxed">
-                  Effectue ton transfert Moov Money au numéro <strong>06887330</strong> (USSD *155#).
-                </p>
-                <a
-                  href="tel:*155%23"
-                  className="flex items-center justify-center gap-2 h-11 w-full rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
-                >
-                  <PhoneCall size={16} />
-                  Composer *155# sur téléphone
                 </a>
               </div>
             )}
@@ -637,15 +608,27 @@ export default function RegisterForm() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-xs font-bold text-cyan-100">
-          Tu as déjà un compte ?{" "}
-          <Link
-            href="/connexion"
-            className="font-black text-cyan-300 hover:text-white underline tracking-wider transition"
-          >
-            SE CONNECTER
-          </Link>
-        </p>
+        <div className="mt-6 pt-4 border-t border-white/10 text-center space-y-2">
+          <p className="text-xs font-bold text-cyan-100">
+            Tu as déjà un compte ?{" "}
+            <Link
+              href="/connexion"
+              className="font-black text-cyan-300 hover:text-white underline tracking-wider transition"
+            >
+              SE CONNECTER
+            </Link>
+          </p>
+
+          <p className="text-[11px] text-cyan-200/60 pt-1">
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-1.5 font-extrabold text-purple-300 hover:text-purple-100 bg-purple-950/40 hover:bg-purple-950/70 border border-purple-400/40 px-3.5 py-1.5 rounded-full transition shadow-md"
+            >
+              <ShieldCheck size={14} className="text-purple-400" />
+              Espace Administrateur 🛡️
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
