@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   Shield,
+  ShieldCheck,
   CheckCircle,
   XCircle,
   UserCheck,
@@ -55,6 +56,11 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(true);
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"PENDING" | "ALL" | "STATS">("PENDING");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
@@ -63,23 +69,34 @@ export default function AdminDashboard() {
 
   async function fetchAdminData() {
     setLoading(true);
+    setLoginError("");
     try {
       const [usersRes, statsRes] = await Promise.all([
         fetch("/api/admin/users", { cache: "no-store" }),
         fetch("/api/admin/stats", { cache: "no-store" }),
       ]);
 
+      if (usersRes.status === 403 || statsRes.status === 403) {
+        setIsAuthorized(false);
+        setLoading(false);
+        return;
+      }
+
       const usersData = await usersRes.json();
       const statsData = await statsRes.json();
 
       if (usersRes.ok && usersData.success) {
         setUsers(usersData.users);
+        setIsAuthorized(true);
+      } else {
+        setIsAuthorized(false);
       }
+
       if (statsRes.ok && statsData.success) {
         setStats(statsData.stats);
       }
     } catch {
-      setMessage({ type: "error", text: "Erreur lors du chargement des données administrateur." });
+      setIsAuthorized(false);
     } finally {
       setLoading(false);
     }
@@ -88,6 +105,39 @@ export default function AdminDashboard() {
   useEffect(() => {
     fetchAdminData();
   }, []);
+
+  async function handleAdminLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setLoginError("");
+    setLoginLoading(true);
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: adminEmail, password: adminPassword }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        setLoginError(data.message || "Identifiants administrateur incorrects.");
+        return;
+      }
+
+      if (data.user?.role !== "ADMIN" && data.user?.role !== "SUPER_ADMIN") {
+        setLoginError("Ce compte est un compte utilisateur. Vous devez vous connecter avec un compte Administrateur.");
+        return;
+      }
+
+      setIsAuthorized(true);
+      await fetchAdminData();
+    } catch {
+      setLoginError("Impossible de contacter le serveur.");
+    } finally {
+      setLoginLoading(false);
+    }
+  }
 
   async function handleUserAction(userId: string, action: string, extraData: any = {}) {
     setActionLoading(userId);
@@ -183,6 +233,94 @@ export default function AdminDashboard() {
       <span className="inline-flex items-center gap-1 rounded-full bg-slate-800 px-3 py-1 text-xs font-bold text-slate-300 border border-slate-700">
         Non renseigné
       </span>
+    );
+  }
+
+  if (!isAuthorized && !loading) {
+    return (
+      <div className="min-h-screen bg-[#070913] text-white flex items-center justify-center p-4 selection:bg-cyan-500 selection:text-black">
+        <div className="fixed inset-0 pointer-events-none z-0">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full bg-purple-600/15 blur-[140px]" />
+        </div>
+
+        <div className="relative z-10 w-full max-w-md rounded-[36px] border border-purple-400/40 bg-slate-950/80 p-8 sm:p-10 shadow-[0_25px_70px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-center space-y-6">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-purple-500/20 border border-purple-400/50 text-purple-300 shadow-[0_0_30px_rgba(168,85,247,0.4)]">
+            <Shield size={40} />
+          </div>
+
+          <div>
+            <span className="inline-block rounded-full bg-purple-500/20 px-3 py-1 text-xs font-black text-purple-300 uppercase tracking-widest border border-purple-400/30 mb-2">
+              Accès Securisé
+            </span>
+            <h1 className="text-2xl sm:text-3xl font-black font-display text-white uppercase tracking-wider">
+              Espace Administrateur
+            </h1>
+            <p className="text-xs text-cyan-100/70 mt-1">
+              Connecte-toi avec tes identifiants Administrateur pour gérer la plateforme.
+            </p>
+          </div>
+
+          <form onSubmit={handleAdminLogin} className="space-y-4 text-left">
+            {loginError && (
+              <div className="rounded-2xl border border-red-500/40 bg-red-500/20 p-3 text-xs font-bold text-red-200 text-center">
+                {loginError}
+              </div>
+            )}
+
+            <div>
+              <label className="mb-1 block text-xs font-black text-purple-300 uppercase">
+                Email ou Identifiant Admin
+              </label>
+              <input
+                type="text"
+                required
+                value={adminEmail}
+                onChange={(e) => setAdminEmail(e.target.value)}
+                placeholder="ex: admin@discutons-en.com"
+                className="h-12 w-full rounded-2xl bg-white/10 px-4 text-sm font-semibold text-white placeholder-slate-400 outline-none border border-white/20 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/30 transition"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-xs font-black text-purple-300 uppercase">
+                Mot de passe
+              </label>
+              <input
+                type="password"
+                required
+                value={adminPassword}
+                onChange={(e) => setAdminPassword(e.target.value)}
+                placeholder="••••••••"
+                className="h-12 w-full rounded-2xl bg-white/10 px-4 text-sm font-semibold text-white placeholder-slate-400 outline-none border border-white/20 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/30 transition"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loginLoading}
+              className="mt-2 flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 hover:brightness-110 text-white font-black text-xs uppercase tracking-widest shadow-[0_0_25px_rgba(168,85,247,0.5)] transition disabled:opacity-50"
+            >
+              {loginLoading ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                <>
+                  <ShieldCheck size={18} />
+                  Se Connecter à l'Administration
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="pt-2 border-t border-white/10 flex justify-between items-center text-xs">
+            <Link href="/inscription" className="text-cyan-300 font-bold hover:underline">
+              ← Retour à l'inscription
+            </Link>
+            <Link href="/accueil" className="text-slate-400 hover:text-white transition">
+              Accueil
+            </Link>
+          </div>
+        </div>
+      </div>
     );
   }
 
