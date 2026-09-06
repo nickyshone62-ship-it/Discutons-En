@@ -6,10 +6,12 @@ import {
   validateEmail,
   validatePassword,
   verifyPassword,
+  ensureDefaultAdmin,
 } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
+    await ensureDefaultAdmin();
     const body = await request.json();
 
     const rawEmail = typeof body.email === "string" ? body.email : "";

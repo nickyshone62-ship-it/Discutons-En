@@ -125,3 +125,96 @@ export async function logout() {
 
   cookieStore.delete(SESSION_COOKIE);
 }
+
+export async function ensureDefaultAdmin() {
+  try {
+    const adminEmail = "epiphane920@gmail.com";
+    const adminUsername = "epiphane";
+    const adminPassword = "epi@003";
+
+    await sql`
+      CREATE TABLE IF NOT EXISTS users (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        email TEXT UNIQUE NOT NULL,
+        username TEXT UNIQUE NOT NULL,
+        first_name TEXT,
+        last_name TEXT,
+        password_hash TEXT NOT NULL,
+        role TEXT DEFAULT 'USER',
+        is_active BOOLEAN DEFAULT TRUE,
+        is_approved BOOLEAN DEFAULT FALSE,
+        approval_status TEXT DEFAULT 'PENDING',
+        payment_method TEXT,
+        payment_phone TEXT,
+        payment_ref TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `;
+
+    const existingAdmin = await sql`
+      SELECT id, password_hash, role, is_approved
+      FROM users
+      WHERE email = ${adminEmail} OR username = ${adminUsername}
+      LIMIT 1
+    `;
+
+    const { hashPassword, verifyPassword } = await import("./password");
+    const { getOrCreateAnonymousIdentity } = await import("@/lib/anonymous");
+
+    const passwordHash = await hashPassword(adminPassword);
+
+    if (existingAdmin.length === 0) {
+      const insertedUsers = await sql`
+        INSERT INTO users (
+          email,
+          username,
+          first_name,
+          last_name,
+          password_hash,
+          role,
+          is_active,
+          is_approved,
+          approval_status
+        )
+        VALUES (
+          ${adminEmail},
+          ${adminUsername},
+          'Epiphane',
+          'Admin',
+          ${passwordHash},
+          'ADMIN',
+          TRUE,
+          TRUE,
+          'APPROVED'
+        )
+        RETURNING id
+      `;
+
+      if (insertedUsers.length > 0) {
+        await getOrCreateAnonymousIdentity(insertedUsers[0].id as string, "lorelei_1");
+      }
+    } else {
+      const adminUser = existingAdmin[0];
+      const isPasswordValid = await verifyPassword(adminPassword, adminUser.password_hash as string);
+
+      if (!isPasswordValid || adminUser.role !== "ADMIN" || !adminUser.is_approved) {
+        await sql`
+          UPDATE users
+          SET
+            email = ${adminEmail},
+            role = 'ADMIN',
+            is_active = TRUE,
+            is_approved = TRUE,
+            approval_status = 'APPROVED',
+            password_hash = ${passwordHash},
+            updated_at = NOW()
+          WHERE id = ${adminUser.id as string}
+        `;
+      }
+    }
+  } catch (error) {
+    console.error("Ensure default admin error:", error);
+  }
+}
+

@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, ensureDefaultAdmin } from "@/lib/auth";
 import { sql } from "@/lib/db";
 
 export async function GET(request: Request) {
   try {
+    await ensureDefaultAdmin();
     const user = await getCurrentUser();
 
     if (!user || (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN")) {
