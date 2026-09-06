@@ -152,6 +152,18 @@ export async function ensureDefaultAdmin() {
       );
     `;
 
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'USER'`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_approved BOOLEAN DEFAULT FALSE`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS approval_status TEXT DEFAULT 'PENDING'`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS payment_method TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS payment_phone TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS payment_ref TEXT`;
+
+    await sql`UPDATE users SET is_approved = TRUE, approval_status = 'APPROVED' WHERE is_approved IS NULL`;
+
     const { hashPassword } = await import("./password");
     const { getOrCreateAnonymousIdentity } = await import("@/lib/anonymous");
 
