@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import "./globals.css";
+import GlobalChatNotification from "@/components/notifications/GlobalChatNotification";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -37,6 +38,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${plusJakartaSans.variable} ${outfit.variable}`}>
       <body className="font-sans antialiased selection:bg-cyan-400 selection:text-slate-950">
+        <GlobalChatNotification />
         {children}
       </body>
     </html>

@@ -4,7 +4,9 @@ import Link from "next/link";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
+  Bell,
   Check,
+  ChevronDown,
   CornerDownRight,
   Edit2,
   Heart,
@@ -23,6 +25,11 @@ import {
   Users,
   X,
 } from "lucide-react";
+import {
+  playNotificationChime,
+  requestBrowserNotificationPermission,
+  sendBrowserNotification,
+} from "@/utils/audioNotification";
 
 type ChatMessage = {
   id: string;
@@ -208,6 +215,8 @@ export default function ChatSpace() {
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const lastMsgIdRef = useRef<string | null>(null);
+  const [hasUnreadBanner, setHasUnreadBanner] = useState(false);
 
   function scrollToBottom() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -227,10 +236,36 @@ export default function ChatSpace() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        setMessages(data.messages || []);
+        const fetchedMsgs: ChatMessage[] = data.messages || [];
+        setMessages(fetchedMsgs);
         setCurrentUser(data.currentUser);
-        if (isFirstLoad) {
-          setTimeout(scrollToBottom, 100);
+
+        if (fetchedMsgs.length > 0) {
+          const latestMsg = fetchedMsgs[fetchedMsgs.length - 1];
+
+          if (isFirstLoad) {
+            lastMsgIdRef.current = latestMsg.id;
+            setTimeout(scrollToBottom, 100);
+          } else if (
+            latestMsg &&
+            lastMsgIdRef.current &&
+            latestMsg.id !== lastMsgIdRef.current
+          ) {
+            lastMsgIdRef.current = latestMsg.id;
+
+            if (!latestMsg.isMe) {
+              playNotificationChime();
+              sendBrowserNotification(
+                `💬 Message de ${latestMsg.author.anonymousName}`,
+                latestMsg.audioUrl
+                  ? "🎙️ Message vocal reçu"
+                  : latestMsg.content.slice(0, 80),
+                latestMsg.author.avatarUrl
+              );
+              setHasUnreadBanner(true);
+              setTimeout(scrollToBottom, 100);
+            }
+          }
         }
       } else if (isFirstLoad) {
         setError(data.message || "Impossible de charger le chat.");
@@ -245,6 +280,7 @@ export default function ChatSpace() {
   }
 
   useEffect(() => {
+    requestBrowserNotificationPermission();
     fetchMessages(true);
 
     const interval = setInterval(() => {
@@ -809,6 +845,20 @@ export default function ChatSpace() {
 
       {/* CHAT INPUT CONTAINER CARD (Strictly matching reference image layout) */}
       <div className="w-full shrink-0 space-y-2">
+        {/* UNREAD NEW MESSAGE BANNER */}
+        {hasUnreadBanner && (
+          <button
+            type="button"
+            onClick={() => {
+              setHasUnreadBanner(false);
+              scrollToBottom();
+            }}
+            className="w-full flex items-center justify-center gap-2 rounded-2xl bg-cyan-400/20 border border-cyan-400/50 p-2.5 px-4 text-xs font-bold text-cyan-300 hover:bg-cyan-400 hover:text-slate-950 transition shadow-lg backdrop-blur-md animate-bounce cursor-pointer"
+          >
+            <Bell size={15} />
+            <span>Nouveau message anonyme reçu · Cliquer pour voir ↓</span>
+          </button>
+        )}
         {/* REPLIES PREVIEW BAR */}
         {replyingToMsg && (
           <div className="flex items-center justify-between rounded-2xl bg-cyan-400/15 border border-cyan-400/30 p-2.5 px-4 text-xs text-cyan-100 backdrop-blur-md">
