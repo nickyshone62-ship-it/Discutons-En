@@ -11,11 +11,13 @@ import {
   Loader2,
   MessageSquare,
   Mic,
+  Paperclip,
   Pause,
   Play,
   Reply,
   Send,
   ShieldCheck,
+  Smile,
   Sparkles,
   Trash2,
   Users,
@@ -511,59 +513,61 @@ export default function ChatSpace() {
 
   return (
     <div className="w-full max-w-full flex-1 h-full flex flex-col p-3 sm:p-5 md:p-6 font-sans text-white overflow-hidden gap-3">
-      {/* CHAT HEADER */}
-      <div className="mb-4 flex items-center justify-between rounded-3xl border border-white/20 bg-white/10 p-4 shadow-2xl backdrop-blur-2xl shrink-0">
+      {/* CHAT HEADER (Inspired by reference layout) */}
+      <div className="flex items-center justify-between rounded-3xl border border-white/20 bg-slate-950/70 p-3.5 sm:p-4 shadow-2xl backdrop-blur-2xl shrink-0">
         <div className="flex items-center gap-3">
           <Link
             href="/accueil"
-            className="rounded-2xl p-2.5 text-cyan-200 hover:bg-white/15 hover:text-white transition"
+            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-cyan-200 hover:bg-white/20 hover:text-white transition border border-white/15 shadow-sm"
             title="Retour à l'accueil"
           >
             <ArrowLeft size={20} />
           </Link>
 
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-400/20 text-cyan-300 border border-cyan-400/40 shadow-inner">
-            <MessageSquare size={22} />
-          </div>
-
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-base sm:text-lg font-black font-display tracking-tight text-white">
-                Salon Communautaire en Direct
+                Salon Communautaire
               </h1>
               <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
             </div>
             <p className="text-xs font-medium text-cyan-100/80">
-              Échanges instantanés en direct entre membres anonymes
+              Échanges anonymes en direct
             </p>
           </div>
         </div>
 
-        {currentUser && (
-          <div className="hidden sm:flex items-center gap-2.5 rounded-full bg-white/10 px-4 py-1.5 border border-white/20">
-            <img
-              src={currentUser.avatarUrl}
-              alt={currentUser.anonymousName}
-              className="h-7 w-7 rounded-full border border-cyan-400/60"
-            />
-            <div className="text-left">
-              <p className="text-xs font-black font-display text-white leading-tight">
-                {currentUser.anonymousName}
-              </p>
-              <p className="text-[10px] text-cyan-300 font-bold leading-tight">
-                Identité Anonyme
-              </p>
+        {/* TOP-RIGHT OVERLAPPING AVATARS BADGE (Inspired by reference top-right badge) */}
+        <div className="flex items-center gap-2">
+          {currentUser ? (
+            <div className="flex items-center -space-x-2.5 p-1 px-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-lg">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 text-white font-bold text-xs border-2 border-slate-950 shadow-md">
+                🤖
+              </div>
+              <img
+                src={currentUser.avatarUrl}
+                alt={currentUser.anonymousName}
+                className="h-8 w-8 rounded-full border-2 border-cyan-400 shadow-md object-cover"
+                title={currentUser.anonymousName}
+              />
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/40">
+              <Users size={18} />
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* ANONYMITY BANNER */}
-      <div className="mb-3 rounded-2xl bg-cyan-400/10 px-4 py-2.5 border border-cyan-400/30 flex items-center justify-between text-xs text-cyan-100 backdrop-blur-md shrink-0">
-        <span className="flex items-center gap-2 font-bold">
-          <ShieldCheck size={16} className="text-cyan-300" />
-          Votre identité réelle reste masquée. Tous les messages sont 100% anonymisés.
-        </span>
+      {/* LIVE STATUS & ANONYMITY BANNER */}
+      <div className="rounded-2xl bg-cyan-400/10 px-4 py-2 border border-cyan-400/20 flex items-center justify-between text-xs text-cyan-100 backdrop-blur-md shrink-0">
+        <div className="flex items-center gap-2 font-semibold">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+          </span>
+          <span>Connecté en direct · Messages 100% anonymisés</span>
+        </div>
         <span className="hidden md:flex items-center gap-1.5 text-amber-300 font-bold text-xs">
           <Sparkles size={14} />
           Bienveillance & Respect
@@ -573,16 +577,43 @@ export default function ChatSpace() {
       {/* MESSAGES FEED */}
       <div className="flex-1 overflow-y-auto rounded-3xl border border-white/20 bg-slate-950/60 p-4 sm:p-6 shadow-2xl backdrop-blur-2xl space-y-4">
         {messages.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center text-center p-6">
-            <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-cyan-400/20 text-cyan-300 border border-cyan-400/40 mb-3">
+          <div className="flex h-full flex-col items-center justify-center text-center p-6 space-y-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-cyan-400/20 text-cyan-300 border border-cyan-400/40 shadow-inner">
               <Users size={30} />
             </div>
-            <h3 className="font-black font-display text-white text-lg">
-              Soyez le premier à envoyer un message !
-            </h3>
-            <p className="text-xs font-medium text-cyan-100/80 max-w-xs mt-1 leading-relaxed">
-              Ce salon vous permet d'échanger directement en texte ou via des vocaux instantanés.
-            </p>
+            <div>
+              <h3 className="font-black font-display text-white text-lg">
+                Bienvenue dans le Salon Communautaire !
+              </h3>
+              <p className="text-xs font-medium text-cyan-100/80 max-w-sm mt-1 leading-relaxed">
+                Posez une question, partagez votre avis ou sélectionnez une option rapide ci-dessous.
+              </p>
+            </div>
+
+            {/* QUICK RESPONSE OPTIONS (Inspired by reference chat prompt buttons) */}
+            <div className="w-full max-w-xs space-y-2.5 pt-2">
+              <button
+                type="button"
+                onClick={() => setInputText("Bonjour la communauté ! 👋")}
+                className="w-full rounded-2xl border border-white/20 bg-white/10 p-3 text-xs font-bold text-cyan-100 hover:bg-cyan-400/20 hover:border-cyan-400/50 hover:text-white transition shadow-md text-center"
+              >
+                👋 Saluer la communauté
+              </button>
+              <button
+                type="button"
+                onClick={() => setInputText("J'aimerais avoir des conseils sur...")}
+                className="w-full rounded-2xl border border-white/20 bg-white/10 p-3 text-xs font-bold text-cyan-100 hover:bg-cyan-400/20 hover:border-cyan-400/50 hover:text-white transition shadow-md text-center"
+              >
+                💡 Demander un conseil anonyme
+              </button>
+              <button
+                type="button"
+                onClick={() => setInputText("Qui est disponible pour échanger ?")}
+                className="w-full rounded-2xl border border-white/20 bg-white/10 p-3 text-xs font-bold text-cyan-100 hover:bg-cyan-400/20 hover:border-cyan-400/50 hover:text-white transition shadow-md text-center"
+              >
+                💬 Lancer une discussion
+              </button>
+            </div>
           </div>
         ) : (
           messages.map((msg) => {
@@ -598,11 +629,11 @@ export default function ChatSpace() {
                 <img
                   src={msg.author.avatarUrl}
                   alt={msg.author.anonymousName}
-                  className="h-9 w-9 rounded-full shrink-0 mt-1 border border-cyan-400/40 shadow-md"
+                  className="h-9 w-9 rounded-full shrink-0 mt-1 border border-cyan-400/40 shadow-md object-cover"
                 />
 
                 <div
-                  className={`max-w-[80%] sm:max-w-[68%] space-y-1 ${
+                  className={`max-w-[85%] sm:max-w-[70%] space-y-1 ${
                     msg.isMe ? "items-end text-right" : "items-start text-left"
                   }`}
                 >
@@ -619,7 +650,7 @@ export default function ChatSpace() {
                     )}
                   </div>
 
-                  {/* HIGHLY HIGHLIGHTED QUOTED REPLY PREVIEW */}
+                  {/* QUOTED REPLY PREVIEW */}
                   {msg.replyTo && (
                     <div className="mb-2 rounded-2xl border-l-4 border-cyan-400 bg-gradient-to-r from-cyan-950/90 via-slate-950/90 to-purple-950/80 p-2.5 px-3.5 text-xs text-cyan-100 backdrop-blur-xl shadow-xl border border-cyan-400/40">
                       <div className="flex items-center gap-2 font-black font-display text-cyan-300">
@@ -658,7 +689,7 @@ export default function ChatSpace() {
                     </div>
                   ) : (
                     <div className="relative inline-block text-left">
-                      {/* MESSAGE BUBBLE - CLICK / TAP TO OPEN ACTION MENU */}
+                      {/* MESSAGE BUBBLE */}
                       <div
                         onClick={() => setActiveMenuMsgId(activeMenuMsgId === msg.id ? null : msg.id)}
                         className="cursor-pointer transition transform active:scale-[0.98]"
@@ -679,7 +710,7 @@ export default function ChatSpace() {
                         )}
                       </div>
 
-                      {/* LIKES BADGE ON MESSAGE */}
+                      {/* LIKES BADGE */}
                       {(msg.likesCount || 0) > 0 && (
                         <button
                           onClick={(e) => {
@@ -697,7 +728,7 @@ export default function ChatSpace() {
                         </button>
                       )}
 
-                      {/* TAP-TO-OPEN INTERACTIVE MENU PANEL */}
+                      {/* ACTION MENU PANEL */}
                       {activeMenuMsgId === msg.id && (
                         <div
                           onClick={(e) => e.stopPropagation()}
@@ -768,11 +799,8 @@ export default function ChatSpace() {
                           </button>
                         </div>
                       )}
-
                     </div>
                   )}
-
-
                 </div>
               </div>
             );
@@ -781,97 +809,144 @@ export default function ChatSpace() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* REPLIES PREVIEW BAR */}
-      {replyingToMsg && (
-        <div className="mt-2 flex items-center justify-between rounded-2xl bg-cyan-400/15 border border-cyan-400/30 p-3 px-4 text-xs text-cyan-100 shrink-0 backdrop-blur-md">
-          <div className="flex items-center gap-2 truncate">
-            <Reply size={15} className="text-cyan-300 shrink-0" />
-            <span>
-              En réponse à <strong className="font-bold text-white">{replyingToMsg.author.anonymousName}</strong>:{" "}
-              <span className="italic truncate max-w-[220px] text-cyan-200/80">
-                "{replyingToMsg.content}"
+      {/* CHAT INPUT CONTAINER CARD (Matching reference screenshot format with existing colors) */}
+      <div className="w-full shrink-0 space-y-2">
+        {/* REPLIES PREVIEW BAR */}
+        {replyingToMsg && (
+          <div className="flex items-center justify-between rounded-2xl bg-cyan-400/15 border border-cyan-400/30 p-2.5 px-4 text-xs text-cyan-100 backdrop-blur-md">
+            <div className="flex items-center gap-2 truncate">
+              <Reply size={15} className="text-cyan-300 shrink-0" />
+              <span>
+                En réponse à <strong className="font-bold text-white">{replyingToMsg.author.anonymousName}</strong>:{" "}
+                <span className="italic truncate max-w-[220px] text-cyan-200/80">
+                  "{replyingToMsg.content}"
+                </span>
               </span>
-            </span>
-          </div>
+            </div>
 
-          <button
-            type="button"
-            onClick={() => setReplyingToMsg(null)}
-            className="p-1 text-cyan-300 hover:text-white"
-            title="Annuler la réponse"
-          >
-            <X size={16} />
-          </button>
-        </div>
-      )}
-
-      {/* CHAT INPUT / VOICE RECORDING */}
-      {recording ? (
-        <div className="mt-1 flex w-full items-center justify-between rounded-3xl border border-red-500/40 bg-red-950/50 p-3.5 px-5 shadow-2xl backdrop-blur-2xl shrink-0">
-          <div className="flex items-center gap-3">
-            <span className="h-3 w-3 rounded-full bg-red-500 animate-ping" />
-            <span className="text-xs font-black font-display tracking-wider text-red-200">
-              ENREGISTREMENT VOCAL ({recordTimer}s)
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
             <button
-              onClick={cancelRecording}
-              className="rounded-full px-4 py-2 text-xs font-bold text-slate-300 hover:bg-white/10 hover:text-white transition"
+              type="button"
+              onClick={() => setReplyingToMsg(null)}
+              className="p-1 text-cyan-300 hover:text-white"
+              title="Annuler la réponse"
             >
-              Annuler
-            </button>
-            <button
-              onClick={stopRecording}
-              className="inline-flex items-center gap-2 rounded-full bg-red-600 px-5 py-2 text-xs font-black font-display uppercase tracking-widest text-white hover:bg-red-500 transition shadow-lg shadow-red-600/40"
-            >
-              Envoyer
-              <Send size={14} />
+              <X size={16} />
             </button>
           </div>
+        )}
+
+        {recording ? (
+          <div className="flex w-full items-center justify-between rounded-3xl border border-red-500/40 bg-red-950/60 p-4 px-5 shadow-2xl backdrop-blur-2xl">
+            <div className="flex items-center gap-3">
+              <span className="h-3 w-3 rounded-full bg-red-500 animate-ping" />
+              <span className="text-xs font-black font-display tracking-wider text-red-200">
+                ENREGISTREMENT VOCAL ({recordTimer}s)
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={cancelRecording}
+                className="rounded-full px-4 py-2 text-xs font-bold text-slate-300 hover:bg-white/10 hover:text-white transition"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={stopRecording}
+                className="inline-flex items-center gap-2 rounded-2xl bg-red-600 px-5 py-2.5 text-xs font-black font-display uppercase tracking-widest text-white hover:bg-red-500 transition shadow-lg shadow-red-600/40"
+              >
+                Envoyer
+                <Send size={14} />
+              </button>
+            </div>
+          </div>
+        ) : (
+          <form
+            onSubmit={handleSendMessage}
+            className="flex w-full flex-col rounded-3xl border border-white/20 bg-slate-950/80 p-3 sm:p-4 shadow-2xl backdrop-blur-2xl space-y-3"
+          >
+            {/* TOP AREA: TEXT INPUT */}
+            <div className="w-full px-1">
+              <textarea
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    if (inputText.trim() && !sending) {
+                      handleSendMessage(e as unknown as FormEvent);
+                    }
+                  }
+                }}
+                placeholder={
+                  replyingToMsg
+                    ? `Répondre à ${replyingToMsg.author.anonymousName}...`
+                    : "Écrivez votre message..."
+                }
+                rows={2}
+                maxLength={1000}
+                className="w-full resize-none bg-transparent px-2 text-sm sm:text-base font-medium outline-none text-white placeholder:text-cyan-200/50"
+              />
+            </div>
+
+            {/* BOTTOM BAR INSIDE CARD: ICONS ON LEFT, PROMINENT SEND BUTTON ON RIGHT (Matching image layout) */}
+            <div className="flex items-center justify-between pt-2 border-t border-white/10">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setInputText((prev) => prev + " 😊");
+                  }}
+                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-cyan-300 hover:bg-white/20 hover:text-white transition border border-white/15"
+                  title="Ajouter un emoji"
+                >
+                  <Smile size={18} />
+                </button>
+                <button
+                  type="button"
+                  onClick={startRecording}
+                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-cyan-300 hover:bg-white/20 hover:text-white transition border border-white/15"
+                  title="Message vocal"
+                >
+                  <Mic size={18} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setInputText("Bonjour à tous ! 👋");
+                  }}
+                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-cyan-300 hover:bg-white/20 hover:text-white transition border border-white/15"
+                  title="Insérer un prompt"
+                >
+                  <Paperclip size={18} />
+                </button>
+              </div>
+
+              <button
+                type="submit"
+                disabled={sending || !inputText.trim()}
+                className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 px-5 sm:px-6 py-2.5 text-xs sm:text-sm font-black font-display transition transform active:scale-95 disabled:opacity-40 shadow-[0_0_20px_rgba(34,211,238,0.35)]"
+                title="Envoyer le message"
+              >
+                <span>Envoyer</span>
+                {sending ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Send size={16} />
+                )}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* POWERED BY FOOTER AT BOTTOM (Inspired by reference layout) */}
+        <div className="flex justify-center items-center gap-1.5 py-0.5 text-[11px] text-cyan-200/60 font-medium">
+          <span>Propulsé par</span>
+          <span className="font-black font-display text-cyan-300 tracking-wider">Discutons-En</span>
         </div>
-      ) : (
-        <form
-          onSubmit={handleSendMessage}
-          className="mt-1 flex w-full items-center gap-2.5 rounded-2xl sm:rounded-full border border-white/20 bg-slate-950/80 p-2 sm:p-2.5 px-3 sm:px-4 shadow-2xl backdrop-blur-2xl shrink-0"
-        >
-          <input
-            type="text"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            placeholder={
-              replyingToMsg
-                ? `Répondre à ${replyingToMsg.author.anonymousName}...`
-                : "Écris ton message anonyme..."
-            }
-            maxLength={1000}
-            className="flex-1 min-w-0 bg-transparent px-3 sm:px-4 text-sm sm:text-base font-medium outline-none text-white placeholder:text-cyan-200/50"
-          />
-
-          <button
-            type="button"
-            onClick={startRecording}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-cyan-300 hover:bg-white/20 hover:text-white transition border border-white/15"
-            title="Enregistrer un message vocal"
-          >
-            <Mic size={19} />
-          </button>
-
-          <button
-            type="submit"
-            disabled={sending || !inputText.trim()}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 transition transform active:scale-95 disabled:opacity-40 shadow-[0_0_15px_rgba(34,211,238,0.4)]"
-            title="Envoyer le message"
-          >
-            {sending ? (
-              <Loader2 size={18} className="animate-spin" />
-            ) : (
-              <Send size={18} className="ml-0.5" />
-            )}
-          </button>
-        </form>
-      )}
+      </div>
     </div>
   );
 }
