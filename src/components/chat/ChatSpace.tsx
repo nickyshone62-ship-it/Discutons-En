@@ -510,7 +510,7 @@ export default function ChatSpace() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6 flex flex-col h-[calc(100vh-2rem)] sm:h-[calc(100vh-4rem)] font-sans text-white">
+    <div className="w-full max-w-full flex-1 h-full flex flex-col p-3 sm:p-5 md:p-6 font-sans text-white overflow-hidden gap-3">
       {/* CHAT HEADER */}
       <div className="mb-4 flex items-center justify-between rounded-3xl border border-white/20 bg-white/10 p-4 shadow-2xl backdrop-blur-2xl shrink-0">
         <div className="flex items-center gap-3">
@@ -807,7 +807,7 @@ export default function ChatSpace() {
 
       {/* CHAT INPUT / VOICE RECORDING */}
       {recording ? (
-        <div className="mt-3 flex items-center justify-between rounded-3xl border border-red-500/40 bg-red-950/50 p-3.5 px-5 shadow-2xl backdrop-blur-2xl shrink-0">
+        <div className="mt-1 flex w-full items-center justify-between rounded-3xl border border-red-500/40 bg-red-950/50 p-3.5 px-5 shadow-2xl backdrop-blur-2xl shrink-0">
           <div className="flex items-center gap-3">
             <span className="h-3 w-3 rounded-full bg-red-500 animate-ping" />
             <span className="text-xs font-black font-display tracking-wider text-red-200">
@@ -834,7 +834,7 @@ export default function ChatSpace() {
       ) : (
         <form
           onSubmit={handleSendMessage}
-          className="mt-3 flex items-center gap-2.5 rounded-full border border-white/20 bg-slate-950/80 p-2 px-3 shadow-2xl backdrop-blur-2xl shrink-0"
+          className="mt-1 flex w-full items-center gap-2.5 rounded-2xl sm:rounded-full border border-white/20 bg-slate-950/80 p-2 sm:p-2.5 px-3 sm:px-4 shadow-2xl backdrop-blur-2xl shrink-0"
         >
           <input
             type="text"
@@ -846,13 +846,13 @@ export default function ChatSpace() {
                 : "Écris ton message anonyme..."
             }
             maxLength={1000}
-            className="flex-1 bg-transparent px-4 text-base font-medium outline-none text-white placeholder:text-cyan-200/50"
+            className="flex-1 min-w-0 bg-transparent px-3 sm:px-4 text-sm sm:text-base font-medium outline-none text-white placeholder:text-cyan-200/50"
           />
 
           <button
             type="button"
             onClick={startRecording}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-cyan-300 hover:bg-white/20 hover:text-white transition border border-white/15"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-cyan-300 hover:bg-white/20 hover:text-white transition border border-white/15"
             title="Enregistrer un message vocal"
           >
             <Mic size={19} />
@@ -861,7 +861,7 @@ export default function ChatSpace() {
           <button
             type="submit"
             disabled={sending || !inputText.trim()}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 transition transform active:scale-95 disabled:opacity-40 shadow-[0_0_15px_rgba(34,211,238,0.4)]"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 transition transform active:scale-95 disabled:opacity-40 shadow-[0_0_15px_rgba(34,211,238,0.4)]"
             title="Envoyer le message"
           >
             {sending ? (
