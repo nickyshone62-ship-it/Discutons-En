@@ -1,1 +1,1 @@
-export { sql } from "./client";
+export { sql, prisma } from "./client";
