@@ -538,19 +538,19 @@ export default function ChatSpace() {
           </div>
         </div>
 
-        {/* TOP-RIGHT AVATAR BADGE (As seen in top right of reference image) */}
+        {/* TOP-RIGHT USER BADGE */}
         <div className="flex items-center gap-2">
           {currentUser ? (
-            <div className="flex items-center -space-x-2.5 p-1 px-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-lg">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 text-white font-bold text-xs border-2 border-slate-950 shadow-md">
-                🤖
-              </div>
+            <div className="flex items-center gap-2.5 p-1.5 px-3 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-lg">
               <img
                 src={currentUser.avatarUrl}
                 alt={currentUser.anonymousName}
-                className="h-8 w-8 rounded-full border-2 border-cyan-400 shadow-md object-cover"
+                className="h-7 w-7 rounded-full border border-cyan-400 shadow-md object-cover"
                 title={currentUser.anonymousName}
               />
+              <span className="text-xs font-bold font-display text-white hidden sm:inline">
+                {currentUser.anonymousName}
+              </span>
             </div>
           ) : (
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/40">
@@ -562,25 +562,22 @@ export default function ChatSpace() {
 
       {/* MESSAGES FEED */}
       <div className="flex-1 overflow-y-auto rounded-3xl border border-white/20 bg-slate-950/60 p-4 sm:p-6 shadow-2xl backdrop-blur-2xl space-y-5">
-        {/* BOT INITIAL WELCOME MESSAGE & QUICK OPTIONS (Matching reference image welcome card + stacked buttons) */}
-        <div className="flex gap-3 flex-row items-start">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 text-white font-bold text-sm border border-purple-400/40 shadow-lg">
-            🤖
-          </div>
-
-          <div className="max-w-[85%] sm:max-w-[75%] space-y-2.5 text-left">
-            <div className="flex items-center gap-2 text-[11px] font-bold text-cyan-200/80">
-              <span className="font-display text-cyan-300">Assistant Communauté</span>
-              <span>·</span>
-              <span className="text-[10px] font-sans font-normal opacity-80">En ligne</span>
+        {messages.length === 0 ? (
+          <div className="flex h-full flex-col items-center justify-center text-center p-6 space-y-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-cyan-400/20 text-cyan-300 border border-cyan-400/40 shadow-inner">
+              <Users size={28} />
+            </div>
+            <div>
+              <h3 className="font-black font-display text-white text-lg">
+                Salon Communautaire en Direct
+              </h3>
+              <p className="text-xs font-medium text-cyan-100/80 max-w-sm mt-1 leading-relaxed">
+                Soyez le premier à envoyer un message anonyme ou choisissez un sujet ci-dessous.
+              </p>
             </div>
 
-            <div className="rounded-3xl rounded-tl-sm bg-white/10 text-white p-4 text-sm leading-relaxed border border-white/15 backdrop-blur-xl shadow-lg">
-              Salut ! Bienvenue dans le Salon Communautaire anonyme. Posez une question, partagez vos idées ou sélectionnez une option ci-dessous.
-            </div>
-
-            {/* STACKED OPTION CARDS (Matching reference image stacked choice cards) */}
-            <div className="space-y-2 pt-1 max-w-sm">
+            {/* STACKED PROMPT BUTTONS */}
+            <div className="space-y-2 pt-1 w-full max-w-xs">
               <button
                 type="button"
                 onClick={() => setInputText("Bonjour à tous ! 👋")}
@@ -609,10 +606,8 @@ export default function ChatSpace() {
               </button>
             </div>
           </div>
-        </div>
-
-        {/* DYNAMIC MESSAGES */}
-        {messages.map((msg) => {
+        ) : (
+          messages.map((msg) => {
           const isEditing = editingId === msg.id;
 
           return (
@@ -800,7 +795,8 @@ export default function ChatSpace() {
               </div>
             </div>
           );
-        })}
+        })
+      )}
 
         {/* STATUS INDICATOR (Matching reference image status ring "Connecting with agent") */}
         <div className="flex items-center justify-center gap-2 text-xs font-semibold text-cyan-200/80 py-2">
