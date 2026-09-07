@@ -516,8 +516,8 @@ export default function ChatSpace() {
 
   return (
     <div className="w-full max-w-full flex-1 h-full flex flex-col p-3 sm:p-5 md:p-6 font-sans text-white overflow-hidden gap-3">
-      {/* CHAT HEADER (Inspired by reference layout) */}
-      <div className="flex items-center justify-between rounded-3xl border border-white/20 bg-slate-950/70 p-3.5 sm:p-4 shadow-2xl backdrop-blur-2xl shrink-0">
+      {/* HEADER (Matching reference image: Back button left, Title center, Avatar badge top right) */}
+      <div className="flex items-center justify-between rounded-3xl border border-white/20 bg-slate-950/80 p-3.5 sm:p-4 shadow-2xl backdrop-blur-2xl shrink-0">
         <div className="flex items-center gap-3">
           <Link
             href="/accueil"
@@ -528,19 +528,17 @@ export default function ChatSpace() {
           </Link>
 
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-base sm:text-lg font-black font-display tracking-tight text-white">
-                Salon Communautaire
-              </h1>
+            <h1 className="text-base sm:text-lg font-black font-display tracking-tight text-white flex items-center gap-2">
+              Salon Communautaire
               <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
-            </div>
-            <p className="text-xs font-medium text-cyan-100/80">
-              Échanges anonymes en direct
+            </h1>
+            <p className="text-xs font-medium text-cyan-100/70">
+              Échanges instantanés en direct
             </p>
           </div>
         </div>
 
-        {/* TOP-RIGHT OVERLAPPING AVATARS BADGE (Inspired by reference top-right badge) */}
+        {/* TOP-RIGHT AVATAR BADGE (As seen in top right of reference image) */}
         <div className="flex items-center gap-2">
           {currentUser ? (
             <div className="flex items-center -space-x-2.5 p-1 px-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-lg">
@@ -562,257 +560,258 @@ export default function ChatSpace() {
         </div>
       </div>
 
-      {/* LIVE STATUS & ANONYMITY BANNER */}
-      <div className="rounded-2xl bg-cyan-400/10 px-4 py-2 border border-cyan-400/20 flex items-center justify-between text-xs text-cyan-100 backdrop-blur-md shrink-0">
-        <div className="flex items-center gap-2 font-semibold">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-          </span>
-          <span>Connecté en direct · Messages 100% anonymisés</span>
-        </div>
-        <span className="hidden md:flex items-center gap-1.5 text-amber-300 font-bold text-xs">
-          <Sparkles size={14} />
-          Bienveillance & Respect
-        </span>
-      </div>
-
       {/* MESSAGES FEED */}
-      <div className="flex-1 overflow-y-auto rounded-3xl border border-white/20 bg-slate-950/60 p-4 sm:p-6 shadow-2xl backdrop-blur-2xl space-y-4">
-        {messages.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center text-center p-6 space-y-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-cyan-400/20 text-cyan-300 border border-cyan-400/40 shadow-inner">
-              <Users size={30} />
-            </div>
-            <div>
-              <h3 className="font-black font-display text-white text-lg">
-                Bienvenue dans le Salon Communautaire !
-              </h3>
-              <p className="text-xs font-medium text-cyan-100/80 max-w-sm mt-1 leading-relaxed">
-                Posez une question, partagez votre avis ou sélectionnez une option rapide ci-dessous.
-              </p>
+      <div className="flex-1 overflow-y-auto rounded-3xl border border-white/20 bg-slate-950/60 p-4 sm:p-6 shadow-2xl backdrop-blur-2xl space-y-5">
+        {/* BOT INITIAL WELCOME MESSAGE & QUICK OPTIONS (Matching reference image welcome card + stacked buttons) */}
+        <div className="flex gap-3 flex-row items-start">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 text-white font-bold text-sm border border-purple-400/40 shadow-lg">
+            🤖
+          </div>
+
+          <div className="max-w-[85%] sm:max-w-[75%] space-y-2.5 text-left">
+            <div className="flex items-center gap-2 text-[11px] font-bold text-cyan-200/80">
+              <span className="font-display text-cyan-300">Assistant Communauté</span>
+              <span>·</span>
+              <span className="text-[10px] font-sans font-normal opacity-80">En ligne</span>
             </div>
 
-            {/* QUICK RESPONSE OPTIONS (Inspired by reference chat prompt buttons) */}
-            <div className="w-full max-w-xs space-y-2.5 pt-2">
+            <div className="rounded-3xl rounded-tl-sm bg-white/10 text-white p-4 text-sm leading-relaxed border border-white/15 backdrop-blur-xl shadow-lg">
+              Salut ! Bienvenue dans le Salon Communautaire anonyme. Posez une question, partagez vos idées ou sélectionnez une option ci-dessous.
+            </div>
+
+            {/* STACKED OPTION CARDS (Matching reference image stacked choice cards) */}
+            <div className="space-y-2 pt-1 max-w-sm">
               <button
                 type="button"
-                onClick={() => setInputText("Bonjour la communauté ! 👋")}
-                className="w-full rounded-2xl border border-white/20 bg-white/10 p-3 text-xs font-bold text-cyan-100 hover:bg-cyan-400/20 hover:border-cyan-400/50 hover:text-white transition shadow-md text-center"
+                onClick={() => setInputText("Bonjour à tous ! 👋")}
+                className="w-full rounded-2xl border border-white/20 bg-slate-900/90 p-3 text-xs sm:text-sm font-semibold text-cyan-100 hover:bg-cyan-400 hover:text-slate-950 transition shadow-md text-left flex items-center justify-between group"
               >
-                👋 Saluer la communauté
+                <span>👋 Saluer la communauté</span>
+                <span className="opacity-0 group-hover:opacity-100 transition">→</span>
               </button>
+
               <button
                 type="button"
                 onClick={() => setInputText("J'aimerais avoir des conseils sur...")}
-                className="w-full rounded-2xl border border-white/20 bg-white/10 p-3 text-xs font-bold text-cyan-100 hover:bg-cyan-400/20 hover:border-cyan-400/50 hover:text-white transition shadow-md text-center"
+                className="w-full rounded-2xl border border-white/20 bg-slate-900/90 p-3 text-xs sm:text-sm font-semibold text-cyan-100 hover:bg-cyan-400 hover:text-slate-950 transition shadow-md text-left flex items-center justify-between group"
               >
-                💡 Demander un conseil anonyme
+                <span>💡 Demander un conseil anonyme</span>
+                <span className="opacity-0 group-hover:opacity-100 transition">→</span>
               </button>
+
               <button
                 type="button"
-                onClick={() => setInputText("Qui est disponible pour échanger ?")}
-                className="w-full rounded-2xl border border-white/20 bg-white/10 p-3 text-xs font-bold text-cyan-100 hover:bg-cyan-400/20 hover:border-cyan-400/50 hover:text-white transition shadow-md text-center"
+                onClick={() => setInputText("Qui est disponible pour discuter ?")}
+                className="w-full rounded-2xl border border-white/20 bg-slate-900/90 p-3 text-xs sm:text-sm font-semibold text-cyan-100 hover:bg-cyan-400 hover:text-slate-950 transition shadow-md text-left flex items-center justify-between group"
               >
-                💬 Lancer une discussion
+                <span>💬 Lancer une discussion</span>
+                <span className="opacity-0 group-hover:opacity-100 transition">→</span>
               </button>
             </div>
           </div>
-        ) : (
-          messages.map((msg) => {
-            const isEditing = editingId === msg.id;
+        </div>
 
-            return (
+        {/* DYNAMIC MESSAGES */}
+        {messages.map((msg) => {
+          const isEditing = editingId === msg.id;
+
+          return (
+            <div
+              key={msg.id}
+              className={`group flex gap-3 ${
+                msg.isMe ? "flex-row-reverse" : "flex-row"
+              }`}
+            >
+              <img
+                src={msg.author.avatarUrl}
+                alt={msg.author.anonymousName}
+                className="h-9 w-9 rounded-full shrink-0 mt-1 border border-cyan-400/40 shadow-md object-cover"
+              />
+
               <div
-                key={msg.id}
-                className={`group flex gap-3 ${
-                  msg.isMe ? "flex-row-reverse" : "flex-row"
+                className={`max-w-[85%] sm:max-w-[70%] space-y-1 ${
+                  msg.isMe ? "items-end text-right" : "items-start text-left"
                 }`}
               >
-                <img
-                  src={msg.author.avatarUrl}
-                  alt={msg.author.anonymousName}
-                  className="h-9 w-9 rounded-full shrink-0 mt-1 border border-cyan-400/40 shadow-md object-cover"
-                />
-
                 <div
-                  className={`max-w-[85%] sm:max-w-[70%] space-y-1 ${
-                    msg.isMe ? "items-end text-right" : "items-start text-left"
+                  className={`flex items-center gap-2 text-[11px] font-bold text-cyan-200/80 ${
+                    msg.isMe ? "justify-end" : "justify-start"
                   }`}
                 >
-                  <div
-                    className={`flex items-center gap-2 text-[11px] font-bold text-cyan-200/80 ${
-                      msg.isMe ? "justify-end" : "justify-start"
-                    }`}
-                  >
-                    <span className="font-display">{msg.author.anonymousName}</span>
-                    <span>·</span>
-                    <span className="text-[10px] font-sans font-normal opacity-80">{formatTime(msg.createdAt)}</span>
-                    {msg.isEdited && (
-                      <span className="italic text-cyan-300/80 text-[10px]">(modifié)</span>
-                    )}
-                  </div>
-
-                  {/* QUOTED REPLY PREVIEW */}
-                  {msg.replyTo && (
-                    <div className="mb-2 rounded-2xl border-l-4 border-cyan-400 bg-gradient-to-r from-cyan-950/90 via-slate-950/90 to-purple-950/80 p-2.5 px-3.5 text-xs text-cyan-100 backdrop-blur-xl shadow-xl border border-cyan-400/40">
-                      <div className="flex items-center gap-2 font-black font-display text-cyan-300">
-                        <CornerDownRight size={14} className="text-cyan-400 shrink-0" />
-                        <span>En réponse à <span className="text-white underline decoration-cyan-400/80 font-black">{msg.replyTo.authorName}</span></span>
-                      </div>
-                      <p className="mt-1 text-xs text-cyan-100/90 italic truncate font-medium pl-4 border-l border-cyan-400/30">
-                        "{msg.replyTo.content}"
-                      </p>
-                    </div>
+                  <span className="font-display">{msg.author.anonymousName}</span>
+                  <span>·</span>
+                  <span className="text-[10px] font-sans font-normal opacity-80">{formatTime(msg.createdAt)}</span>
+                  {msg.isEdited && (
+                    <span className="italic text-cyan-300/80 text-[10px]">(modifié)</span>
                   )}
+                </div>
 
-                  {isEditing ? (
-                    <div className="flex items-center gap-2 bg-slate-900/95 border border-cyan-400 p-2.5 rounded-2xl text-left shadow-2xl backdrop-blur-2xl">
-                      <input
-                        type="text"
-                        value={editText}
-                        onChange={(e) => setEditText(e.target.value)}
-                        className="bg-transparent text-white text-base outline-none flex-1 px-2 font-medium"
-                        autoFocus
-                      />
-                      <button
-                        onClick={() => handleSaveEdit(msg.id)}
-                        className="p-2 rounded-xl bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition font-bold shadow-md"
-                        title="Enregistrer"
-                      >
-                        <Check size={16} />
-                      </button>
-                      <button
-                        onClick={() => setEditingId(null)}
-                        className="p-2 rounded-xl bg-white/10 text-slate-300 hover:text-white transition"
-                        title="Annuler"
-                      >
-                        <X size={16} />
-                      </button>
+                {/* QUOTED REPLY PREVIEW */}
+                {msg.replyTo && (
+                  <div className="mb-2 rounded-2xl border-l-4 border-cyan-400 bg-gradient-to-r from-cyan-950/90 via-slate-950/90 to-purple-950/80 p-2.5 px-3.5 text-xs text-cyan-100 backdrop-blur-xl shadow-xl border border-cyan-400/40">
+                    <div className="flex items-center gap-2 font-black font-display text-cyan-300">
+                      <CornerDownRight size={14} className="text-cyan-400 shrink-0" />
+                      <span>En réponse à <span className="text-white underline decoration-cyan-400/80 font-black">{msg.replyTo.authorName}</span></span>
                     </div>
-                  ) : (
-                    <div className="relative inline-block text-left">
-                      {/* MESSAGE BUBBLE */}
-                      <div
-                        onClick={() => setActiveMenuMsgId(activeMenuMsgId === msg.id ? null : msg.id)}
-                        className="cursor-pointer transition transform active:scale-[0.98]"
-                        title="Cliquer pour afficher les options"
-                      >
-                        {msg.audioUrl ? (
-                          <VoicePlayer src={msg.audioUrl} isMe={msg.isMe} />
-                        ) : (
-                          <div
-                            className={`rounded-3xl px-4.5 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words inline-block shadow-lg ${
-                              msg.isMe
-                                ? "bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 font-semibold rounded-tr-none shadow-[0_0_20px_rgba(34,211,238,0.25)]"
-                                : "bg-white/10 text-white font-medium rounded-tl-none border border-white/15 backdrop-blur-xl hover:bg-white/15"
-                            }`}
-                          >
-                            {msg.content}
-                          </div>
-                        )}
-                      </div>
+                    <p className="mt-1 text-xs text-cyan-100/90 italic truncate font-medium pl-4 border-l border-cyan-400/30">
+                      "{msg.replyTo.content}"
+                    </p>
+                  </div>
+                )}
 
-                      {/* LIKES BADGE */}
-                      {(msg.likesCount || 0) > 0 && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleLikeMessage(msg.id);
-                          }}
-                          className={`absolute -bottom-2 right-2 flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-black border shadow-lg transition transform active:scale-95 ${
-                            msg.isLikedByMe
-                              ? "bg-rose-500 text-white border-rose-400 shadow-rose-500/40"
-                              : "bg-slate-900/90 text-rose-400 border-white/20"
-                          }`}
-                        >
-                          <Heart size={11} className="fill-current" />
-                          <span>{msg.likesCount}</span>
-                        </button>
-                      )}
-
-                      {/* ACTION MENU PANEL */}
-                      {activeMenuMsgId === msg.id && (
+                {isEditing ? (
+                  <div className="flex items-center gap-2 bg-slate-900/95 border border-cyan-400 p-2.5 rounded-2xl text-left shadow-2xl backdrop-blur-2xl">
+                    <input
+                      type="text"
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                      className="bg-transparent text-white text-base outline-none flex-1 px-2 font-medium"
+                      autoFocus
+                    />
+                    <button
+                      onClick={() => handleSaveEdit(msg.id)}
+                      className="p-2 rounded-xl bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition font-bold shadow-md"
+                      title="Enregistrer"
+                    >
+                      <Check size={16} />
+                    </button>
+                    <button
+                      onClick={() => setEditingId(null)}
+                      className="p-2 rounded-xl bg-white/10 text-slate-300 hover:text-white transition"
+                      title="Annuler"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative inline-block text-left">
+                    {/* MESSAGE BUBBLE */}
+                    <div
+                      onClick={() => setActiveMenuMsgId(activeMenuMsgId === msg.id ? null : msg.id)}
+                      className="cursor-pointer transition transform active:scale-[0.98]"
+                      title="Cliquer pour afficher les options"
+                    >
+                      {msg.audioUrl ? (
+                        <VoicePlayer src={msg.audioUrl} isMe={msg.isMe} />
+                      ) : (
                         <div
-                          onClick={(e) => e.stopPropagation()}
-                          className={`mt-2 flex flex-wrap items-center gap-2 rounded-2xl border border-cyan-400/60 bg-slate-950/95 p-2 px-3 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150 z-30 max-w-full ${
-                            msg.isMe ? "justify-end" : "justify-start"
+                          className={`rounded-3xl px-4.5 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words inline-block shadow-lg ${
+                            msg.isMe
+                              ? "bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 font-semibold rounded-tr-none shadow-[0_0_20px_rgba(34,211,238,0.25)]"
+                              : "bg-white/10 text-white font-medium rounded-tl-none border border-white/15 backdrop-blur-xl hover:bg-white/15"
                           }`}
                         >
-                          <button
-                            onClick={() => {
-                              setReplyingToMsg(msg);
-                              setActiveMenuMsgId(null);
-                            }}
-                            className="flex items-center gap-1.5 rounded-xl bg-cyan-400/20 px-3 py-1.5 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition active:scale-95"
-                          >
-                            <Reply size={14} />
-                            <span>Répondre</span>
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              handleLikeMessage(msg.id);
-                              setActiveMenuMsgId(null);
-                            }}
-                            className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition active:scale-95 ${
-                              msg.isLikedByMe
-                                ? "bg-rose-500/30 text-rose-300 border border-rose-400/40"
-                                : "bg-white/10 text-slate-200 hover:text-rose-400"
-                            }`}
-                          >
-                            <Heart size={14} className={msg.isLikedByMe ? "fill-rose-400" : ""} />
-                            <span>Aimer ({msg.likesCount || 0})</span>
-                          </button>
-
-                          {msg.isMe && (
-                            <>
-                              {!msg.audioUrl && (
-                                <button
-                                  onClick={() => {
-                                    setEditingId(msg.id);
-                                    setEditText(msg.content);
-                                    setActiveMenuMsgId(null);
-                                  }}
-                                  className="flex items-center gap-1.5 rounded-xl bg-cyan-400/20 px-3 py-1.5 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition active:scale-95"
-                                >
-                                  <Edit2 size={14} />
-                                  <span>Modifier</span>
-                                </button>
-                              )}
-                              <button
-                                onClick={() => {
-                                  handleDeleteMessage(msg.id);
-                                  setActiveMenuMsgId(null);
-                                }}
-                                className="flex items-center gap-1.5 rounded-xl bg-red-500/25 border border-red-500/40 px-3 py-1.5 text-xs font-black text-red-200 hover:bg-red-500/40 transition active:scale-95 shadow-md shadow-red-950/50"
-                              >
-                                <Trash2 size={14} className="text-red-400" />
-                                <span>Supprimer</span>
-                              </button>
-                            </>
-                          )}
-
-                          <button
-                            onClick={() => setActiveMenuMsgId(null)}
-                            className="p-1.5 rounded-xl bg-white/10 text-slate-400 hover:text-white transition"
-                            title="Fermer"
-                          >
-                            <X size={15} />
-                          </button>
+                          {msg.content}
                         </div>
                       )}
                     </div>
-                  )}
-                </div>
+
+                    {/* LIKES BADGE */}
+                    {(msg.likesCount || 0) > 0 && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLikeMessage(msg.id);
+                        }}
+                        className={`absolute -bottom-2 right-2 flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-black border shadow-lg transition transform active:scale-95 ${
+                          msg.isLikedByMe
+                            ? "bg-rose-500 text-white border-rose-400 shadow-rose-500/40"
+                            : "bg-slate-900/90 text-rose-400 border-white/20"
+                        }`}
+                      >
+                        <Heart size={11} className="fill-current" />
+                        <span>{msg.likesCount}</span>
+                      </button>
+                    )}
+
+                    {/* ACTION MENU PANEL */}
+                    {activeMenuMsgId === msg.id && (
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        className={`mt-2 flex flex-wrap items-center gap-2 rounded-2xl border border-cyan-400/60 bg-slate-950/95 p-2 px-3 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150 z-30 max-w-full ${
+                          msg.isMe ? "justify-end" : "justify-start"
+                        }`}
+                      >
+                        <button
+                          onClick={() => {
+                            setReplyingToMsg(msg);
+                            setActiveMenuMsgId(null);
+                          }}
+                          className="flex items-center gap-1.5 rounded-xl bg-cyan-400/20 px-3 py-1.5 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition active:scale-95"
+                        >
+                          <Reply size={14} />
+                          <span>Répondre</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            handleLikeMessage(msg.id);
+                            setActiveMenuMsgId(null);
+                          }}
+                          className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition active:scale-95 ${
+                            msg.isLikedByMe
+                              ? "bg-rose-500/30 text-rose-300 border border-rose-400/40"
+                              : "bg-white/10 text-slate-200 hover:text-rose-400"
+                          }`}
+                        >
+                          <Heart size={14} className={msg.isLikedByMe ? "fill-rose-400" : ""} />
+                          <span>Aimer ({msg.likesCount || 0})</span>
+                        </button>
+
+                        {msg.isMe && (
+                          <>
+                            {!msg.audioUrl && (
+                              <button
+                                onClick={() => {
+                                  setEditingId(msg.id);
+                                  setEditText(msg.content);
+                                  setActiveMenuMsgId(null);
+                                }}
+                                className="flex items-center gap-1.5 rounded-xl bg-cyan-400/20 px-3 py-1.5 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition active:scale-95"
+                              >
+                                <Edit2 size={14} />
+                                <span>Modifier</span>
+                              </button>
+                            )}
+                            <button
+                              onClick={() => {
+                                handleDeleteMessage(msg.id);
+                                setActiveMenuMsgId(null);
+                              }}
+                              className="flex items-center gap-1.5 rounded-xl bg-red-500/25 border border-red-500/40 px-3 py-1.5 text-xs font-black text-red-200 hover:bg-red-500/40 transition active:scale-95 shadow-md shadow-red-950/50"
+                            >
+                              <Trash2 size={14} className="text-red-400" />
+                              <span>Supprimer</span>
+                            </button>
+                          </>
+                        )}
+
+                        <button
+                          onClick={() => setActiveMenuMsgId(null)}
+                          className="p-1.5 rounded-xl bg-white/10 text-slate-400 hover:text-white transition"
+                          title="Fermer"
+                        >
+                          <X size={15} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-            );
-          })
-        )}
+            </div>
+          );
+        })}
+
+        {/* STATUS INDICATOR (Matching reference image status ring "Connecting with agent") */}
+        <div className="flex items-center justify-center gap-2 text-xs font-semibold text-cyan-200/80 py-2">
+          <span className="h-4 w-4 rounded-full border-2 border-emerald-400 border-t-transparent animate-spin" />
+          <span>Connecté en direct · salon anonyme</span>
+        </div>
+
         <div ref={messagesEndRef} />
       </div>
 
-      {/* CHAT INPUT CONTAINER CARD (Matching reference screenshot format with existing colors) */}
+      {/* CHAT INPUT CONTAINER CARD (Strictly matching reference image layout) */}
       <div className="w-full shrink-0 space-y-2">
         {/* REPLIES PREVIEW BAR */}
         {replyingToMsg && (
@@ -868,9 +867,9 @@ export default function ChatSpace() {
         ) : (
           <form
             onSubmit={handleSendMessage}
-            className="flex w-full flex-col rounded-3xl border border-white/20 bg-slate-950/80 p-3 sm:p-4 shadow-2xl backdrop-blur-2xl space-y-3"
+            className="flex w-full flex-col rounded-3xl border border-white/20 bg-slate-950/85 p-3.5 sm:p-4 shadow-2xl backdrop-blur-2xl space-y-3"
           >
-            {/* TOP AREA: TEXT INPUT */}
+            {/* TOP AREA: INPUT FIELD ("Type message" format) */}
             <div className="w-full px-1">
               <textarea
                 value={inputText}
@@ -892,7 +891,7 @@ export default function ChatSpace() {
               />
             </div>
 
-            {/* BOTTOM BAR INSIDE CARD: ICONS ON LEFT, PROMINENT SEND BUTTON ON RIGHT (Matching image layout) */}
+            {/* BOTTOM BAR INSIDE CARD: ICONS ON LEFT (Smile, Paperclip, Mic), RECTANGULAR SEND BUTTON ON RIGHT */}
             <div className="flex items-center justify-between pt-2 border-t border-white/10">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
@@ -905,6 +904,18 @@ export default function ChatSpace() {
                 >
                   <Smile size={18} />
                 </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setInputText("Bonjour à tous ! 👋");
+                  }}
+                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-cyan-300 hover:bg-white/20 hover:text-white transition border border-white/15"
+                  title="Pièce jointe / Prompt"
+                >
+                  <Paperclip size={18} />
+                </button>
+
                 <button
                   type="button"
                   onClick={startRecording}
@@ -913,22 +924,13 @@ export default function ChatSpace() {
                 >
                   <Mic size={18} />
                 </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setInputText("Bonjour à tous ! 👋");
-                  }}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-cyan-300 hover:bg-white/20 hover:text-white transition border border-white/15"
-                  title="Insérer un prompt"
-                >
-                  <Paperclip size={18} />
-                </button>
               </div>
 
+              {/* SOLID SEND BUTTON ON RIGHT (Matching reference format) */}
               <button
                 type="submit"
                 disabled={sending || !inputText.trim()}
-                className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 px-5 sm:px-6 py-2.5 text-xs sm:text-sm font-black font-display transition transform active:scale-95 disabled:opacity-40 shadow-[0_0_20px_rgba(34,211,238,0.35)]"
+                className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 px-6 py-2.5 text-xs sm:text-sm font-black font-display transition transform active:scale-95 disabled:opacity-40 shadow-[0_0_20px_rgba(34,211,238,0.35)]"
                 title="Envoyer le message"
               >
                 <span>Envoyer</span>
@@ -942,7 +944,7 @@ export default function ChatSpace() {
           </form>
         )}
 
-        {/* POWERED BY FOOTER AT BOTTOM (Inspired by reference layout) */}
+        {/* POWERED BY FOOTER AT BOTTOM (Matching "Powered by kirridesk" format) */}
         <div className="flex justify-center items-center gap-1.5 py-0.5 text-[11px] text-cyan-200/60 font-medium">
           <span>Propulsé par</span>
           <span className="font-black font-display text-cyan-300 tracking-wider">Discutons-En</span>
