@@ -254,11 +254,9 @@ export default function ChatSpace() {
     return () => clearInterval(interval);
   }, []);
 
-  async function handleSendMessage(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
+  async function submitMessage() {
     const textToSend = inputText.trim();
-    if (!textToSend) return;
+    if (!textToSend || sending) return;
 
     setSending(true);
     setInputText("");
@@ -295,6 +293,11 @@ export default function ChatSpace() {
     } finally {
       setSending(false);
     }
+  }
+
+  async function handleSendMessage(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await submitMessage();
   }
 
   function getSupportedMimeType() {
@@ -875,9 +878,7 @@ export default function ChatSpace() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
-                    if (inputText.trim() && !sending) {
-                      handleSendMessage(e as unknown as FormEvent);
-                    }
+                    submitMessage();
                   }
                 }}
                 placeholder={
