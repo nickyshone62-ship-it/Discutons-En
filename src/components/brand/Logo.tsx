@@ -17,10 +17,10 @@ interface LogoProps {
 }
 
 const sizeDimensions: Record<LogoSize, { icon: number; textSize: string; gap: string }> = {
-  sm: { icon: 32, textSize: "text-lg", gap: "gap-2" },
-  md: { icon: 42, textSize: "text-2xl", gap: "gap-2.5" },
-  lg: { icon: 56, textSize: "text-3xl", gap: "gap-3.5" },
-  xl: { icon: 72, textSize: "text-4xl sm:text-5xl", gap: "gap-4" },
+  sm: { icon: 34, textSize: "text-lg", gap: "gap-2" },
+  md: { icon: 44, textSize: "text-2xl", gap: "gap-2.5" },
+  lg: { icon: 58, textSize: "text-3xl", gap: "gap-3.5" },
+  xl: { icon: 76, textSize: "text-4xl sm:text-5xl", gap: "gap-4" },
 };
 
 export default function Logo({
@@ -35,17 +35,18 @@ export default function Logo({
   const isIconOnly = variant === "icon" || !showText;
   const isStacked = variant === "full";
 
-  // Color mappings based on mode
-  let primaryGradientStart = "#22d3ee";
-  let primaryGradientEnd = "#38bdf8";
-  let secondaryGradient = "#6366f1";
+  // Color theme parameters
+  let mainGradStart = "#22d3ee";
+  let mainGradMid = "#38bdf8";
+  let mainGradEnd = "#6366f1";
   let textColorDis = mode === "light" ? "text-cyan-600" : "text-cyan-400";
   let textColorEn = mode === "light" ? "text-slate-900" : "text-white";
+  let cutoutColor = mode === "dark" ? "#090d16" : mode === "light" ? "#ffffff" : "#0f172a";
 
   if (mode === "monochrome") {
-    primaryGradientStart = "#ffffff";
-    primaryGradientEnd = "#e2e8f0";
-    secondaryGradient = "#94a3b8";
+    mainGradStart = "#ffffff";
+    mainGradMid = "#f1f5f9";
+    mainGradEnd = "#cbd5e1";
     textColorDis = "text-white";
     textColorEn = "text-slate-200";
   }
@@ -61,46 +62,54 @@ export default function Logo({
       aria-hidden="true"
     >
       <defs>
-        {/* Main Cyan Gradient */}
-        <linearGradient id={`logoCyanGrad-${mode}`} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor={primaryGradientStart} />
-          <stop offset="100%" stopColor={primaryGradientEnd} />
+        {/* Main Ribbon Fluid Gradient */}
+        <linearGradient id={`negRibbonGrad-${mode}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor={mainGradStart} />
+          <stop offset="50%" stopColor={mainGradMid} />
+          <stop offset="100%" stopColor={mainGradEnd} />
         </linearGradient>
 
-        {/* Secondary Indigo/Accent Gradient */}
-        <linearGradient id={`logoIndigoGrad-${mode}`} x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor={secondaryGradient} />
-          <stop offset="100%" stopColor={primaryGradientStart} />
+        {/* Secondary Ribbon Overlay Gradient for 3D Depth */}
+        <linearGradient id={`negRibbonOverlay-${mode}`} x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor={mainGradMid} stopOpacity="0.9" />
+          <stop offset="100%" stopColor={mainGradEnd} stopOpacity="0.95" />
         </linearGradient>
 
         {/* Soft Glow Effect */}
-        <filter id={`logoGlow-${mode}`} x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" result="blur" />
+        <filter id={`negGlow-${mode}`} x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3.5" result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="over" />
         </filter>
       </defs>
 
-      {/* Outer Circle Container (Subtle Background Glow Ring) */}
+      {/* Dark background ring glow for dark mode */}
       {mode === "dark" && (
-        <circle cx="50" cy="50" r="46" fill="#0f172a" fillOpacity="0.6" stroke="url(#logoCyanGrad-dark)" strokeWidth="1.5" strokeOpacity="0.25" />
+        <circle cx="50" cy="50" r="46" fill="#0f172a" fillOpacity="0.5" stroke="url(#negRibbonGrad-dark)" strokeWidth="1" strokeOpacity="0.2" />
       )}
 
-      {/* Main Symbol: Interlocking 'D' and 'E' Speech Loops */}
-      {/* Loop 'D' - Primary Left-to-Right Chat Arc */}
+      {/* Fluid Outer "D" Ribbon Body */}
       <path
-        d="M 26 30 C 26 21 35 16 48 16 C 68 16 82 28 82 44 C 82 60 67 70 48 70 L 36 70 L 24 82 L 28 68 C 22 62 18 53 18 44 C 18 38 21 33 26 30 Z"
-        fill={`url(#logoCyanGrad-${mode})`}
-        filter={mode === "dark" ? `url(#logoGlow-${mode})` : undefined}
+        d="M 22 15 L 50 15 C 72 15 88 28 88 50 C 88 72 72 85 50 85 L 22 85 C 18 85 15 82 15 78 L 15 22 C 15 18 18 15 22 15 Z"
+        fill={`url(#negRibbonGrad-${mode})`}
+        filter={mode === "dark" ? `url(#negGlow-${mode})` : undefined}
       />
 
-      {/* Inner Interlocking Loop 'E' - Connected Dialogue Core */}
+      {/* Top Fold Ribbon Curve giving 3D overlapping depth like the reference plane logo */}
       <path
-        d="M 44 32 C 55 32 64 38 64 47 C 64 54 57 60 46 60 C 40 60 34 58 30 54 L 30 46 L 54 46 C 56 46 57 44 57 42 C 57 40 56 38 54 38 L 30 38 C 34 34 39 32 44 32 Z"
-        fill={mode === "dark" ? "#090d16" : mode === "light" ? "#ffffff" : "#0f172a"}
+        d="M 22 15 C 38 15 54 20 66 30 C 50 32 34 38 22 50 Z"
+        fill={`url(#negRibbonOverlay-${mode})`}
+        opacity="0.5"
       />
 
-      {/* Accent Pulse Dot - Connection Indicator */}
-      <circle cx="68" cy="30" r="6" fill={`url(#logoIndigoGrad-${mode})`} />
+      {/* NEGATIVE SPACE CUTOUT: Sculpted Speech Bubble + Chat Tail inside the "D" Loop */}
+      <path
+        d="M 32 32 L 56 32 C 64 32 70 38 70 46 C 70 54 64 60 56 60 L 44 60 L 36 68 L 38 60 L 32 60 C 28 60 26 57 26 53 L 26 38 C 26 34 28 32 32 32 Z"
+        fill={cutoutColor}
+      />
+
+      {/* Small Chat Dot in Negative Space */}
+      <circle cx="43" cy="46" r="3" fill={`url(#negRibbonGrad-${mode})`} />
+      <circle cx="53" cy="46" r="3" fill={`url(#negRibbonGrad-${mode})`} />
     </svg>
   );
 
