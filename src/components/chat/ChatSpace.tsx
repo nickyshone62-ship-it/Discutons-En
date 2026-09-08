@@ -284,12 +284,73 @@ export default function ChatSpace() {
     requestBrowserNotificationPermission();
     fetchMessages(true);
 
+    // Mark as read immediately on opening chat
+    fetch("/api/chat/read", { method: "POST" }).catch(() => {});
+
+    // 1. Instant Real-Time SSE Stream (< 50ms)
+    let eventSource: EventSource | null = null;
+    try {
+      eventSource = new EventSource("/api/chat/stream");
+
+      eventSource.onmessage = (event) => {
+        if (!event.data || event.data.startsWith(":")) return;
+        try {
+          const incomingMsg = JSON.parse(event.data);
+          if (!incomingMsg || !incomingMsg.id) return;
+
+          setMessages((prev) => {
+            if (prev.some((m) => m.id === incomingMsg.id)) {
+              return prev;
+            }
+
+            const currentUserId = currentUser?.id;
+            const isMe = incomingMsg.userId === currentUserId || incomingMsg.isMe;
+            const formattedMsg = { ...incomingMsg, isMe };
+
+            if (!isMe) {
+              playNotificationChime();
+              sendBrowserNotification(
+                `💬 Message de ${formattedMsg.author.anonymousName}`,
+                formattedMsg.audioUrl
+                  ? "🎙️ Message vocal reçu"
+                  : formattedMsg.content.slice(0, 80),
+                formattedMsg.author.avatarUrl
+              );
+              setHasUnreadBanner(true);
+
+              // Mark read in background
+              fetch("/api/chat/read", { method: "POST" }).catch(() => {});
+            }
+
+            // Smart scroll: scroll to bottom on new message
+            if (isMe || !hasUnreadBanner) {
+              setTimeout(scrollToBottom, 50);
+            }
+
+            return [...prev, formattedMsg];
+          });
+        } catch (e) {
+          console.error("[ChatSpace] SSE parse error:", e);
+        }
+      };
+
+      eventSource.onerror = () => {
+        // SSE reconnect handles itself, fallback polling runs in background
+      };
+    } catch (e) {
+      console.warn("[ChatSpace] EventSource SSE not supported:", e);
+    }
+
+    // 2. Safety backup polling (every 10s)
     const interval = setInterval(() => {
       fetchMessages(false);
-    }, 3000);
+    }, 10000);
 
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      if (eventSource) eventSource.close();
+      clearInterval(interval);
+    };
+  }, [currentUser]);
 
   async function submitMessage() {
     const textToSend = inputText.trim();

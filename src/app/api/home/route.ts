@@ -80,6 +80,48 @@ export async function GET() {
       },
     }));
 
+    // Fetch unread count for current user
+    const unreadResult = await sql`
+      SELECT COUNT(*)::int AS count
+      FROM chat_messages cm
+      LEFT JOIN chat_read_states crs ON crs.user_id = ${user.id as string}
+      WHERE cm.user_id != ${user.id as string}
+        AND (crs.last_read_at IS NULL OR cm.created_at > crs.last_read_at)
+    `;
+    const unreadCount = Number(unreadResult[0]?.count ?? 0);
+
+    // Fetch recent chat messages for homepage summary
+    const recentChatRows = await sql`
+      SELECT
+        cm.id,
+        cm.user_id,
+        cm.content,
+        cm.audio_url,
+        cm.created_at,
+        ai.anonymous_name,
+        ai.avatar_seed
+      FROM chat_messages cm
+      INNER JOIN anonymous_identities ai ON ai.user_id = cm.user_id
+      ORDER BY cm.created_at DESC
+      LIMIT 4
+    `;
+
+    const recentMessages = recentChatRows.map((msg) => ({
+      id: msg.id,
+      userId: msg.user_id,
+      content: msg.content,
+      audioUrl: msg.audio_url,
+      createdAt: msg.created_at,
+      isMe: msg.user_id === user.id,
+      author: {
+        anonymousName: msg.anonymous_name,
+        avatarUrl: getAvatarUrl(
+          msg.avatar_seed as string,
+          msg.anonymous_name as string
+        ),
+      },
+    }));
+
     return NextResponse.json({
       success: true,
       user: {
@@ -97,6 +139,8 @@ export async function GET() {
       },
       categories,
       posts: formattedPosts,
+      unreadCount,
+      recentMessages,
     });
   } catch (error) {
     console.error("Home API error:", error);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import PushNotificationPrompt from "./PushNotificationPrompt";
 
 export default function PwaProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -45,7 +46,34 @@ export default function PwaProvider({ children }: { children: React.ReactNode })
         .then((reg) => console.log("[PWA Dev] SW active with scope:", reg.scope))
         .catch((err) => console.warn("[PWA Dev] SW registration:", err));
     }
+
+    // Sync Badging API periodically if supported
+    const fetchUnreadAndBadge = async () => {
+      try {
+        const res = await fetch("/api/chat/unread");
+        const data = await res.json();
+        if (res.ok && data.success && typeof data.unreadCount === "number") {
+          if ("setAppBadge" in navigator) {
+            if (data.unreadCount > 0) {
+              (navigator as any).setAppBadge(data.unreadCount).catch(() => {});
+            } else if ("clearAppBadge" in navigator) {
+              (navigator as any).clearAppBadge().catch(() => {});
+            }
+          }
+        }
+      } catch {}
+    };
+
+    fetchUnreadAndBadge();
+    const interval = setInterval(fetchUnreadAndBadge, 15000);
+    return () => clearInterval(interval);
   }, []);
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <PushNotificationPrompt />
+    </>
+  );
 }
+

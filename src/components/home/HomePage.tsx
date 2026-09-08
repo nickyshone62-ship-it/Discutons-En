@@ -47,6 +47,19 @@ type Post = {
   };
 };
 
+type RecentMessage = {
+  id: string;
+  userId: string;
+  content: string;
+  audioUrl: string | null;
+  createdAt: string;
+  isMe: boolean;
+  author: {
+    anonymousName: string;
+    avatarUrl: string;
+  };
+};
+
 type HomeData = {
   user: {
     id: string;
@@ -60,6 +73,8 @@ type HomeData = {
   };
   categories: Category[];
   posts: Post[];
+  unreadCount?: number;
+  recentMessages?: RecentMessage[];
 };
 
 function formatDate(date: string) {
@@ -575,6 +590,62 @@ export default function HomePage() {
           {/* RIGHT SIDEBAR */}
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-4">
+              {/* RECENT MESSAGES CARD */}
+              <div className="rounded-3xl border border-cyan-400/30 bg-slate-900/60 p-5 backdrop-blur-2xl shadow-xl space-y-3.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xs font-black font-display uppercase tracking-wider text-white flex items-center gap-2">
+                    <MessageSquare size={16} className="text-cyan-400" />
+                    Messages Récents
+                  </h3>
+
+                  {data.unreadCount && data.unreadCount > 0 ? (
+                    <span className="flex h-5 px-2 items-center justify-center rounded-full bg-cyan-400 text-[10px] font-black text-slate-950 animate-pulse">
+                      {data.unreadCount} non lus
+                    </span>
+                  ) : null}
+                </div>
+
+                {data.recentMessages && data.recentMessages.length > 0 ? (
+                  <div className="space-y-2.5">
+                    {data.recentMessages.map((msg) => (
+                      <Link
+                        key={msg.id}
+                        href="/chat"
+                        className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/5 p-2.5 transition hover:bg-white/10 hover:border-cyan-400/40"
+                      >
+                        <img
+                          src={msg.author.avatarUrl}
+                          alt={msg.author.anonymousName}
+                          className="h-8 w-8 rounded-full shrink-0 border border-cyan-400/40 object-cover"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className="font-bold text-white truncate">
+                              {msg.author.anonymousName}
+                            </span>
+                            <span className="text-[9px] text-cyan-200/60 font-medium">
+                              {formatDate(msg.createdAt)}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-300 truncate">
+                            {msg.audioUrl ? "🎙️ Message vocal" : msg.content}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+
+                    <Link
+                      href="/chat"
+                      className="block text-center text-xs font-black font-display text-cyan-300 hover:text-white pt-1 transition"
+                    >
+                      Ouvrir le chat →
+                    </Link>
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-400 italic">Aucun message récent.</p>
+                )}
+              </div>
+
               <div className="rounded-3xl border border-white/20 bg-white/10 p-5 backdrop-blur-2xl shadow-xl space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-400/20 text-cyan-300 border border-cyan-400/40">
@@ -626,9 +697,14 @@ export default function HomePage() {
 
           <Link
             href="/chat"
-            className="flex flex-col items-center gap-1 px-3 py-1.5 text-slate-300 hover:text-cyan-300"
+            className="relative flex flex-col items-center gap-1 px-3 py-1.5 text-slate-300 hover:text-cyan-300"
           >
             <MessageSquare size={20} />
+            {data.unreadCount && data.unreadCount > 0 ? (
+              <span className="absolute top-0 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-cyan-400 text-[9px] font-black text-slate-950 shadow-sm animate-pulse">
+                {data.unreadCount}
+              </span>
+            ) : null}
             <span className="text-[10px] font-bold">Chat</span>
           </Link>
 

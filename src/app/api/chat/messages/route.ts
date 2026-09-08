@@ -5,6 +5,8 @@ import {
   getAvatarUrl,
 } from "@/lib/anonymous";
 import { sql } from "@/lib/db";
+import { chatEventEmitter } from "@/lib/events";
+import { sendPushNotificationToUsers } from "@/lib/push";
 
 export async function GET() {
   try {
@@ -20,7 +22,7 @@ export async function GET() {
       );
     }
 
-    // Ensure columns exist
+    // Ensure columns and tables exist
     await sql`
       CREATE TABLE IF NOT EXISTS chat_messages (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -46,6 +48,24 @@ export async function GET() {
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (user_id, message_id)
       )
+    `;
+    await sql`
+      CREATE TABLE IF NOT EXISTS chat_read_states (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID UNIQUE NOT NULL,
+        last_read_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `;
+
+    // Mark current user read state
+    await sql`
+      INSERT INTO chat_read_states (user_id, last_read_at, updated_at)
+      VALUES (${user.id as string}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      ON CONFLICT (user_id)
+      DO UPDATE SET
+        last_read_at = CURRENT_TIMESTAMP,
+        updated_at = CURRENT_TIMESTAMP
     `;
 
     const identity = await getOrCreateAnonymousIdentity(user.id as string);
@@ -182,6 +202,16 @@ export async function POST(request: Request) {
     const identity = await getOrCreateAnonymousIdentity(user.id as string);
     const newMsg = inserted[0];
 
+    // Update sender's read state
+    await sql`
+      INSERT INTO chat_read_states (user_id, last_read_at, updated_at)
+      VALUES (${user.id as string}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      ON CONFLICT (user_id)
+      DO UPDATE SET
+        last_read_at = CURRENT_TIMESTAMP,
+        updated_at = CURRENT_TIMESTAMP
+    `;
+
     // Fetch parent details if replying
     let replyTo = null;
     if (replyToId) {
@@ -204,27 +234,40 @@ export async function POST(request: Request) {
       }
     }
 
+    const formattedMessage = {
+      id: newMsg.id,
+      userId: newMsg.user_id,
+      content: newMsg.content,
+      audioUrl: newMsg.audio_url,
+      isEdited: !!newMsg.is_edited,
+      likesCount: 0,
+      isLikedByMe: false,
+      replyTo,
+      createdAt: newMsg.created_at,
+      isMe: true,
+      author: {
+        anonymousName: identity.anonymous_name,
+        avatarUrl: getAvatarUrl(
+          identity.avatar_seed,
+          identity.anonymous_name
+        ),
+      },
+    };
+
+    // 1. Emit instant SSE Real-Time event for connected clients (< 50ms)
+    chatEventEmitter.emit("new_chat_message", formattedMessage);
+
+    // 2. Trigger async Web Push notifications to off-screen / background users
+    sendPushNotificationToUsers(user.id as string, {
+      title: "Discutons-En 💬",
+      body: `${identity.anonymous_name} : ${content || "🎤 Message vocal"}`,
+      url: "/chat",
+      tag: "discutons-en-chat",
+    }).catch((err) => console.error("Web Push trigger error:", err));
+
     return NextResponse.json({
       success: true,
-      message: {
-        id: newMsg.id,
-        userId: newMsg.user_id,
-        content: newMsg.content,
-        audioUrl: newMsg.audio_url,
-        isEdited: !!newMsg.is_edited,
-        likesCount: 0,
-        isLikedByMe: false,
-        replyTo,
-        createdAt: newMsg.created_at,
-        isMe: true,
-        author: {
-          anonymousName: identity.anonymous_name,
-          avatarUrl: getAvatarUrl(
-            identity.avatar_seed,
-            identity.anonymous_name
-          ),
-        },
-      },
+      message: formattedMessage,
     });
   } catch (error) {
     console.error("Post chat message error:", error);
@@ -237,3 +280,4 @@ export async function POST(request: Request) {
     );
   }
 }
+
