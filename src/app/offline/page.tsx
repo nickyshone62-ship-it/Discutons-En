@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Logo from "@/components/brand/Logo";
 import { WifiOff, RefreshCw, Home, MessageSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -38,10 +39,11 @@ export default function OfflinePage() {
 
       {/* Main Glassmorphism Card */}
       <div className="relative z-10 max-w-md w-full rounded-3xl border border-white/10 bg-slate-900/60 p-8 backdrop-blur-xl shadow-2xl text-center space-y-6">
+        <Logo variant="full" size="md" className="mx-auto" />
         
         {/* Icon Header */}
-        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.2)]">
-          <WifiOff className="h-10 w-10 animate-pulse" />
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.2)]">
+          <WifiOff className="h-8 w-8 animate-pulse" />
         </div>
 
         {/* Title & Description */}

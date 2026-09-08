@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Logo from "@/components/brand/Logo";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -563,6 +564,7 @@ export default function ChatSpace() {
             <ArrowLeft size={20} />
           </Link>
 
+          <Logo variant="icon" size="sm" className="hidden xs:inline-flex" />
           <div>
             <h1 className="text-base sm:text-lg font-black font-display tracking-tight text-white flex items-center gap-2">
               Salon Communautaire

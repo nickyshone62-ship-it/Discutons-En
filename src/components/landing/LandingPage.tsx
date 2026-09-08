@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Logo from "@/components/brand/Logo";
 import {
   ArrowRight,
   Heart,
@@ -28,13 +29,7 @@ export default function LandingPage() {
       {/* NAVBAR */}
       <header className="relative z-20 border-b border-white/15 bg-slate-950/50 backdrop-blur-2xl">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-2xl font-black font-display tracking-wider hover:scale-105 transition duration-300"
-          >
-            <span className="text-cyan-400 text-shadow-glow">DIS</span>
-            <span className="text-white">cutons-En</span>
-          </Link>
+          <Logo variant="horizontal" size="md" href="/" />
 
           <div className="flex items-center gap-3">
             <Link

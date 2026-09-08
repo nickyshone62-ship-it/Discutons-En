@@ -1,42 +1,53 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
+    <!-- Background Dark Gradient -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0f172a" />
       <stop offset="50%" stop-color="#1e1b4b" />
       <stop offset="100%" stop-color="#090d16" />
     </linearGradient>
+
+    <!-- Cyan Electric Primary Gradient -->
     <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#22d3ee" />
       <stop offset="100%" stop-color="#38bdf8" />
     </linearGradient>
+
+    <!-- Indigo Accent Gradient -->
+    <linearGradient id="indigoGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#22d3ee" />
+    </linearGradient>
+
+    <!-- Neon Glow Filter -->
     <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feGaussianBlur stdDeviation="10" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="512" height="512" rx="110" fill="url(#bgGrad)" />
+  <!-- Background Base Canvas -->
+  <rect width="512" height="512" rx="115" fill="url(#bgGrad)" />
   
-  <!-- Outer Glow Ring -->
-  <rect x="24" y="24" width="464" height="464" rx="90" fill="none" stroke="url(#cyanGrad)" stroke-width="4" stroke-opacity="0.4" />
+  <!-- Outer Safety Border Ring -->
+  <rect x="24" y="24" width="464" height="464" rx="95" fill="none" stroke="url(#cyanGrad)" stroke-width="4" stroke-opacity="0.3" />
 
-  <!-- Main Speech Bubble Shape -->
-  <g transform="translate(86, 96)">
-    <!-- Chat bubble shadow -->
-    <path d="M 40 40 L 300 40 A 40 40 0 0 1 340 80 L 340 220 A 40 40 0 0 1 300 260 L 160 260 L 90 320 L 105 260 L 40 260 A 40 40 0 0 1 0 220 L 0 80 A 40 40 0 0 1 40 40 Z" fill="#22d3ee" opacity="0.15" />
-    
-    <!-- Main Chat bubble -->
-    <path d="M 30 20 L 310 20 A 30 30 0 0 1 340 50 L 340 210 A 30 30 0 0 1 310 240 L 150 240 L 80 300 L 95 240 L 30 240 A 30 30 0 0 1 0 210 L 0 50 A 30 30 0 0 1 30 20 Z" fill="url(#bgGrad)" stroke="url(#cyanGrad)" stroke-width="6" />
+  <!-- Central Emblem: Interlocking D & E Dialogue Loop -->
+  <g transform="translate(56, 56) scale(4)">
+    <!-- Main Outer Loop D (Speech Bubble Shape) -->
+    <path
+      d="M 26 30 C 26 21 35 16 48 16 C 68 16 82 28 82 44 C 82 60 67 70 48 70 L 36 70 L 24 82 L 28 68 C 22 62 18 53 18 44 C 18 38 21 33 26 30 Z"
+      fill="url(#cyanGrad)"
+      filter="url(#glow)"
+    />
 
-    <!-- Text: DIS -->
-    <text x="50" y="145" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="78" fill="#22d3ee" filter="url(#glow)">DIS</text>
-    
-    <!-- Text: cutons -->
-    <text x="185" y="145" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="52" fill="#ffffff">cut</text>
-    
-    <!-- Subtitle pill: En -->
-    <rect x="50" y="170" width="240" height="36" rx="18" fill="url(#cyanGrad)" />
-    <text x="170" y="195" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="22" fill="#0f172a" text-anchor="middle" letter-spacing="3">ENSEMBLE</text>
+    <!-- Inner Core E (Connected Core Cutout) -->
+    <path
+      d="M 44 32 C 55 32 64 38 64 47 C 64 54 57 60 46 60 C 40 60 34 58 30 54 L 30 46 L 54 46 C 56 46 57 44 57 42 C 57 40 56 38 54 38 L 30 38 C 34 34 39 32 44 32 Z"
+      fill="#090d16"
+    />
+
+    <!-- Accent Pulse Dot -->
+    <circle cx="68" cy="30" r="6" fill="url(#indigoGrad)" />
   </g>
 </svg>

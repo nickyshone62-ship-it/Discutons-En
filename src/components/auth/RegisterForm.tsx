@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Logo from "@/components/brand/Logo";
 import { FormEvent, useState } from "react";
 import {
   Eye,
@@ -190,13 +191,7 @@ export default function RegisterForm() {
       {/* GLASS CARD CONTAINER */}
       <div className="rounded-[36px] border border-white/30 bg-white/15 p-6 sm:p-10 shadow-[0_25px_70px_rgba(0,0,0,0.5)] backdrop-blur-2xl text-white">
         <div className="mb-6 text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-2xl font-black font-display tracking-tight hover:scale-105 transition duration-300"
-          >
-            <span className="text-cyan-400 text-shadow-glow">DIS</span>
-            <span className="text-white">cutons-En</span>
-          </Link>
+          <Logo variant="full" size="lg" href="/" className="mb-2" />
 
           <h1 className="mt-4 text-3xl sm:text-4xl font-black font-display tracking-widest uppercase gradient-text-cyan text-shadow-glow">
             INSCRIPTION

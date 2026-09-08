@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Logo from "@/components/brand/Logo";
 import { useEffect, useState } from "react";
 import {
   Bell,
@@ -196,13 +197,7 @@ export default function HomePage() {
       {/* NAVBAR */}
       <header className="sticky top-0 z-40 border-b border-white/15 bg-slate-950/80 backdrop-blur-2xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/accueil"
-            className="flex items-center gap-2 text-xl font-black font-display tracking-wider hover:scale-105 transition duration-300"
-          >
-            <span className="text-cyan-400 text-shadow-glow">DIS</span>
-            <span className="text-white">cutons-En</span>
-          </Link>
+          <Logo variant="horizontal" size="sm" href="/accueil" />
 
           <div className="hidden items-center gap-3 md:flex">
             {(data.user.role === "ADMIN" || data.user.role === "SUPER_ADMIN") && (

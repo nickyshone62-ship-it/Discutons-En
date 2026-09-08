@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Logo from "@/components/brand/Logo";
 import { Download, X, Share, PlusSquare, Sparkles, CheckCircle2 } from "lucide-react";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -110,9 +111,7 @@ export default function PwaInstallPrompt() {
           </button>
 
           <div className="flex items-start gap-3 pr-6">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-sky-500 text-slate-950 font-black font-display shadow-[0_0_15px_rgba(34,211,238,0.4)]">
-              <Sparkles className="h-6 w-6 fill-slate-950" />
-            </div>
+            <Logo variant="icon" size="sm" />
 
             <div className="space-y-1">
               <h3 className="text-sm font-black font-display tracking-wide text-white flex items-center gap-1.5">
