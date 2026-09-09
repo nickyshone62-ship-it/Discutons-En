@@ -61,7 +61,7 @@ function formatTime(dateStr: string) {
   });
 }
 
-function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean; avatarUrl?: string }) {
+function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean }) {
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -179,6 +179,12 @@ export default function ChatSpace() {
     anonymousName: string;
     avatarUrl: string;
   } | null>(null);
+  const currentUserRef = useRef<{
+    id: string;
+    anonymousName: string;
+    avatarUrl: string;
+  } | null>(null);
+
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
@@ -206,15 +212,21 @@ export default function ChatSpace() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastMsgIdRef = useRef<string | null>(null);
   const isUserScrolledUpRef = useRef(false);
+  const hasInitialScrolledRef = useRef(false);
   const [showScrollBottomBtn, setShowScrollBottomBtn] = useState(false);
   const [hasUnreadBanner, setHasUnreadBanner] = useState(false);
+
+  // Keep currentUserRef in sync for callbacks
+  useEffect(() => {
+    currentUserRef.current = currentUser;
+  }, [currentUser]);
 
   function handleScroll() {
     const container = chatContainerRef.current;
     if (!container) return;
     const { scrollTop, scrollHeight, clientHeight } = container;
-    // Strict threshold: if user is > 20px from bottom, consider them scrolled up!
-    const isUp = scrollHeight - scrollTop - clientHeight > 20;
+    // If user is > 30px from bottom, they are scrolled up reading history
+    const isUp = scrollHeight - scrollTop - clientHeight > 30;
     isUserScrolledUpRef.current = isUp;
     setShowScrollBottomBtn(isUp);
     if (!isUp) {
@@ -224,7 +236,7 @@ export default function ChatSpace() {
 
   function scrollToBottom(force = false) {
     if (!force && isUserScrolledUpRef.current) {
-      // User is manually reading older messages higher up, NEVER force scroll down
+      // User is manually reading older messages higher up, NEVER force scroll down!
       return;
     }
 
@@ -253,8 +265,8 @@ export default function ChatSpace() {
 
       if (response.ok && data.success) {
         const fetchedMsgs: ChatMessage[] = data.messages || [];
-        
-        // Prevent state updates if messages array hasn't changed to avoid scroll jumps!
+
+        // Only update state if messages array has actually changed
         setMessages((prevMsgs) => {
           if (
             prevMsgs.length === fetchedMsgs.length &&
@@ -270,14 +282,19 @@ export default function ChatSpace() {
           return fetchedMsgs;
         });
 
-        setCurrentUser(data.currentUser);
+        if (data.currentUser) {
+          setCurrentUser(data.currentUser);
+          currentUserRef.current = data.currentUser;
+        }
 
         if (fetchedMsgs.length > 0) {
           const latestMsg = fetchedMsgs[fetchedMsgs.length - 1];
 
-          if (isFirstLoad) {
+          // Initial scroll ONLY ONCE when loading for the first time!
+          if (isFirstLoad && !hasInitialScrolledRef.current) {
+            hasInitialScrolledRef.current = true;
             lastMsgIdRef.current = latestMsg.id;
-            setTimeout(() => scrollToBottom(true), 100);
+            setTimeout(() => scrollToBottom(true), 150);
           } else if (
             latestMsg &&
             lastMsgIdRef.current &&
@@ -295,6 +312,7 @@ export default function ChatSpace() {
                 latestMsg.author.avatarUrl
               );
               setHasUnreadBanner(true);
+              // Respect user scroll position!
               setTimeout(() => scrollToBottom(false), 100);
             }
           }
@@ -311,6 +329,7 @@ export default function ChatSpace() {
     }
   }
 
+  // Runs ONCE on mount with EMPTY dependency array `[]`
   useEffect(() => {
     requestBrowserNotificationPermission();
     fetchMessages(true);
@@ -327,23 +346,15 @@ export default function ChatSpace() {
           const incomingMsg = JSON.parse(event.data);
           if (!incomingMsg || !incomingMsg.id) return;
 
-          let isNew = false;
-          let isMe = false;
-
           setMessages((prev) => {
             if (prev.some((m) => m.id === incomingMsg.id)) {
               return prev;
             }
 
-            isNew = true;
-            const currentUserId = currentUser?.id;
-            isMe = incomingMsg.userId === currentUserId || incomingMsg.isMe;
+            const currentUserId = currentUserRef.current?.id;
+            const isMe = incomingMsg.userId === currentUserId || incomingMsg.isMe;
             const formattedMsg = { ...incomingMsg, isMe };
 
-            return [...prev, formattedMsg];
-          });
-
-          if (isNew) {
             if (!isMe) {
               playNotificationChime();
               sendBrowserNotification(
@@ -358,11 +369,16 @@ export default function ChatSpace() {
             }
 
             if (isMe) {
+              isUserScrolledUpRef.current = false;
+              setShowScrollBottomBtn(false);
               setTimeout(() => scrollToBottom(true), 50);
             } else {
+              // Respect user scroll position when others speak!
               setTimeout(() => scrollToBottom(false), 50);
             }
-          }
+
+            return [...prev, formattedMsg];
+          });
         } catch (e) {
           console.error("[ChatSpace] SSE parse error:", e);
         }
@@ -375,13 +391,13 @@ export default function ChatSpace() {
 
     const interval = setInterval(() => {
       fetchMessages(false);
-    }, 10000);
+    }, 12000);
 
     return () => {
       if (eventSource) eventSource.close();
       clearInterval(interval);
     };
-  }, [currentUser]);
+  }, []); // EMPTY DEPENDENCY ARRAY SO IT NEVER RE-RUNS ON STATE CHANGES!
 
   async function submitMessage() {
     const textToSend = inputText.trim();
@@ -829,7 +845,7 @@ export default function ChatSpace() {
                     <div>
                       {/* Audio or Text */}
                       {msg.audioUrl ? (
-                        <VoicePlayer src={msg.audioUrl} isMe={msg.isMe} avatarUrl={msg.author.avatarUrl} />
+                        <VoicePlayer src={msg.audioUrl} isMe={msg.isMe} />
                       ) : (
                         <p className="text-xs sm:text-sm text-slate-900 font-medium leading-relaxed whitespace-pre-wrap break-words pr-12">
                           {msg.content}
