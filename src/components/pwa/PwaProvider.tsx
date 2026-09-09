@@ -5,18 +5,13 @@ import PushNotificationPrompt from "./PushNotificationPrompt";
 
 export default function PwaProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      "serviceWorker" in navigator &&
-      process.env.NODE_ENV === "production"
-    ) {
-      window.addEventListener("load", () => {
+    if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+      const registerSW = () => {
         navigator.serviceWorker
           .register("/sw.js")
           .then((registration) => {
-            console.log("[PWA] Service Worker registered with scope:", registration.scope);
+            console.log("[PWA] Service Worker active with scope:", registration.scope);
 
-            // Listen for updates
             registration.onupdatefound = () => {
               const installingWorker = registration.installing;
               if (installingWorker) {
@@ -25,26 +20,22 @@ export default function PwaProvider({ children }: { children: React.ReactNode })
                     installingWorker.state === "installed" &&
                     navigator.serviceWorker.controller
                   ) {
-                    console.log("[PWA] New version available! Reloading recommended.");
+                    console.log("[PWA] New version available!");
                   }
                 };
               }
             };
           })
           .catch((error) => {
-            console.error("[PWA] Service Worker registration failed:", error);
+            console.warn("[PWA] Service Worker registration failed:", error);
           });
-      });
-    } else if (
-      typeof window !== "undefined" &&
-      "serviceWorker" in navigator &&
-      process.env.NODE_ENV !== "production"
-    ) {
-      // Register SW even in dev mode if explicitly needed for testing
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then((reg) => console.log("[PWA Dev] SW active with scope:", reg.scope))
-        .catch((err) => console.warn("[PWA Dev] SW registration:", err));
+      };
+
+      if (document.readyState === "complete") {
+        registerSW();
+      } else {
+        window.addEventListener("load", registerSW);
+      }
     }
 
     // Sync Badging API periodically if supported
@@ -76,4 +67,3 @@ export default function PwaProvider({ children }: { children: React.ReactNode })
     </>
   );
 }
-

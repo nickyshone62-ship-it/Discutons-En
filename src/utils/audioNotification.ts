@@ -12,13 +12,16 @@ export function playNotificationChime() {
     if (!AudioCtx) return;
 
     const ctx = new AudioCtx();
+    if (ctx.state === "suspended") {
+      ctx.resume().catch(() => {});
+    }
 
     // First tone (D5 - 587.33 Hz)
     const osc1 = ctx.createOscillator();
     const gain1 = ctx.createGain();
     osc1.type = "sine";
     osc1.frequency.setValueAtTime(587.33, ctx.currentTime);
-    gain1.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain1.gain.setValueAtTime(0.18, ctx.currentTime);
     gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
 
     osc1.connect(gain1);
@@ -31,7 +34,7 @@ export function playNotificationChime() {
     const gain2 = ctx.createGain();
     osc2.type = "sine";
     osc2.frequency.setValueAtTime(880, ctx.currentTime + 0.12);
-    gain2.gain.setValueAtTime(0.18, ctx.currentTime + 0.12);
+    gain2.gain.setValueAtTime(0.2, ctx.currentTime + 0.12);
     gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
 
     osc2.connect(gain2);
