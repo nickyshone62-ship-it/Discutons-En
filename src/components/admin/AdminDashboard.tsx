@@ -268,7 +268,7 @@ export default function AdminDashboard() {
             )}
 
             <div>
-              <label className="mb-1 block text-xs font-black text-sky-200 uppercase">
+              <label className="mb-1 block text-xs font-black text-rose-300 uppercase">
                 Email ou Identifiant Admin
               </label>
               <input
@@ -277,12 +277,12 @@ export default function AdminDashboard() {
                 value={adminEmail}
                 onChange={(e) => setAdminEmail(e.target.value)}
                 placeholder="ex: admin@discutons-en.com"
-                className="h-12 w-full rounded-2xl bg-white/10 px-4 text-sm font-semibold text-white placeholder-slate-400 outline-none border border-white/20 focus:border-white focus:ring-2 focus:ring-blue-300/40 transition"
+                className="h-12 w-full rounded-2xl bg-white/10 px-4 text-sm font-semibold text-white placeholder-slate-400 outline-none border border-white/20 focus:border-rose-400 focus:ring-2 focus:ring-rose-400/30 transition"
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-xs font-black text-sky-200 uppercase">
+              <label className="mb-1 block text-xs font-black text-rose-300 uppercase">
                 Mot de passe
               </label>
               <input
@@ -291,17 +291,17 @@ export default function AdminDashboard() {
                 value={adminPassword}
                 onChange={(e) => setAdminPassword(e.target.value)}
                 placeholder="••••••••"
-                className="h-12 w-full rounded-2xl bg-white/10 px-4 text-sm font-semibold text-white placeholder-slate-400 outline-none border border-white/20 focus:border-white focus:ring-2 focus:ring-blue-300/40 transition"
+                className="h-12 w-full rounded-2xl bg-white/10 px-4 text-sm font-semibold text-white placeholder-slate-400 outline-none border border-white/20 focus:border-rose-400 focus:ring-2 focus:ring-rose-400/30 transition"
               />
             </div>
 
             <button
               type="submit"
               disabled={loginLoading}
-              className="mt-2 flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-white hover:bg-sky-50 text-blue-950 font-black text-xs uppercase tracking-widest shadow-[0_0_30px_rgba(255,255,255,0.7)] transition disabled:opacity-50"
+              className="mt-2 flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 hover:brightness-110 text-white font-black text-xs uppercase tracking-widest shadow-[0_0_25px_rgba(244,63,94,0.5)] transition disabled:opacity-50"
             >
               {loginLoading ? (
-                <Loader2 size={18} className="animate-spin text-blue-950" />
+                <Loader2 size={18} className="animate-spin text-white" />
               ) : (
                 <>
                   <ShieldCheck size={18} />

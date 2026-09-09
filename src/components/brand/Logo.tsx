@@ -37,11 +37,11 @@ export default function Logo({
 
   // Color theme parameters
   let mainGradStart = "#ffffff";
-  let mainGradMid = "#60a5fa";
-  let mainGradEnd = "#1d4ed8";
-  let textColorDis = mode === "light" ? "text-blue-700" : "text-white";
-  let textColorEn = mode === "light" ? "text-slate-900" : "text-sky-200";
-  let cutoutColor = mode === "dark" ? "#071738" : mode === "light" ? "#ffffff" : "#0f2b5c";
+  let mainGradMid = "#fb7185";
+  let mainGradEnd = "#e11d48";
+  let textColorDis = mode === "light" ? "text-rose-600" : "text-white";
+  let textColorEn = mode === "light" ? "text-slate-900" : "text-rose-200";
+  let cutoutColor = mode === "dark" ? "#18030a" : mode === "light" ? "#ffffff" : "#4c0519";
 
   if (mode === "monochrome") {
     mainGradStart = "#ffffff";

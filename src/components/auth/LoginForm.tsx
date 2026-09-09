@@ -49,15 +49,15 @@ export default function LoginForm() {
   return (
     <div className="relative w-full max-w-md mx-auto">
       {/* GLASS CARD CONTAINER */}
-      <div className="rounded-[32px] border border-white/30 bg-white/15 p-8 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] backdrop-blur-2xl text-white">
+      <div className="rounded-[32px] border border-rose-500/30 bg-slate-950/85 p-8 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-2xl text-white">
         <div className="mb-7 text-center">
           <Logo variant="full" size="lg" href="/" className="mb-2" />
 
-          <h1 className="mt-6 text-3xl sm:text-4xl font-black font-display tracking-widest uppercase gradient-text-blue text-shadow-glow">
+          <h1 className="mt-6 text-3xl sm:text-4xl font-black font-display tracking-widest uppercase gradient-text-rose text-shadow-glow">
             CONNEXION
           </h1>
 
-          <p className="mt-2 text-xs font-semibold leading-relaxed text-sky-100/90 max-w-xs mx-auto">
+          <p className="mt-2 text-xs font-semibold leading-relaxed text-rose-100/90 max-w-xs mx-auto">
             Connecte-toi pour retrouver ton espace et la communauté.
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function LoginForm() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="Adresse Email"
-                className="h-12 w-full rounded-full bg-white px-6 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-blue-300/80 focus:border-white focus:scale-[1.01] transition-all duration-300"
+                className="h-12 w-full rounded-full bg-white px-6 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 focus:scale-[1.01] transition-all duration-300"
               />
             </div>
 
@@ -95,7 +95,7 @@ export default function LoginForm() {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 placeholder="Mot de passe"
-                className="h-12 w-full rounded-full bg-white px-6 pr-12 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-blue-300/80 focus:border-white focus:scale-[1.01] transition-all duration-300"
+                className="h-12 w-full rounded-full bg-white px-6 pr-12 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 focus:scale-[1.01] transition-all duration-300"
               />
               <button
                 type="button"
@@ -111,11 +111,11 @@ export default function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-white hover:bg-sky-50 text-blue-950 font-black font-display text-sm uppercase tracking-widest transition-all duration-300 transform active:scale-95 shadow-[0_0_35px_rgba(255,255,255,0.7)] hover:shadow-[0_0_45px_rgba(255,255,255,0.9)] disabled:opacity-60"
+            className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 hover:from-rose-400 hover:to-pink-400 text-white font-black font-display text-sm uppercase tracking-widest transition-all duration-300 transform active:scale-95 shadow-[0_0_30px_rgba(244,63,94,0.5)] hover:shadow-[0_0_40px_rgba(244,63,94,0.75)] disabled:opacity-60"
           >
             {loading ? (
               <>
-                <Loader2 size={20} className="animate-spin text-blue-950" />
+                <Loader2 size={20} className="animate-spin text-white" />
                 CONNEXION EN COURS...
               </>
             ) : (
@@ -127,11 +127,11 @@ export default function LoginForm() {
           </button>
         </form>
 
-        <p className="mt-7 text-center text-xs font-bold text-sky-100">
+        <p className="mt-7 text-center text-xs font-bold text-rose-100">
           Pas encore de compte ?{" "}
           <Link
             href="/inscription"
-            className="font-black text-white hover:text-sky-200 underline tracking-wider transition"
+            className="font-black text-rose-400 hover:text-white underline tracking-wider transition"
           >
             CRÉER UN COMPTE
           </Link>

@@ -14,62 +14,68 @@
     font-family: var(--font-display), 'Outfit', system-ui, sans-serif;
   }
 
-  /* Glassmorphism Styles */
+  /* Glassmorphism Styles - Figma Dating/Social Style */
   .bg-glass {
-    background: rgba(11, 25, 50, 0.65);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.4);
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
   }
 
   .bg-glass-card {
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 12px 35px 0 rgba(2, 6, 23, 0.5);
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(244, 63, 94, 0.25);
+    box-shadow: 0 16px 40px 0 rgba(15, 23, 42, 0.6);
   }
 
   .bg-glass-card-hover {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .bg-glass-card-hover:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 15px 45px 0 rgba(59, 130, 246, 0.35);
+    background: rgba(244, 63, 94, 0.12);
+    border-color: rgba(251, 113, 133, 0.6);
+    box-shadow: 0 20px 50px 0 rgba(244, 63, 94, 0.35);
     transform: translateY(-2px);
   }
 
   .bg-glass-input {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(12px);
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(16px);
     color: #ffffff;
     transition: all 0.25s ease;
   }
   .bg-glass-input:focus {
     outline: none;
-    border-color: #ffffff;
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 255, 0.22);
+    border-color: #fb7185;
+    box-shadow: 0 0 25px rgba(244, 63, 94, 0.45);
+    background: rgba(15, 23, 42, 0.95);
   }
 
   /* Text Effects & Typography Gradients */
   .gradient-text-cyan {
-    background: linear-gradient(135deg, #ffffff 0%, #dbeafe 35%, #93c5fd 70%, #3b82f6 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #fecdd3 35%, #fb7185 70%, #e11d48 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .gradient-text-blue {
-    background: linear-gradient(135deg, #ffffff 0%, #bfdbfe 40%, #60a5fa 75%, #2563eb 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #ffe4e6 40%, #fda4af 75%, #f43f5e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-text-rose {
+    background: linear-gradient(135deg, #ffffff 0%, #fecdd3 40%, #fb7185 75%, #e11d48 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .gradient-text-purple {
-    background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 40%, #60a5fa 80%, #2563eb 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #fecdd3 40%, #fb7185 80%, #be123c 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -81,11 +87,11 @@
   }
 
   .text-shadow-glow {
-    text-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 0 45px rgba(59, 130, 246, 0.6);
+    text-shadow: 0 0 25px rgba(244, 63, 94, 0.8), 0 0 45px rgba(225, 29, 72, 0.6);
   }
 
   .text-shadow-purple-glow {
-    text-shadow: 0 0 25px rgba(96, 165, 250, 0.8);
+    text-shadow: 0 0 25px rgba(251, 113, 133, 0.8);
   }
 
   .text-shadow-title {
@@ -141,7 +147,7 @@ html {
 }
 
 body {
-  background: linear-gradient(135deg, #020617 0%, #071938 25%, #0f2b5c 50%, #1e40af 80%, #030712 100%);
+  background: linear-gradient(135deg, #18030a 0%, #4c0519 25%, #881337 55%, #be123c 85%, #0f172a 100%);
   color: #f8fafc;
   min-height: 100vh;
   font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -162,15 +168,15 @@ h1, h2, h3, h4, h5, h6 {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.9);
+  background: rgba(15, 23, 42, 0.95);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #22d3ee 0%, #3b82f6 100%);
+  background: linear-gradient(180deg, #fb7185 0%, #be123c 100%);
   border-radius: 9999px;
   border: 2px solid rgba(15, 23, 42, 0.9);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #67e8f9 0%, #60a5fa 100%);
+  background: linear-gradient(180deg, #fda4af 0%, #e11d48 100%);
 }
 
 /* Prevent iOS / Mobile Safari / Chrome auto-zoom on input focus */
