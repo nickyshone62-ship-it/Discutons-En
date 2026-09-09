@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Logo from "@/components/brand/Logo";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -9,7 +8,6 @@ import {
   Check,
   CheckCheck,
   ChevronDown,
-  CornerDownRight,
   Edit2,
   Heart,
   Loader2,
@@ -63,7 +61,7 @@ function formatTime(dateStr: string) {
   });
 }
 
-function VoicePlayer({ src, isMe, avatarUrl }: { src: string; isMe?: boolean; avatarUrl?: string }) {
+function VoicePlayer({ src, isMe }: { src: string; isMe?: boolean; avatarUrl?: string }) {
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -215,7 +213,8 @@ export default function ChatSpace() {
     const container = chatContainerRef.current;
     if (!container) return;
     const { scrollTop, scrollHeight, clientHeight } = container;
-    const isUp = scrollHeight - scrollTop - clientHeight > 120;
+    // Strict threshold: if user is > 20px from bottom, consider them scrolled up!
+    const isUp = scrollHeight - scrollTop - clientHeight > 20;
     isUserScrolledUpRef.current = isUp;
     setShowScrollBottomBtn(isUp);
     if (!isUp) {
@@ -225,7 +224,7 @@ export default function ChatSpace() {
 
   function scrollToBottom(force = false) {
     if (!force && isUserScrolledUpRef.current) {
-      // User is manually reading older messages higher up, do not force scroll down
+      // User is manually reading older messages higher up, NEVER force scroll down
       return;
     }
 
@@ -254,7 +253,23 @@ export default function ChatSpace() {
 
       if (response.ok && data.success) {
         const fetchedMsgs: ChatMessage[] = data.messages || [];
-        setMessages(fetchedMsgs);
+        
+        // Prevent state updates if messages array hasn't changed to avoid scroll jumps!
+        setMessages((prevMsgs) => {
+          if (
+            prevMsgs.length === fetchedMsgs.length &&
+            prevMsgs.every(
+              (m, idx) =>
+                m.id === fetchedMsgs[idx]?.id &&
+                m.content === fetchedMsgs[idx]?.content &&
+                m.likesCount === fetchedMsgs[idx]?.likesCount
+            )
+          ) {
+            return prevMsgs;
+          }
+          return fetchedMsgs;
+        });
+
         setCurrentUser(data.currentUser);
 
         if (fetchedMsgs.length > 0) {
@@ -312,23 +327,31 @@ export default function ChatSpace() {
           const incomingMsg = JSON.parse(event.data);
           if (!incomingMsg || !incomingMsg.id) return;
 
+          let isNew = false;
+          let isMe = false;
+
           setMessages((prev) => {
             if (prev.some((m) => m.id === incomingMsg.id)) {
               return prev;
             }
 
+            isNew = true;
             const currentUserId = currentUser?.id;
-            const isMe = incomingMsg.userId === currentUserId || incomingMsg.isMe;
+            isMe = incomingMsg.userId === currentUserId || incomingMsg.isMe;
             const formattedMsg = { ...incomingMsg, isMe };
 
+            return [...prev, formattedMsg];
+          });
+
+          if (isNew) {
             if (!isMe) {
               playNotificationChime();
               sendBrowserNotification(
-                `💬 Message de ${formattedMsg.author.anonymousName}`,
-                formattedMsg.audioUrl
+                `💬 Message de ${incomingMsg.author?.anonymousName || 'Anonyme'}`,
+                incomingMsg.audioUrl
                   ? "🎙️ Message vocal reçu"
-                  : formattedMsg.content.slice(0, 80),
-                formattedMsg.author.avatarUrl
+                  : incomingMsg.content?.slice(0, 80) || "",
+                incomingMsg.author?.avatarUrl || ""
               );
               setHasUnreadBanner(true);
               fetch("/api/chat/read", { method: "POST" }).catch(() => {});
@@ -339,9 +362,7 @@ export default function ChatSpace() {
             } else {
               setTimeout(() => scrollToBottom(false), 50);
             }
-
-            return [...prev, formattedMsg];
-          });
+          }
         } catch (e) {
           console.error("[ChatSpace] SSE parse error:", e);
         }
@@ -392,6 +413,8 @@ export default function ChatSpace() {
 
       if (response.ok && data.success) {
         setMessages((prev) => [...prev, data.message]);
+        isUserScrolledUpRef.current = false;
+        setShowScrollBottomBtn(false);
         setTimeout(() => scrollToBottom(true), 50);
       } else {
         alert(data.message || "Erreur d'envoi du message.");
@@ -506,6 +529,8 @@ export default function ChatSpace() {
 
       if (response.ok && data.success) {
         setMessages((prev) => [...prev, data.message]);
+        isUserScrolledUpRef.current = false;
+        setShowScrollBottomBtn(false);
         setTimeout(() => scrollToBottom(true), 50);
       }
     } catch {
@@ -704,7 +729,7 @@ export default function ChatSpace() {
       <div
         ref={chatContainerRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-4 bg-whatsapp-pattern relative scroll-smooth overscroll-contain touch-pan-y"
+        className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-4 bg-whatsapp-pattern relative touch-pan-y"
       >
         {/* Sticky Date Badge */}
         <div className="flex justify-center my-2 sticky top-2 z-10">
@@ -925,28 +950,29 @@ export default function ChatSpace() {
           })
         )}
 
-        {/* FLOATING WHATSAPP SCROLL TO BOTTOM BUTTON */}
-        {showScrollBottomBtn && (
-          <button
-            type="button"
-            onClick={() => {
-              setHasUnreadBanner(false);
-              scrollToBottom(true);
-            }}
-            className="sticky bottom-4 float-right mr-2 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-white text-[#ff2a6d] shadow-xl border border-pink-200 flex items-center justify-center hover:bg-pink-50 transition transform active:scale-95 z-30 group"
-            title="Faire défiler vers le bas"
-          >
-            <ChevronDown size={22} className="group-hover:translate-y-0.5 transition-transform" />
-            {hasUnreadBanner && (
-              <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#ff2a6d] border-2 border-white">
-                <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping" />
-              </span>
-            )}
-          </button>
-        )}
-
         <div ref={messagesEndRef} />
       </div>
+
+      {/* FLOATING ABSOLUTE OVERLAY WHATSAPP SCROLL TO BOTTOM BUTTON */}
+      {showScrollBottomBtn && (
+        <button
+          type="button"
+          onClick={() => {
+            isUserScrolledUpRef.current = false;
+            setHasUnreadBanner(false);
+            scrollToBottom(true);
+          }}
+          className="absolute bottom-20 right-4 sm:bottom-24 sm:right-6 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-white text-[#ff2a6d] shadow-2xl border border-pink-200 flex items-center justify-center hover:bg-pink-50 transition transform active:scale-95 z-30 group"
+          title="Faire défiler vers le bas"
+        >
+          <ChevronDown size={22} className="group-hover:translate-y-0.5 transition-transform" />
+          {hasUnreadBanner && (
+            <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#ff2a6d] border-2 border-white">
+              <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping" />
+            </span>
+          )}
+        </button>
+      )}
 
       {/* WHATSAPP FOOTER INPUT BAR */}
       <div className="bg-[#f0f2f5] p-2 sm:p-3 border-t border-slate-200 flex flex-col gap-2 shrink-0 z-20">
@@ -955,6 +981,7 @@ export default function ChatSpace() {
           <button
             type="button"
             onClick={() => {
+              isUserScrolledUpRef.current = false;
               setHasUnreadBanner(false);
               scrollToBottom(true);
             }}
