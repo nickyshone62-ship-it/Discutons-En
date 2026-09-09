@@ -36,12 +36,12 @@ export default function Logo({
   const isStacked = variant === "full";
 
   // Color theme parameters
-  let mainGradStart = "#22d3ee";
-  let mainGradMid = "#38bdf8";
-  let mainGradEnd = "#6366f1";
-  let textColorDis = mode === "light" ? "text-cyan-600" : "text-cyan-400";
-  let textColorEn = mode === "light" ? "text-slate-900" : "text-white";
-  let cutoutColor = mode === "dark" ? "#090d16" : mode === "light" ? "#ffffff" : "#0f172a";
+  let mainGradStart = "#ffffff";
+  let mainGradMid = "#60a5fa";
+  let mainGradEnd = "#1d4ed8";
+  let textColorDis = mode === "light" ? "text-blue-700" : "text-white";
+  let textColorEn = mode === "light" ? "text-slate-900" : "text-sky-200";
+  let cutoutColor = mode === "dark" ? "#071738" : mode === "light" ? "#ffffff" : "#0f2b5c";
 
   if (mode === "monochrome") {
     mainGradStart = "#ffffff";

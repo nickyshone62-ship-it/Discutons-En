@@ -194,11 +194,11 @@ export default function RegisterForm() {
         <div className="mb-6 text-center">
           <Logo variant="full" size="lg" href="/" className="mb-2" />
 
-          <h1 className="mt-4 text-3xl sm:text-4xl font-black font-display tracking-widest uppercase gradient-text-cyan text-shadow-glow">
+          <h1 className="mt-4 text-3xl sm:text-4xl font-black font-display tracking-widest uppercase gradient-text-blue text-shadow-glow">
             INSCRIPTION
           </h1>
 
-          <p className="mt-2 text-xs font-semibold leading-relaxed text-cyan-100/90 max-w-sm mx-auto">
+          <p className="mt-2 text-xs font-semibold leading-relaxed text-sky-100/90 max-w-sm mx-auto">
             Crée ton compte privé avec ton nom & prénom et choisis parmi <strong>100 Avatars Bitmoji</strong>.
           </p>
         </div>
@@ -588,11 +588,11 @@ export default function RegisterForm() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-4 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 via-cyan-300 to-sky-400 hover:from-cyan-300 hover:to-cyan-200 text-slate-950 font-black font-display text-sm uppercase tracking-widest transition-all duration-300 transform active:scale-95 shadow-[0_0_30px_rgba(34,211,238,0.5)] hover:shadow-[0_0_40px_rgba(34,211,238,0.75)] disabled:opacity-60"
+            className="mt-4 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-white hover:bg-sky-50 text-blue-950 font-black font-display text-sm uppercase tracking-widest transition-all duration-300 transform active:scale-95 shadow-[0_0_35px_rgba(255,255,255,0.7)] hover:shadow-[0_0_45px_rgba(255,255,255,0.9)] disabled:opacity-60"
           >
             {loading ? (
               <>
-                <Loader2 size={20} className="animate-spin" />
+                <Loader2 size={20} className="animate-spin text-blue-950" />
                 CREATION DU COMPTE & VERIFICATION...
               </>
             ) : (
@@ -605,22 +605,22 @@ export default function RegisterForm() {
         </form>
 
         <div className="mt-6 pt-4 border-t border-white/10 text-center space-y-2">
-          <p className="text-xs font-bold text-cyan-100">
+          <p className="text-xs font-bold text-sky-100">
             Tu as déjà un compte ?{" "}
             <Link
               href="/connexion"
-              className="font-black text-cyan-300 hover:text-white underline tracking-wider transition"
+              className="font-black text-white hover:text-sky-200 underline tracking-wider transition"
             >
               SE CONNECTER
             </Link>
           </p>
 
-          <p className="text-[11px] text-cyan-200/60 pt-1">
+          <p className="text-[11px] text-sky-200/60 pt-1">
             <Link
               href="/admin"
-              className="inline-flex items-center gap-1.5 font-extrabold text-purple-300 hover:text-purple-100 bg-purple-950/40 hover:bg-purple-950/70 border border-purple-400/40 px-3.5 py-1.5 rounded-full transition shadow-md"
+              className="inline-flex items-center gap-1.5 font-extrabold text-white hover:text-sky-200 bg-white/15 hover:bg-white/25 border border-white/40 px-3.5 py-1.5 rounded-full transition shadow-md"
             >
-              <ShieldCheck size={14} className="text-purple-400" />
+              <ShieldCheck size={14} className="text-sky-300" />
               Espace Administrateur 🛡️
             </Link>
           </p>

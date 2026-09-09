@@ -203,14 +203,14 @@ export default function HomePage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-gradient-to-br from-purple-950 via-indigo-950 to-blue-950 text-white pb-24 overflow-x-hidden font-sans">
+    <main className="relative min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-white pb-24 overflow-x-hidden font-sans">
       {/* GEOMETRIC BACKGROUND DECORATIONS */}
-      <div className="pointer-events-none fixed -top-20 -left-20 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl" />
-      <div className="pointer-events-none fixed top-1/3 right-0 h-96 w-96 rounded-full bg-purple-600/20 blur-3xl" />
-      <div className="pointer-events-none fixed bottom-10 left-1/4 h-80 w-80 rounded-full bg-blue-600/20 blur-3xl" />
+      <div className="pointer-events-none fixed -top-20 -left-20 h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
+      <div className="pointer-events-none fixed top-1/3 right-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
+      <div className="pointer-events-none fixed bottom-10 left-1/4 h-80 w-80 rounded-full bg-sky-500/20 blur-3xl" />
 
       {/* NAVBAR */}
-      <header className="sticky top-0 z-40 border-b border-white/15 bg-slate-950/80 backdrop-blur-2xl">
+      <header className="sticky top-0 z-40 border-b border-white/20 bg-blue-950/80 backdrop-blur-2xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Logo variant="horizontal" size="sm" href="/accueil" />
 
@@ -218,16 +218,16 @@ export default function HomePage() {
             {(data.user.role === "ADMIN" || data.user.role === "SUPER_ADMIN") && (
               <Link
                 href="/admin"
-                className="flex h-10 items-center gap-2 rounded-full border border-purple-400/50 bg-purple-500/20 px-4 text-xs font-black font-display uppercase tracking-wider text-purple-300 hover:bg-purple-500/30 hover:text-white transition shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+                className="flex h-10 items-center gap-2 rounded-full border border-white/40 bg-white/15 px-4 text-xs font-black font-display uppercase tracking-wider text-white hover:bg-white/25 transition shadow-[0_0_15px_rgba(255,255,255,0.3)]"
               >
-                <ShieldCheck size={16} />
+                <ShieldCheck size={16} className="text-sky-300" />
                 Admin
               </Link>
             )}
 
             <Link
               href="/chat"
-              className="flex h-10 items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 px-4.5 text-xs font-black font-display uppercase tracking-wider transition shadow-lg shadow-cyan-400/35 transform active:scale-95"
+              className="flex h-10 items-center gap-2 rounded-full bg-white hover:bg-sky-50 text-blue-950 px-4.5 text-xs font-black font-display uppercase tracking-wider transition shadow-lg shadow-white/20 transform active:scale-95"
             >
               <MessageSquare size={16} />
               Chat en direct
