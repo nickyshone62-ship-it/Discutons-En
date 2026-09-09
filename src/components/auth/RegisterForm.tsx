@@ -266,8 +266,8 @@ export default function RegisterForm() {
                   onClick={() => setActiveCategory(tab.id)}
                   className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-bold transition ${
                     activeCategory === tab.id
-                      ? "bg-cyan-400 text-slate-950 font-black shadow-md"
-                      : "bg-white/10 text-cyan-200/80 hover:bg-white/20 hover:text-white"
+                      ? "bg-rose-500 text-white font-black shadow-md"
+                      : "bg-white/10 text-rose-200/80 hover:bg-white/20 hover:text-white"
                   }`}
                 >
                   {tab.label}
@@ -288,7 +288,7 @@ export default function RegisterForm() {
                     onClick={() => setSelectedAvatarSeed(avatar.seed)}
                     className={`group relative flex flex-col items-center justify-center rounded-2xl p-1.5 transition duration-300 transform active:scale-95 ${
                       isSelected
-                        ? "border-2 border-cyan-400 bg-cyan-400/20 shadow-[0_0_20px_rgba(34,211,238,0.5)] scale-105"
+                        ? "border-2 border-rose-400 bg-rose-500/20 shadow-[0_0_20px_rgba(244,63,94,0.5)] scale-105"
                         : "border border-white/10 bg-white/5 hover:bg-white/15 hover:scale-100"
                     }`}
                   >
@@ -302,7 +302,7 @@ export default function RegisterForm() {
                       />
 
                       {isSelected && (
-                        <div className="absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-cyan-400 text-slate-950 shadow-md">
+                        <div className="absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-rose-500 text-white shadow-md">
                           <Check size={11} strokeWidth={3} />
                         </div>
                       )}
@@ -316,7 +316,7 @@ export default function RegisterForm() {
           {/* NAME & SURNAME INPUTS */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
-              <label htmlFor="firstName" className="mb-1.5 block text-xs font-black uppercase text-cyan-300">
+              <label htmlFor="firstName" className="mb-1.5 block text-xs font-black uppercase text-rose-300">
                 Prénom
               </label>
               <input
@@ -328,12 +328,12 @@ export default function RegisterForm() {
                 value={firstName}
                 onChange={(event) => setFirstName(event.target.value)}
                 placeholder="Ex: Thomas"
-                className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-cyan-300/80 focus:border-cyan-300 transition"
+                className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 transition"
               />
             </div>
 
             <div>
-              <label htmlFor="lastName" className="mb-1.5 block text-xs font-black uppercase text-cyan-300">
+              <label htmlFor="lastName" className="mb-1.5 block text-xs font-black uppercase text-rose-300">
                 Nom
               </label>
               <input
@@ -345,7 +345,7 @@ export default function RegisterForm() {
                 value={lastName}
                 onChange={(event) => setLastName(event.target.value)}
                 placeholder="Ex: Dubois"
-                className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-cyan-300/80 focus:border-cyan-300 transition"
+                className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 transition"
               />
             </div>
           </div>
@@ -353,7 +353,7 @@ export default function RegisterForm() {
           {/* USERNAME & EMAIL INPUTS */}
           <div className="space-y-3.5">
             <div>
-              <label htmlFor="username" className="mb-1.5 block text-xs font-black uppercase text-cyan-300">
+              <label htmlFor="username" className="mb-1.5 block text-xs font-black uppercase text-rose-300">
                 Nom d'utilisateur (Pseudo unique)
               </label>
               <input
@@ -366,12 +366,12 @@ export default function RegisterForm() {
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
                 placeholder="Ex: thomas_d"
-                className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-cyan-300/80 focus:border-cyan-300 transition"
+                className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 transition"
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="mb-1.5 block text-xs font-black uppercase text-cyan-300">
+              <label htmlFor="email" className="mb-1.5 block text-xs font-black uppercase text-rose-300">
                 Adresse Email
               </label>
               <input
@@ -382,13 +382,13 @@ export default function RegisterForm() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="Ex: thomas.dubois@email.com"
-                className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-cyan-300/80 focus:border-cyan-300 transition"
+                className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 transition"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div className="relative">
-                <label htmlFor="password" className="mb-1.5 block text-xs font-black uppercase text-cyan-300">
+                <label htmlFor="password" className="mb-1.5 block text-xs font-black uppercase text-rose-300">
                   Mot de passe
                 </label>
                 <input
@@ -401,7 +401,7 @@ export default function RegisterForm() {
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="8+ caractères"
-                  className="h-12 w-full rounded-full bg-white px-5 pr-12 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-cyan-300/80 focus:border-cyan-300 transition"
+                  className="h-12 w-full rounded-full bg-white px-5 pr-12 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 transition"
                 />
                 <button
                   type="button"
@@ -413,7 +413,7 @@ export default function RegisterForm() {
               </div>
 
               <div className="relative">
-                <label htmlFor="confirmPassword" className="mb-1.5 block text-xs font-black uppercase text-cyan-300">
+                <label htmlFor="confirmPassword" className="mb-1.5 block text-xs font-black uppercase text-rose-300">
                   Confirmation
                 </label>
                 <input
@@ -424,7 +424,7 @@ export default function RegisterForm() {
                   value={confirmPassword}
                   onChange={(event) => setConfirmPassword(event.target.value)}
                   placeholder="Répéter le mot de passe"
-                  className="h-12 w-full rounded-full bg-white px-5 pr-12 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-cyan-300/80 focus:border-cyan-300 transition"
+                  className="h-12 w-full rounded-full bg-white px-5 pr-12 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 transition"
                 />
                 <button
                   type="button"
@@ -438,16 +438,16 @@ export default function RegisterForm() {
           </div>
 
           {/* MOYEN DE PAIEMENT SECTION */}
-          <div className="rounded-3xl border border-cyan-400/30 bg-slate-950/70 p-5 backdrop-blur-xl space-y-4">
+          <div className="rounded-3xl border border-rose-500/30 bg-slate-950/70 p-5 backdrop-blur-xl space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-400 text-slate-950 font-black shadow-md">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-500 text-white font-black shadow-md">
                 <CreditCard size={20} />
               </div>
               <div>
-                <h2 className="text-xs font-black font-display uppercase tracking-wider text-cyan-300">
+                <h2 className="text-xs font-black font-display uppercase tracking-wider text-rose-300">
                   Moyen de Paiement à l'inscription
                 </h2>
-                <p className="text-[10px] text-cyan-100/70">
+                <p className="text-[10px] text-rose-100/70">
                   Sélectionne ton moyen de paiement et effectue le transfert vers le numéro <strong>06887330</strong>.
                 </p>
               </div>
@@ -460,12 +460,12 @@ export default function RegisterForm() {
                 onClick={() => setPaymentMethod("ORANGE_MONEY")}
                 className={`flex flex-col items-center justify-center rounded-2xl p-3 border transition duration-300 ${
                   paymentMethod === "ORANGE_MONEY"
-                    ? "border-orange-500 bg-orange-500/20 shadow-[0_0_20px_rgba(255,121,0,0.4)] scale-102"
+                    ? "border-rose-500 bg-rose-500/20 shadow-[0_0_20px_rgba(244,63,94,0.4)] scale-102"
                     : "border-white/10 bg-white/5 hover:bg-white/15"
                 }`}
               >
                 <OrangeMoneyLogo className="h-9 w-9 mb-1" />
-                <span className="text-[11px] font-black text-orange-300">Orange Money</span>
+                <span className="text-[11px] font-black text-rose-300">Orange Money</span>
               </button>
 
               <button
@@ -473,12 +473,12 @@ export default function RegisterForm() {
                 onClick={() => setPaymentMethod("WAVE")}
                 className={`flex flex-col items-center justify-center rounded-2xl p-3 border transition duration-300 ${
                   paymentMethod === "WAVE"
-                    ? "border-sky-400 bg-sky-400/20 shadow-[0_0_20px_rgba(29,195,244,0.4)] scale-102"
+                    ? "border-rose-400 bg-rose-500/20 shadow-[0_0_20px_rgba(244,63,94,0.4)] scale-102"
                     : "border-white/10 bg-white/5 hover:bg-white/15"
                 }`}
               >
                 <WaveLogo className="h-9 w-9 mb-1" />
-                <span className="text-[11px] font-black text-sky-300">Wave</span>
+                <span className="text-[11px] font-black text-rose-300">Wave</span>
               </button>
 
               <div className="col-span-2 sm:col-span-1 opacity-50 cursor-not-allowed flex flex-col items-center justify-center rounded-2xl p-3 border border-white/10 bg-white/5">
@@ -489,19 +489,19 @@ export default function RegisterForm() {
 
             {/* PAYMENT METHOD DETAILS & DIRECT ACTION BUTTONS */}
             {paymentMethod === "ORANGE_MONEY" && (
-              <div className="rounded-2xl border border-orange-500/40 bg-orange-950/30 p-4 space-y-3">
+              <div className="rounded-2xl border border-rose-500/40 bg-rose-950/30 p-4 space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-orange-200">Code USSD Orange Money :</span>
-                  <span className="font-mono font-black text-amber-300 bg-black/40 px-2 py-1 rounded-lg border border-orange-500/30 select-all">
+                  <span className="font-bold text-rose-200">Code USSD Orange Money :</span>
+                  <span className="font-mono font-black text-rose-300 bg-black/40 px-2 py-1 rounded-lg border border-rose-500/30 select-all">
                     *144*2*1*06887330*500#
                   </span>
                 </div>
-                <p className="text-[11px] text-orange-100/80 leading-relaxed">
+                <p className="text-[11px] text-rose-100/80 leading-relaxed">
                   Clique sur le bouton ci-dessous pour composer automatiquement le code USSD sur ton téléphone.
                 </p>
                 <a
                   href="tel:*144*2*1*06887330*500%23"
-                  className="flex items-center justify-center gap-2 h-11 w-full rounded-xl bg-orange-500 hover:bg-orange-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
+                  className="flex items-center justify-center gap-2 h-11 w-full rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-black text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
                 >
                   <PhoneCall size={16} />
                   Composer *144*2*1*06887330*500#
@@ -510,21 +510,21 @@ export default function RegisterForm() {
             )}
 
             {paymentMethod === "WAVE" && (
-              <div className="rounded-2xl border border-sky-400/40 bg-sky-950/30 p-4 space-y-3">
+              <div className="rounded-2xl border border-rose-500/40 bg-rose-950/30 p-4 space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-sky-200">Compte Wave :</span>
-                  <span className="font-mono font-black text-sky-300 bg-black/40 px-2 py-1 rounded-lg border border-sky-400/30 select-all">
+                  <span className="font-bold text-rose-200">Compte Wave :</span>
+                  <span className="font-mono font-black text-rose-300 bg-black/40 px-2 py-1 rounded-lg border border-rose-400/30 select-all">
                     06887330
                   </span>
                 </div>
-                <p className="text-[11px] text-sky-100/80 leading-relaxed">
+                <p className="text-[11px] text-rose-100/80 leading-relaxed">
                   Clique ci-dessous pour ouvrir directement ton compte Wave et faire le transfert vers <strong>06887330</strong>.
                 </p>
                 <a
                   href="https://wave.com/send?phone=06887330"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 h-11 w-full rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
+                  className="flex items-center justify-center gap-2 h-11 w-full rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-black text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
                 >
                   <ExternalLink size={16} />
                   Payer directement via l'application Wave (06887330)
@@ -535,7 +535,7 @@ export default function RegisterForm() {
             {/* PAYMENT TRANSACTION INPUTS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
               <div>
-                <label htmlFor="paymentPhone" className="mb-1.5 block text-xs font-black uppercase text-cyan-300">
+                <label htmlFor="paymentPhone" className="mb-1.5 block text-xs font-black uppercase text-rose-300">
                   Numéro ayant payé
                 </label>
                 <input
@@ -545,12 +545,12 @@ export default function RegisterForm() {
                   value={paymentPhone}
                   onChange={(e) => setPaymentPhone(e.target.value)}
                   placeholder="Ex: 06887330"
-                  className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-cyan-300/80 focus:border-cyan-300 transition"
+                  className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 transition"
                 />
               </div>
 
               <div>
-                <label htmlFor="paymentRef" className="mb-1.5 block text-xs font-black uppercase text-cyan-300">
+                <label htmlFor="paymentRef" className="mb-1.5 block text-xs font-black uppercase text-rose-300">
                   ID / Réf Transaction
                 </label>
                 <input
@@ -560,7 +560,7 @@ export default function RegisterForm() {
                   value={paymentRef}
                   onChange={(e) => setPaymentRef(e.target.value)}
                   placeholder="Ex: PP240906.1420..."
-                  className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-cyan-300/80 focus:border-cyan-300 transition"
+                  className="h-12 w-full rounded-full bg-white px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 transition"
                 />
               </div>
             </div>
@@ -568,16 +568,16 @@ export default function RegisterForm() {
 
           {/* TERMS CHECKBOX */}
           <div className="flex items-center justify-center gap-2 pt-1">
-            <label className="flex items-center gap-2 text-xs font-semibold text-cyan-100 cursor-pointer select-none">
+            <label className="flex items-center gap-2 text-xs font-semibold text-rose-100 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={termsAccepted}
                 onChange={(e) => setTermsAccepted(e.target.checked)}
-                className="h-4 w-4 rounded accent-cyan-400 cursor-pointer"
+                className="h-4 w-4 rounded accent-rose-500 cursor-pointer"
               />
               <span>
                 J'accepte les{" "}
-                <span className="text-cyan-300 font-bold underline hover:text-white transition">
+                <span className="text-rose-300 font-bold underline hover:text-white transition">
                   Conditions d'Utilisation
                 </span>
               </span>
