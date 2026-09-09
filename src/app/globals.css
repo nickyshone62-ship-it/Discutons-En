@@ -119,6 +119,29 @@
   .text-shadow-title {
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
+
+  /* WhatsApp Chat Wallpaper Pattern & Bubble Utilities */
+  .bg-whatsapp-pattern {
+    background-color: #f7f2f5;
+    background-image: radial-gradient(rgba(255, 42, 109, 0.07) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .whatsapp-bubble-me {
+    background: #ffe6ee;
+    color: #0f172a;
+    border: 1px solid rgba(255, 42, 109, 0.25);
+    border-radius: 18px 18px 4px 18px;
+    box-shadow: 0 1px 4px rgba(255, 42, 109, 0.1);
+  }
+
+  .whatsapp-bubble-other {
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 18px 18px 18px 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
 }
 
 /* Animations */
