@@ -89,10 +89,11 @@
     -webkit-text-fill-color: transparent;
   }
 
-  .gradient-text-rose {
-    background: linear-gradient(135deg, #0f172a 0%, #ff2a6d 50%, #ff6699 100%);
+  .gradient-text-rose, .gradient-text-brand {
+    background: linear-gradient(135deg, #ff2a6d 0%, #ff4b7d 50%, #ff6699 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 10px rgba(255, 42, 109, 0.3));
   }
 
   .gradient-text-purple {

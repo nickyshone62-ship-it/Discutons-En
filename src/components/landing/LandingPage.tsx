@@ -24,7 +24,7 @@ export default function LandingPage() {
       {/* NAVBAR */}
       <header className="relative z-20 border-b border-pink-100/80 bg-white/80 backdrop-blur-2xl">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Logo variant="horizontal" size="md" href="/" />
+          <Logo variant="horizontal" size="lg" href="/" />
 
           <div className="flex items-center gap-3">
             <Link

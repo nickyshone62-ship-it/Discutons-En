@@ -625,7 +625,7 @@ export default function ChatSpace() {
             <ArrowLeft size={20} />
           </Link>
 
-          <Logo variant="icon" size="sm" className="hidden xs:inline-flex" />
+          <Logo variant="horizontal" size="sm" href="/accueil" />
           <div>
             <h1 className="text-base sm:text-lg font-extrabold font-display tracking-tight text-slate-900 flex items-center gap-2">
               Salon Communautaire

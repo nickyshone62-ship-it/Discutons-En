@@ -192,11 +192,13 @@ export default function RegisterForm() {
         
         {/* MAIN PAGE HEADER WITH PROMINENT TITLES & SUBTITLES */}
         <div className="mb-8 text-center space-y-3">
-          <Logo variant="full" size="lg" href="/" className="mb-3" />
+          <div className="flex justify-center mb-1">
+            <Logo variant="full" size="xl" href="/" />
+          </div>
 
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-pink-200 bg-pink-50 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#ff2a6d] shadow-sm">
-            <Sparkles size={13} className="text-[#ff2a6d]" />
-            Inscription 100% Anonyme & Sécurisée
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-pink-200 bg-pink-50 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#ff2a6d] shadow-sm">
+            <Sparkles size={14} className="text-[#ff2a6d]" />
+            Discutons-En · 100% Anonyme
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-black font-display tracking-tight text-slate-900 leading-tight">

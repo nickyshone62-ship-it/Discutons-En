@@ -51,11 +51,13 @@ export default function LoginForm() {
       {/* BECKY UI LIGHT CARD CONTAINER */}
       <div className="rounded-[36px] border border-pink-100/80 bg-white p-8 sm:p-10 shadow-[0_25px_65px_rgba(0,0,0,0.06)] text-slate-900">
         <div className="mb-8 text-center space-y-3">
-          <Logo variant="full" size="lg" href="/" className="mb-3" />
+          <div className="flex justify-center mb-1">
+            <Logo variant="full" size="xl" href="/" />
+          </div>
 
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-pink-200 bg-pink-50 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#ff2a6d] shadow-sm">
-            <Sparkles size={13} className="text-[#ff2a6d]" />
-            Espace Membre Anonyme
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-pink-200 bg-pink-50 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#ff2a6d] shadow-sm">
+            <Sparkles size={14} className="text-[#ff2a6d]" />
+            Discutons-En · Espace Membre
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-black font-display tracking-tight text-slate-900">

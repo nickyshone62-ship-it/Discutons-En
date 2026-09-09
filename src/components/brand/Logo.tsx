@@ -17,15 +17,15 @@ interface LogoProps {
 }
 
 const sizeDimensions: Record<LogoSize, { icon: number; textSize: string; gap: string }> = {
-  sm: { icon: 34, textSize: "text-lg", gap: "gap-2" },
-  md: { icon: 44, textSize: "text-2xl", gap: "gap-2.5" },
-  lg: { icon: 58, textSize: "text-3xl", gap: "gap-3.5" },
-  xl: { icon: 76, textSize: "text-4xl sm:text-5xl", gap: "gap-4" },
+  sm: { icon: 38, textSize: "text-xl", gap: "gap-2.5" },
+  md: { icon: 48, textSize: "text-2xl sm:text-3xl", gap: "gap-3" },
+  lg: { icon: 62, textSize: "text-3xl sm:text-4xl", gap: "gap-3.5" },
+  xl: { icon: 82, textSize: "text-4xl sm:text-5xl", gap: "gap-4" },
 };
 
 export default function Logo({
   variant = "horizontal",
-  mode = "dark",
+  mode = "light",
   size = "md",
   showText = true,
   className = "",
@@ -35,21 +35,11 @@ export default function Logo({
   const isIconOnly = variant === "icon" || !showText;
   const isStacked = variant === "full";
 
-  // Color theme parameters
-  let mainGradStart = "#ffffff";
-  let mainGradMid = "#fb7185";
-  let mainGradEnd = "#e11d48";
-  let textColorDis = mode === "light" ? "text-rose-600" : "text-white";
-  let textColorEn = mode === "light" ? "text-slate-900" : "text-rose-200";
-  let cutoutColor = mode === "dark" ? "#18030a" : mode === "light" ? "#ffffff" : "#4c0519";
-
-  if (mode === "monochrome") {
-    mainGradStart = "#ffffff";
-    mainGradMid = "#f1f5f9";
-    mainGradEnd = "#cbd5e1";
-    textColorDis = "text-white";
-    textColorEn = "text-slate-200";
-  }
+  // Hot Pink / Rose Fluid Ribbon Gradient
+  const mainGradStart = "#ff2a6d";
+  const mainGradMid = "#ff4b7d";
+  const mainGradEnd = "#ff6699";
+  const cutoutColor = mode === "dark" ? "#18030a" : "#ffffff";
 
   const symbolSvg = (
     <svg
@@ -58,7 +48,7 @@ export default function Logo({
       viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="shrink-0 transition-transform duration-300 group-hover:scale-105"
+      className="shrink-0 transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_4px_12px_rgba(255,42,109,0.35)]"
       aria-hidden="true"
     >
       <defs>
@@ -82,23 +72,21 @@ export default function Logo({
         </filter>
       </defs>
 
-      {/* Dark background ring glow for dark mode */}
-      {mode === "dark" && (
-        <circle cx="50" cy="50" r="46" fill="#0f172a" fillOpacity="0.5" stroke="url(#negRibbonGrad-dark)" strokeWidth="1" strokeOpacity="0.2" />
-      )}
+      {/* Outer Glow Ring */}
+      <circle cx="50" cy="50" r="46" fill="#ff2a6d" fillOpacity="0.08" stroke="url(#negRibbonGrad-light)" strokeWidth="1.5" strokeOpacity="0.3" />
 
       {/* Fluid Outer "D" Ribbon Body */}
       <path
         d="M 22 15 L 50 15 C 72 15 88 28 88 50 C 88 72 72 85 50 85 L 22 85 C 18 85 15 82 15 78 L 15 22 C 15 18 18 15 22 15 Z"
         fill={`url(#negRibbonGrad-${mode})`}
-        filter={mode === "dark" ? `url(#negGlow-${mode})` : undefined}
+        filter={`url(#negGlow-${mode})`}
       />
 
-      {/* Top Fold Ribbon Curve giving 3D overlapping depth like the reference plane logo */}
+      {/* Top Fold Ribbon Curve giving 3D overlapping depth */}
       <path
         d="M 22 15 C 38 15 54 20 66 30 C 50 32 34 38 22 50 Z"
         fill={`url(#negRibbonOverlay-${mode})`}
-        opacity="0.5"
+        opacity="0.6"
       />
 
       {/* NEGATIVE SPACE CUTOUT: Sculpted Speech Bubble + Chat Tail inside the "D" Loop */}
@@ -107,16 +95,20 @@ export default function Logo({
         fill={cutoutColor}
       />
 
-      {/* Small Chat Dot in Negative Space */}
-      <circle cx="43" cy="46" r="3" fill={`url(#negRibbonGrad-${mode})`} />
-      <circle cx="53" cy="46" r="3" fill={`url(#negRibbonGrad-${mode})`} />
+      {/* Small Chat Dots in Negative Space */}
+      <circle cx="43" cy="46" r="3.5" fill={`url(#negRibbonGrad-${mode})`} />
+      <circle cx="53" cy="46" r="3.5" fill={`url(#negRibbonGrad-${mode})`} />
     </svg>
   );
 
   const textContent = !isIconOnly && (
     <div className={`flex items-center tracking-tight font-black font-display ${dim.textSize}`}>
-      <span className={`${textColorDis} drop-shadow-[0_0_12px_rgba(255,42,109,0.6)]`}>DIS</span>
-      <span className={textColorEn}>cutons-En</span>
+      <span className="bg-gradient-to-r from-[#ff2a6d] via-[#ff4b7d] to-[#ff6699] bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(255,42,109,0.3)]">
+        DIS
+      </span>
+      <span className={mode === "dark" ? "text-white" : "text-slate-900"}>
+        cutons-En
+      </span>
     </div>
   );
 

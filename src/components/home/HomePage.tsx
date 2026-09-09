@@ -211,7 +211,7 @@ export default function HomePage() {
       {/* NAVBAR */}
       <header className="sticky top-0 z-40 border-b border-pink-100/80 bg-white/90 backdrop-blur-2xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Logo variant="horizontal" size="sm" href="/accueil" />
+          <Logo variant="horizontal" size="md" href="/accueil" />
 
           <div className="hidden items-center gap-3 md:flex">
             {(data.user.role === "ADMIN" || data.user.role === "SUPER_ADMIN") && (
