@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Logo from "@/components/brand/Logo";
-import { Download, X, Share, PlusSquare, Sparkles, CheckCircle2 } from "lucide-react";
+import { Download, X, Share, PlusSquare, Sparkles } from "lucide-react";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -99,42 +99,43 @@ export default function PwaInstallPrompt() {
     <>
       {/* Primary Install Banner */}
       <div className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 animate-in slide-in-from-bottom duration-300">
-        <div className="relative overflow-hidden rounded-2xl border border-cyan-400/30 bg-slate-950/90 p-4 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] text-white">
-          <div className="pointer-events-none absolute -top-10 -left-10 h-24 w-24 rounded-full bg-cyan-400/20 blur-xl" />
+        <div className="relative overflow-hidden rounded-3xl border border-pink-200 bg-white/95 p-4 sm:p-5 backdrop-blur-2xl shadow-[0_20px_50px_rgba(255,42,109,0.2)] text-slate-900">
+          <div className="pointer-events-none absolute -top-10 -left-10 h-24 w-24 rounded-full bg-pink-300/30 blur-xl" />
 
           <button
             onClick={handleDismiss}
-            className="absolute top-3 right-3 text-slate-400 hover:text-white p-1 transition"
+            className="absolute top-3 right-3 text-slate-400 hover:text-slate-700 p-1 transition"
             aria-label="Fermer"
           >
             <X className="h-4 w-4" />
           </button>
 
-          <div className="flex items-start gap-3 pr-6">
+          <div className="flex items-start gap-3.5 pr-6">
             <Logo variant="icon" size="sm" />
 
             <div className="space-y-1">
-              <h3 className="text-sm font-black font-display tracking-wide text-white flex items-center gap-1.5">
+              <h3 className="text-sm sm:text-base font-extrabold font-display text-slate-900 flex items-center gap-1.5">
                 Installer Discutons-En
+                <Sparkles className="h-4 w-4 text-[#ff2a6d]" />
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-slate-600 leading-relaxed font-medium">
                 Accès rapide depuis votre écran d'accueil, notifications instantanées et mode hors ligne.
               </p>
             </div>
           </div>
 
-          <div className="mt-3 flex items-center gap-2">
+          <div className="mt-4 flex items-center gap-2">
             <button
               onClick={handleInstallClick}
-              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 px-4 py-2.5 text-xs font-black font-display text-slate-950 transition hover:from-cyan-300 hover:to-sky-300 shadow-[0_0_15px_rgba(34,211,238,0.3)] active:scale-95"
+              className="flex-1 flex items-center justify-center gap-2 rounded-2xl btn-pink px-4 py-2.5 text-xs font-black font-display uppercase tracking-wider text-white shadow-lg active:scale-95"
             >
               <Download className="h-4 w-4" />
-              INSTALLER L'APPLICATION
+              TÉLÉCHARGER L'APPLICATION
             </button>
 
             <button
               onClick={handleDismiss}
-              className="rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-xs font-bold text-slate-300 hover:bg-white/10"
+              className="rounded-2xl border border-slate-200 bg-slate-100 px-3 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-200 transition"
             >
               Plus tard
             </button>
@@ -144,50 +145,50 @@ export default function PwaInstallPrompt() {
 
       {/* iOS Safari Guide Modal */}
       {showIosGuide && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative max-w-sm w-full rounded-3xl border border-cyan-400/30 bg-slate-900/95 p-6 backdrop-blur-2xl shadow-2xl text-white space-y-5">
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative max-w-sm w-full rounded-3xl border border-pink-200 bg-white p-6 backdrop-blur-2xl shadow-2xl text-slate-900 space-y-5">
             <button
               onClick={() => setShowIosGuide(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white p-1"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-1"
             >
               <X className="h-5 w-5" />
             </button>
 
             <div className="text-center space-y-2">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-400/10 border border-cyan-400/30 text-cyan-400">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-pink-50 border border-pink-200 text-[#ff2a6d]">
                 <Share className="h-7 w-7" />
               </div>
-              <h3 className="text-lg font-black font-display text-white">
-                Installer sur iPhone / iPad
+              <h3 className="text-lg font-extrabold font-display text-slate-900">
+                Télécharger sur iPhone / iPad
               </h3>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-slate-600 font-medium">
                 Suivez ces 2 étapes simples sur Safari :
               </p>
             </div>
 
-            <div className="space-y-3 text-xs text-slate-200">
-              <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-400 text-slate-950 font-black">
+            <div className="space-y-3 text-xs text-slate-700 font-medium">
+              <div className="flex items-center gap-3 rounded-2xl border border-pink-100 bg-pink-50/50 p-3">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#ff2a6d] text-white font-black">
                   1
                 </span>
                 <span>
-                  Appuyez sur le bouton <strong>Partager</strong> <Share className="inline h-3.5 w-3.5 text-cyan-400" /> dans la barre Safari.
+                  Appuyez sur le bouton <strong>Partager</strong> <Share className="inline h-3.5 w-3.5 text-[#ff2a6d]" /> dans la barre Safari.
                 </span>
               </div>
 
-              <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-400 text-slate-950 font-black">
+              <div className="flex items-center gap-3 rounded-2xl border border-pink-100 bg-pink-50/50 p-3">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#ff2a6d] text-white font-black">
                   2
                 </span>
                 <span>
-                  Défilez vers le bas et sélectionnez <strong>Sur l'écran d'accueil</strong> <PlusSquare className="inline h-3.5 w-3.5 text-cyan-400" />.
+                  Défilez vers le bas et sélectionnez <strong>Sur l'écran d'accueil</strong> <PlusSquare className="inline h-3.5 w-3.5 text-[#ff2a6d]" />.
                 </span>
               </div>
             </div>
 
             <button
               onClick={() => setShowIosGuide(false)}
-              className="w-full rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 py-2.5 text-xs font-black font-display text-slate-950"
+              className="w-full rounded-2xl btn-pink py-3 text-xs font-black font-display uppercase tracking-widest text-white shadow-lg"
             >
               COMPRIS !
             </button>

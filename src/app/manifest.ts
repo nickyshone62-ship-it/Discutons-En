@@ -9,13 +9,19 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: "#090d16",
-    theme_color: "#0f172a",
+    background_color: "#fdf8fa",
+    theme_color: "#ff2a6d",
     lang: "fr",
     id: "/",
     scope: "/",
     categories: ["social", "community", "productivity"],
     icons: [
+      {
+        src: "/icons/icon.svg",
+        sizes: "any",
+        type: "image/svg+xml",
+        purpose: "any",
+      },
       {
         src: "/icons/icon-192x192.png",
         sizes: "192x192",
@@ -39,12 +45,6 @@ export default function manifest(): MetadataRoute.Manifest {
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
-      },
-      {
-        src: "/icons/icon.svg",
-        sizes: "any",
-        type: "image/svg+xml",
-        purpose: "any",
       },
     ],
   };

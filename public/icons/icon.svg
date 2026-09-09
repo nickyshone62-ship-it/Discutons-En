@@ -1,22 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <!-- Background Dark Gradient -->
+    <!-- Background Gradient -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="50%" stop-color="#1e1b4b" />
-      <stop offset="100%" stop-color="#090d16" />
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="50%" stop-color="#fdf8fa" />
+      <stop offset="100%" stop-color="#faedf3" />
     </linearGradient>
 
-    <!-- Cyan to Sky to Indigo Ribbon Gradient -->
+    <!-- Hot Pink / Rose Ribbon Gradient -->
     <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#22d3ee" />
-      <stop offset="50%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#6366f1" />
+      <stop offset="0%" stop-color="#ff2a6d" />
+      <stop offset="50%" stop-color="#ff4b7d" />
+      <stop offset="100%" stop-color="#ff6699" />
     </linearGradient>
 
     <linearGradient id="ribbonOverlay" x1="100%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9" />
-      <stop offset="100%" stop-color="#6366f1" stop-opacity="0.95" />
+      <stop offset="0%" stop-color="#ff4b7d" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#ff6699" stop-opacity="0.95" />
     </linearGradient>
 
     <!-- Neon Glow Filter -->
@@ -30,7 +30,7 @@
   <rect width="512" height="512" rx="115" fill="url(#bgGrad)" />
   
   <!-- Outer Ring -->
-  <rect x="24" y="24" width="464" height="464" rx="95" fill="none" stroke="url(#ribbonGrad)" stroke-width="4" stroke-opacity="0.35" />
+  <rect x="24" y="24" width="464" height="464" rx="95" fill="none" stroke="url(#ribbonGrad)" stroke-width="6" stroke-opacity="0.4" />
 
   <!-- Negative Space Ribbon Emblem -->
   <g transform="translate(56, 56) scale(4)">
@@ -45,17 +45,17 @@
     <path
       d="M 22 15 C 38 15 54 20 66 30 C 50 32 34 38 22 50 Z"
       fill="url(#ribbonOverlay)"
-      opacity="0.5"
+      opacity="0.6"
     />
 
     <!-- NEGATIVE SPACE CUTOUT: Speech Bubble carved inside the ribbon "D" -->
     <path
       d="M 32 32 L 56 32 C 64 32 70 38 70 46 C 70 54 64 60 56 60 L 44 60 L 36 68 L 38 60 L 32 60 C 28 60 26 57 26 53 L 26 38 C 26 34 28 32 32 32 Z"
-      fill="#090d16"
+      fill="#ffffff"
     />
 
     <!-- Inner Chat Dots -->
-    <circle cx="43" cy="46" r="3" fill="url(#ribbonGrad)" />
-    <circle cx="53" cy="46" r="3" fill="url(#ribbonGrad)" />
+    <circle cx="43" cy="46" r="3.5" fill="url(#ribbonGrad)" />
+    <circle cx="53" cy="46" r="3.5" fill="url(#ribbonGrad)" />
   </g>
 </svg>

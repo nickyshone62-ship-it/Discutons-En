@@ -27,19 +27,19 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "Discutons-En",
   },
   icons: {
     icon: [
+      { url: "/icons/icon.svg", type: "image/svg+xml" },
       { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
       { url: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" },
-      { url: "/icons/icon.svg", type: "image/svg+xml" },
     ],
     apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/icons/icon.svg", type: "image/svg+xml" },
     ],
-    shortcut: ["/icons/icon-192x192.png"],
+    shortcut: ["/icons/icon.svg"],
   },
 };
 
@@ -48,7 +48,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#0f172a",
+  themeColor: "#ff2a6d",
 };
 
 export default function RootLayout({
@@ -58,7 +58,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${plusJakartaSans.variable} ${outfit.variable}`}>
-      <body className="font-sans antialiased selection:bg-cyan-400 selection:text-slate-950 min-h-screen bg-slate-950 text-slate-100">
+      <body className="font-sans antialiased selection:bg-[#ff2a6d] selection:text-white min-h-screen bg-[#fdf8fa] text-slate-900">
         <PwaProvider>
           <OfflineBanner />
           <GlobalChatNotification />
@@ -69,5 +69,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-
