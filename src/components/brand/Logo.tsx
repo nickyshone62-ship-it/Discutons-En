@@ -115,7 +115,7 @@ export default function Logo({
 
   const textContent = !isIconOnly && (
     <div className={`flex items-center tracking-tight font-black font-display ${dim.textSize}`}>
-      <span className={`${textColorDis} drop-shadow-[0_0_12px_rgba(34,211,238,0.4)]`}>DIS</span>
+      <span className={`${textColorDis} drop-shadow-[0_0_12px_rgba(255,42,109,0.6)]`}>DIS</span>
       <span className={textColorEn}>cutons-En</span>
     </div>
   );

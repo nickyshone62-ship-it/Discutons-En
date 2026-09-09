@@ -48,16 +48,16 @@ export default function LoginForm() {
 
   return (
     <div className="relative w-full max-w-md mx-auto">
-      {/* GLASS CARD CONTAINER */}
-      <div className="rounded-[32px] border border-rose-500/30 bg-slate-950/85 p-8 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-2xl text-white">
+      {/* BECKY UI LIGHT CARD CONTAINER */}
+      <div className="rounded-[36px] border border-pink-100/70 bg-white p-8 sm:p-10 shadow-[0_25px_65px_rgba(0,0,0,0.06)] text-slate-900">
         <div className="mb-7 text-center">
           <Logo variant="full" size="lg" href="/" className="mb-2" />
 
-          <h1 className="mt-6 text-3xl sm:text-4xl font-black font-display tracking-widest uppercase gradient-text-rose text-shadow-glow">
-            CONNEXION
+          <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold font-display tracking-tight text-slate-900">
+            Se connecter
           </h1>
 
-          <p className="mt-2 text-xs font-semibold leading-relaxed text-rose-100/90 max-w-xs mx-auto">
+          <p className="mt-2 text-xs font-medium leading-relaxed text-slate-500 max-w-xs mx-auto">
             Connecte-toi pour retrouver ton espace et la communauté.
           </p>
         </div>
@@ -66,14 +66,17 @@ export default function LoginForm() {
           {error && (
             <div
               role="alert"
-              className="rounded-2xl border border-red-400/50 bg-red-500/25 px-4 py-3 text-xs font-bold text-red-100 text-center shadow-lg"
+              className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-bold text-red-600 text-center shadow-sm"
             >
               {error}
             </div>
           )}
 
-          <div className="space-y-3.5">
+          <div className="space-y-4 text-left">
             <div>
+              <label htmlFor="login-email" className="mb-1.5 block text-xs font-bold text-slate-700">
+                Adresse email
+              </label>
               <input
                 id="login-email"
                 type="email"
@@ -81,37 +84,42 @@ export default function LoginForm() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                placeholder="Adresse Email"
-                className="h-12 w-full rounded-full bg-white px-6 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 focus:scale-[1.01] transition-all duration-300"
+                placeholder="Entrez votre adresse email"
+                className="h-13 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-medium text-slate-900 placeholder:text-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] focus:border-transparent transition-all duration-200"
               />
             </div>
 
-            <div className="relative">
-              <input
-                id="login-password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="Mot de passe"
-                className="h-12 w-full rounded-full bg-white px-6 pr-12 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none shadow-inner focus:ring-4 focus:ring-rose-400/80 focus:border-rose-400 focus:scale-[1.01] transition-all duration-300"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition"
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
+            <div>
+              <label htmlFor="login-password" className="mb-1.5 block text-xs font-bold text-slate-700">
+                Mot de passe
+              </label>
+              <div className="relative">
+                <input
+                  id="login-password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="Entrez votre mot de passe"
+                  className="h-13 w-full rounded-2xl bg-[#f4f3f6] px-5 pr-12 text-sm font-medium text-slate-900 placeholder:text-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] focus:border-transparent transition-all duration-200"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* LOGIN SUBMIT BUTTON */}
+          {/* BECKY EXACT GRADIENT BUTTON (ROSE TO ORANGE) */}
           <button
             type="submit"
             disabled={loading}
-            className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 hover:from-rose-400 hover:to-pink-400 text-white font-black font-display text-sm uppercase tracking-widest transition-all duration-300 transform active:scale-95 shadow-[0_0_30px_rgba(244,63,94,0.5)] hover:shadow-[0_0_40px_rgba(244,63,94,0.75)] disabled:opacity-60"
+            className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-2xl btn-becky font-extrabold font-display text-sm uppercase tracking-wider transition-all duration-300 transform active:scale-95 disabled:opacity-60"
           >
             {loading ? (
               <>
@@ -121,19 +129,19 @@ export default function LoginForm() {
             ) : (
               <>
                 SE CONNECTER
-                <ArrowRight size={20} />
+                <ArrowRight size={18} />
               </>
             )}
           </button>
         </form>
 
-        <p className="mt-7 text-center text-xs font-bold text-rose-100">
+        <p className="mt-8 text-center text-xs font-medium text-slate-600">
           Pas encore de compte ?{" "}
           <Link
             href="/inscription"
-            className="font-black text-rose-400 hover:text-white underline tracking-wider transition"
+            className="font-bold text-slate-900 hover:text-[#ff2a6d] transition"
           >
-            CRÉER UN COMPTE
+            Créer un compte
           </Link>
         </p>
       </div>

@@ -730,11 +730,11 @@ export default function AdminDashboard() {
                 <CreditCard size={20} /> Moyens de Paiement Supportés
               </h3>
               <div className="space-y-3 text-xs">
-                <div className="p-4 rounded-2xl bg-orange-950/20 border border-orange-500/30 space-y-1">
-                  <div className="flex items-center gap-2 text-orange-300 font-black text-sm">
+                <div className="p-4 rounded-2xl bg-pink-950/30 border border-pink-500/30 space-y-1">
+                  <div className="flex items-center gap-2 text-pink-300 font-black text-sm">
                     <OrangeMoneyLogo className="h-6 w-6" /> Orange Money
                   </div>
-                  <p className="text-orange-100/80">Code USSD direct : <code className="bg-black/50 px-1.5 py-0.5 rounded text-amber-300">*144*2*1*06887330*500#</code></p>
+                  <p className="text-pink-100/80">Code USSD direct : <code className="bg-black/50 px-1.5 py-0.5 rounded text-pink-300">*144*2*1*06887330*500#</code></p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 space-y-1">

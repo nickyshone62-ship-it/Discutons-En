@@ -150,7 +150,6 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, []);
 
-
   async function handleLogout() {
     try {
       await fetch("/api/auth/logout", {
@@ -163,7 +162,7 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-purple-950 via-indigo-950 to-slate-950 p-6 text-white">
+      <main className="min-h-screen bg-gradient-to-br from-[#9f1239] via-[#881337] to-[#4c0519] p-6 text-white">
         <div className="mx-auto max-w-7xl px-4 py-6">
           <div className="h-16 animate-pulse rounded-3xl bg-white/10" />
           <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr]">
@@ -180,20 +179,20 @@ export default function HomePage() {
 
   if (error || !data) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple-950 via-indigo-950 to-slate-950 px-4 text-white">
+      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#9f1239] via-[#881337] to-[#4c0519] px-4 text-white">
         <div className="w-full max-w-md rounded-3xl border border-white/20 bg-white/10 p-8 text-center backdrop-blur-xl shadow-2xl">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/20 text-red-300 font-bold text-xl">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-pink-500/20 text-pink-300 font-bold text-xl">
             !
           </div>
           <h1 className="mt-5 text-xl font-black font-display tracking-wide text-white">
             Une erreur est survenue
           </h1>
-          <p className="mt-2 text-xs font-semibold text-cyan-100/80">
+          <p className="mt-2 text-xs font-semibold text-rose-100/80">
             {error || "Impossible de charger votre espace."}
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-6 rounded-full bg-cyan-400 px-6 py-3 text-xs font-black font-display text-slate-950 uppercase tracking-widest shadow-lg shadow-cyan-400/40 hover:bg-cyan-300 transition"
+            className="mt-6 rounded-full btn-pink px-6 py-3 text-xs font-black font-display uppercase tracking-widest shadow-lg"
           >
             Réessayer
           </button>
@@ -203,14 +202,14 @@ export default function HomePage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-gradient-to-br from-[#18030a] via-[#4c0519] to-[#0f172a] text-white pb-24 overflow-x-hidden font-sans">
+    <main className="relative min-h-screen bg-gradient-to-br from-[#9f1239] via-[#881337] to-[#4c0519] text-white pb-24 overflow-x-hidden font-sans">
       {/* GEOMETRIC BACKGROUND DECORATIONS */}
       <div className="pointer-events-none fixed -top-20 -left-20 h-96 w-96 rounded-full bg-rose-500/20 blur-3xl" />
       <div className="pointer-events-none fixed top-1/3 right-0 h-96 w-96 rounded-full bg-pink-500/15 blur-3xl" />
       <div className="pointer-events-none fixed bottom-10 left-1/4 h-80 w-80 rounded-full bg-rose-600/20 blur-3xl" />
 
       {/* NAVBAR */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/85 backdrop-blur-2xl">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#4c0519]/90 backdrop-blur-2xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Logo variant="horizontal" size="sm" href="/accueil" />
 
@@ -218,16 +217,16 @@ export default function HomePage() {
             {(data.user.role === "ADMIN" || data.user.role === "SUPER_ADMIN") && (
               <Link
                 href="/admin"
-                className="flex h-10 items-center gap-2 rounded-full border border-rose-400/40 bg-rose-500/20 px-4 text-xs font-black font-display uppercase tracking-wider text-rose-200 hover:bg-rose-500/30 hover:text-white transition shadow-[0_0_15px_rgba(244,63,94,0.3)]"
+                className="flex h-10 items-center gap-2 rounded-full border border-pink-400/40 bg-pink-500/20 px-4 text-xs font-bold uppercase tracking-wider text-pink-200 hover:bg-pink-500/30 transition shadow-sm"
               >
-                <ShieldCheck size={16} className="text-rose-300" />
+                <ShieldCheck size={16} className="text-[#ff2a6d]" />
                 Admin
               </Link>
             )}
 
             <Link
               href="/chat"
-              className="flex h-10 items-center gap-2 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-400 hover:to-pink-400 text-white px-4.5 text-xs font-black font-display uppercase tracking-wider transition shadow-lg shadow-rose-500/30 transform active:scale-95"
+              className="flex h-10 items-center gap-2 rounded-full btn-pink px-4.5 text-xs font-black font-display uppercase tracking-wider transition shadow-md transform active:scale-95 text-white"
             >
               <MessageSquare size={16} />
               Chat en direct
@@ -246,7 +245,7 @@ export default function HomePage() {
               aria-label="Notifications"
             >
               <Bell size={18} />
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-400 animate-ping" />
+              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#ff2a6d] animate-ping" />
             </button>
 
             <div className="h-6 w-px bg-white/20 mx-1" />
@@ -259,13 +258,13 @@ export default function HomePage() {
               <img
                 src={data.identity.avatarUrl}
                 alt={data.identity.anonymousName}
-                className="h-8 w-8 rounded-full border border-cyan-400/60"
+                className="h-8 w-8 rounded-full border-2 border-[#ff2a6d]"
               />
               <div className="hidden text-left lg:block">
                 <p className="text-xs font-black text-white leading-tight font-display">
                   {data.identity.anonymousName}
                 </p>
-                <p className="text-[10px] text-cyan-300 font-bold">
+                <p className="text-[10px] text-pink-300 font-bold">
                   Mon compte →
                 </p>
               </div>
@@ -273,7 +272,7 @@ export default function HomePage() {
 
             <button
               onClick={handleLogout}
-              className="rounded-full p-2 text-slate-300 hover:bg-white/20 hover:text-red-400 transition"
+              className="rounded-full p-2 text-pink-200 hover:bg-white/20 hover:text-white transition"
               aria-label="Se déconnecter"
               title="Se déconnecter"
             >
@@ -291,7 +290,7 @@ export default function HomePage() {
         </div>
 
         {menuOpen && (
-          <div className="border-t border-white/10 bg-slate-950/95 px-4 py-4 backdrop-blur-2xl md:hidden">
+          <div className="border-t border-white/10 bg-[#4c0519]/95 px-4 py-4 backdrop-blur-2xl md:hidden">
             <Link
               href="/compte"
               onClick={() => setMenuOpen(false)}
@@ -300,13 +299,13 @@ export default function HomePage() {
               <img
                 src={data.identity.avatarUrl}
                 alt={data.identity.anonymousName}
-                className="h-11 w-11 rounded-full border border-cyan-400"
+                className="h-11 w-11 rounded-full border-2 border-[#ff2a6d]"
               />
               <div>
                 <p className="text-sm font-bold text-white">
                   {data.identity.anonymousName}
                 </p>
-                <p className="text-xs text-cyan-300 font-bold">
+                <p className="text-xs text-pink-300 font-bold">
                   Gérer mon compte →
                 </p>
               </div>
@@ -317,7 +316,7 @@ export default function HomePage() {
                 <Link
                   href="/admin"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-2xl bg-purple-500/20 border border-purple-400/50 px-4 py-3 text-sm font-black text-purple-300"
+                  className="flex items-center gap-3 rounded-2xl bg-pink-500/20 border border-pink-400/50 px-4 py-3 text-sm font-black text-pink-200"
                 >
                   <ShieldCheck size={18} />
                   Espace Administrateur 🛡️
@@ -336,7 +335,7 @@ export default function HomePage() {
               <Link
                 href="/chat"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 rounded-2xl bg-cyan-400 px-4 py-3 text-sm font-black text-slate-950 uppercase font-display"
+                className="flex items-center gap-3 rounded-2xl btn-pink px-4 py-3 text-sm font-black text-white uppercase font-display"
               >
                 <MessageSquare size={18} />
                 Chat en direct
@@ -353,7 +352,7 @@ export default function HomePage() {
 
               <button
                 onClick={handleLogout}
-                className="flex w-full items-center gap-3 rounded-2xl bg-red-500/20 px-4 py-3 text-left text-sm font-bold text-red-300"
+                className="flex w-full items-center gap-3 rounded-2xl bg-red-500/20 px-4 py-3 text-left text-sm font-bold text-red-200"
               >
                 <LogOut size={18} />
                 Se déconnecter
@@ -372,15 +371,15 @@ export default function HomePage() {
               <div className="rounded-3xl border border-white/20 bg-white/10 p-4 backdrop-blur-2xl shadow-xl space-y-2">
                 <Link
                   href="/accueil"
-                  className="flex items-center gap-3 rounded-2xl bg-cyan-400/20 border border-cyan-400/40 px-4 py-3 text-sm font-black font-display text-cyan-300"
+                  className="flex items-center gap-3 rounded-2xl bg-[#ff2a6d]/20 border border-[#ff2a6d]/40 px-4 py-3 text-sm font-black font-display text-white"
                 >
-                  <Home size={18} />
+                  <Home size={18} className="text-[#ff2a6d]" />
                   Accueil
                 </Link>
 
                 <Link
                   href="/chat"
-                  className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 px-4 py-3 text-sm font-black font-display text-slate-950 uppercase tracking-wider transition shadow-lg shadow-cyan-400/30 hover:scale-[1.02] duration-300"
+                  className="flex items-center gap-3 rounded-2xl btn-pink px-4 py-3 text-sm font-black font-display text-white uppercase tracking-wider transition shadow-lg hover:scale-[1.02] duration-300"
                 >
                   <MessageSquare size={18} />
                   Chat en direct
@@ -388,7 +387,7 @@ export default function HomePage() {
 
                 <Link
                   href="/recherche"
-                  className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold text-slate-200 transition hover:bg-white/10"
+                  className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold text-pink-100 transition hover:bg-white/10"
                 >
                   <Search size={18} />
                   Rechercher
@@ -397,7 +396,7 @@ export default function HomePage() {
 
               {/* CATEGORIES CARD */}
               <div className="rounded-3xl border border-white/20 bg-white/10 p-4.5 backdrop-blur-2xl shadow-xl">
-                <h2 className="mb-3 text-xs font-black font-display uppercase tracking-widest text-cyan-300">
+                <h2 className="mb-3 text-xs font-black font-display uppercase tracking-widest text-pink-300">
                   Catégories
                 </h2>
 
@@ -405,7 +404,7 @@ export default function HomePage() {
                   {data.categories.map((category) => (
                     <button
                       key={category.id}
-                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-slate-200 transition hover:bg-white/15 hover:text-white"
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-pink-100 transition hover:bg-white/15 hover:text-white"
                     >
                       <span className="text-base">
                         {getCategoryIcon(category.icon)}
@@ -421,18 +420,18 @@ export default function HomePage() {
           {/* MAIN FEED SECTION */}
           <section className="min-w-0 space-y-6">
             {/* HERO WELCOME BANNER */}
-            <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-r from-purple-900/90 via-indigo-900/90 to-blue-900/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:p-8">
-              <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-cyan-400/30 blur-3xl" />
+            <div className="relative overflow-hidden rounded-3xl border border-pink-400/30 bg-gradient-to-r from-[#881337] via-[#9f1239] to-[#be185d] p-6 text-white shadow-2xl backdrop-blur-2xl sm:p-8">
+              <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#ff2a6d]/30 blur-3xl" />
 
               <div className="relative z-10">
                 <div className="flex items-center gap-3">
                   <img
                     src={data.identity.avatarUrl}
                     alt={data.identity.anonymousName}
-                    className="h-12 w-12 rounded-full border-2 border-cyan-400 shadow-lg"
+                    className="h-12 w-12 rounded-full border-2 border-white shadow-lg"
                   />
                   <div>
-                    <p className="text-xs font-semibold text-cyan-200">
+                    <p className="text-xs font-semibold text-pink-200">
                       Bienvenue
                     </p>
                     <p className="font-black font-display text-white text-base">
@@ -441,17 +440,17 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <h1 className="mt-5 max-w-xl text-2xl font-black font-display tracking-tight sm:text-3xl gradient-text-cyan text-shadow-glow">
+                <h1 className="mt-5 max-w-xl text-2xl font-black font-display tracking-tight sm:text-3xl text-white text-shadow-glow">
                   Quel problème veux-tu partager aujourd'hui ?
                 </h1>
 
-                <p className="mt-2.5 max-w-xl text-xs sm:text-sm leading-relaxed text-cyan-100/90 font-medium">
+                <p className="mt-2.5 max-w-xl text-xs sm:text-sm leading-relaxed text-pink-100/90 font-medium">
                   Exprime-toi librement. La communauté est là pour t'écouter, échanger et trouver la meilleure voie avec toi.
                 </p>
 
                 <Link
                   href="/publier"
-                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 via-cyan-300 to-sky-400 hover:from-cyan-300 hover:to-cyan-200 px-7 py-3.5 text-xs font-black font-display uppercase tracking-widest text-slate-950 shadow-[0_0_25px_rgba(34,211,238,0.5)] transition transform hover:scale-[1.03] active:scale-95 duration-300"
+                  className="mt-6 inline-flex items-center gap-2 rounded-full btn-pink px-7 py-3.5 text-xs font-black font-display uppercase tracking-widest text-white shadow-lg transition transform hover:scale-[1.03] active:scale-95 duration-300"
                 >
                   <Plus size={18} />
                   Partager un problème
@@ -461,7 +460,7 @@ export default function HomePage() {
 
             {/* MOBILE CATEGORIES */}
             <div className="lg:hidden">
-              <h2 className="mb-2 text-xs font-black font-display uppercase tracking-widest text-cyan-300">
+              <h2 className="mb-2 text-xs font-black font-display uppercase tracking-widest text-pink-300">
                 Catégories
               </h2>
               <div className="flex gap-2 overflow-x-auto pb-2">
@@ -481,7 +480,7 @@ export default function HomePage() {
             <div>
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-black font-display uppercase tracking-widest text-cyan-400 text-shadow-glow">
+                  <p className="text-xs font-black font-display uppercase tracking-widest text-pink-300 text-shadow-glow">
                     Communauté
                   </p>
                   <h2 className="text-2xl font-black font-display text-white">
@@ -489,7 +488,7 @@ export default function HomePage() {
                   </h2>
                 </div>
 
-                <button className="flex items-center gap-1 text-xs font-bold text-cyan-300 hover:text-white transition">
+                <button className="flex items-center gap-1 text-xs font-bold text-pink-300 hover:text-white transition">
                   Voir tout
                   <ChevronRight size={16} />
                 </button>
@@ -497,16 +496,16 @@ export default function HomePage() {
 
               {data.posts.length === 0 ? (
                 <div className="rounded-3xl border border-dashed border-white/20 bg-white/10 p-10 text-center backdrop-blur-2xl">
-                  <MessageCircle size={36} className="mx-auto text-cyan-300 mb-3" />
+                  <MessageCircle size={36} className="mx-auto text-pink-300 mb-3" />
                   <h3 className="font-black font-display text-white text-lg">
                     Aucun problème pour le moment
                   </h3>
-                  <p className="mx-auto mt-2 max-w-sm text-xs font-medium text-cyan-100/80">
+                  <p className="mx-auto mt-2 max-w-sm text-xs font-medium text-pink-100/80">
                     Sois le premier à partager quelque chose avec la communauté.
                   </p>
                   <Link
                     href="/publier"
-                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-cyan-400 px-6 py-3 text-xs font-black font-display uppercase text-slate-950 shadow-lg shadow-cyan-400/40"
+                    className="mt-6 inline-flex items-center gap-2 rounded-full btn-pink px-6 py-3 text-xs font-black font-display uppercase text-white shadow-lg"
                   >
                     <Plus size={16} />
                     Publier un problème
@@ -517,26 +516,26 @@ export default function HomePage() {
                   {data.posts.map((post) => (
                     <article
                       key={post.id}
-                      className="rounded-3xl border border-white/20 bg-white/10 p-5 sm:p-6 shadow-xl backdrop-blur-2xl transition-all duration-300 hover:border-cyan-400/50 hover:bg-white/15 hover:-translate-y-0.5"
+                      className="rounded-3xl border border-white/20 bg-white/10 p-5 sm:p-6 shadow-xl backdrop-blur-2xl transition-all duration-300 hover:border-pink-400/50 hover:bg-white/15 hover:-translate-y-0.5"
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex min-w-0 items-center gap-3">
                           <img
                             src={post.author.avatarUrl}
                             alt={post.author.anonymousName}
-                            className="h-10 w-10 shrink-0 rounded-full border border-cyan-400/40 shadow-sm"
+                            className="h-10 w-10 shrink-0 rounded-full border border-pink-400/40 shadow-sm"
                           />
                           <div className="min-w-0">
                             <p className="truncate text-xs font-black font-display text-white">
                               {post.author.anonymousName}
                             </p>
-                            <p className="text-[10px] font-semibold text-cyan-200/70">
+                            <p className="text-[10px] font-semibold text-pink-200/70">
                               {formatDate(post.createdAt)}
                             </p>
                           </div>
                         </div>
 
-                        <span className="shrink-0 rounded-full bg-cyan-400/20 border border-cyan-400/40 px-3.5 py-1 text-xs font-extrabold text-cyan-300">
+                        <span className="shrink-0 rounded-full bg-[#ff2a6d]/20 border border-[#ff2a6d]/40 px-3.5 py-1 text-xs font-extrabold text-pink-200">
                           {getCategoryIcon(post.category.icon)}{" "}
                           {post.category.name}
                         </span>
@@ -546,36 +545,36 @@ export default function HomePage() {
                         href={`/probleme/${post.id}`}
                         className="mt-4 block group"
                       >
-                        <h3 className="text-lg sm:text-xl font-black font-display leading-snug text-white transition group-hover:text-cyan-300">
+                        <h3 className="text-lg sm:text-xl font-black font-display leading-snug text-white transition group-hover:text-pink-300">
                           {post.title}
                         </h3>
 
-                        <p className="mt-2 line-clamp-3 text-xs sm:text-sm leading-relaxed text-cyan-100/85 font-medium">
+                        <p className="mt-2 line-clamp-3 text-xs sm:text-sm leading-relaxed text-pink-100/85 font-medium">
                           {post.content}
                         </p>
                       </Link>
 
                       <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-                        <div className="flex items-center gap-5 text-xs font-bold text-cyan-200/80">
+                        <div className="flex items-center gap-5 text-xs font-bold text-pink-200/80">
                           <span className="flex items-center gap-1.5">
-                            <MessageCircle size={16} className="text-cyan-400" />
+                            <MessageCircle size={16} className="text-[#ff2a6d]" />
                             {post.commentsCount}
                           </span>
 
                           <span className="flex items-center gap-1.5">
-                            <Heart size={16} className="text-rose-400" />
+                            <Heart size={16} className="text-[#ff2a6d]" />
                             {post.likesCount}
                           </span>
 
                           <span className="flex items-center gap-1.5">
-                            <Eye size={16} className="text-cyan-300" />
+                            <Eye size={16} className="text-pink-300" />
                             {post.viewsCount}
                           </span>
                         </div>
 
                         <Link
                           href={`/probleme/${post.id}`}
-                          className="text-xs font-black font-display text-cyan-300 hover:text-white transition"
+                          className="text-xs font-black font-display text-pink-300 hover:text-white transition"
                         >
                           Voir la discussion →
                         </Link>
@@ -591,15 +590,15 @@ export default function HomePage() {
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-4">
               {/* RECENT MESSAGES CARD */}
-              <div className="rounded-3xl border border-cyan-400/30 bg-slate-900/60 p-5 backdrop-blur-2xl shadow-xl space-y-3.5">
+              <div className="rounded-3xl border border-pink-400/30 bg-white/10 p-5 backdrop-blur-2xl shadow-xl space-y-3.5">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-black font-display uppercase tracking-wider text-white flex items-center gap-2">
-                    <MessageSquare size={16} className="text-cyan-400" />
+                    <MessageSquare size={16} className="text-[#ff2a6d]" />
                     Messages Récents
                   </h3>
 
                   {data.unreadCount && data.unreadCount > 0 ? (
-                    <span className="flex h-5 px-2 items-center justify-center rounded-full bg-cyan-400 text-[10px] font-black text-slate-950 animate-pulse">
+                    <span className="flex h-5 px-2 items-center justify-center rounded-full bg-[#ff2a6d] text-[10px] font-black text-white animate-pulse">
                       {data.unreadCount} non lus
                     </span>
                   ) : null}
@@ -611,23 +610,23 @@ export default function HomePage() {
                       <Link
                         key={msg.id}
                         href="/chat"
-                        className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/5 p-2.5 transition hover:bg-white/10 hover:border-cyan-400/40"
+                        className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/5 p-2.5 transition hover:bg-white/10 hover:border-pink-400/40"
                       >
                         <img
                           src={msg.author.avatarUrl}
                           alt={msg.author.anonymousName}
-                          className="h-8 w-8 rounded-full shrink-0 border border-cyan-400/40 object-cover"
+                          className="h-8 w-8 rounded-full shrink-0 border border-pink-400/40 object-cover"
                         />
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between text-[11px]">
                             <span className="font-bold text-white truncate">
                               {msg.author.anonymousName}
                             </span>
-                            <span className="text-[9px] text-cyan-200/60 font-medium">
+                            <span className="text-[9px] text-pink-200/60 font-medium">
                               {formatDate(msg.createdAt)}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-300 truncate">
+                          <p className="text-xs text-pink-100/80 truncate">
                             {msg.audioUrl ? "🎙️ Message vocal" : msg.content}
                           </p>
                         </div>
@@ -636,46 +635,46 @@ export default function HomePage() {
 
                     <Link
                       href="/chat"
-                      className="block text-center text-xs font-black font-display text-cyan-300 hover:text-white pt-1 transition"
+                      className="block text-center text-xs font-black font-display text-pink-300 hover:text-white pt-1 transition"
                     >
                       Ouvrir le chat →
                     </Link>
                   </div>
                 ) : (
-                  <p className="text-xs text-slate-400 italic">Aucun message récent.</p>
+                  <p className="text-xs text-pink-200/60 italic">Aucun message récent.</p>
                 )}
               </div>
 
               <div className="rounded-3xl border border-white/20 bg-white/10 p-5 backdrop-blur-2xl shadow-xl space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-400/20 text-cyan-300 border border-cyan-400/40">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#ff2a6d]/20 text-[#ff2a6d] border border-[#ff2a6d]/40">
                     <ShieldCheck size={20} />
                   </div>
                   <div>
                     <h2 className="text-xs font-black font-display uppercase text-white">
                       Anonymat garanti
                     </h2>
-                    <p className="text-[10px] font-bold text-cyan-300">Toujours protégé</p>
+                    <p className="text-[10px] font-bold text-pink-300">Toujours protégé</p>
                   </div>
                 </div>
-                <p className="text-xs leading-relaxed text-cyan-100/80 font-medium">
+                <p className="text-xs leading-relaxed text-pink-100/80 font-medium">
                   Les autres membres voient uniquement ton pseudonyme anonyme attribué. Tes données personnelles sont privées.
                 </p>
               </div>
 
               <div className="rounded-3xl border border-white/20 bg-white/10 p-5 backdrop-blur-2xl shadow-xl space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-400/20 text-amber-300 border border-amber-400/40">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-pink-500/20 text-pink-300 border border-pink-500/40">
                     <Sparkles size={19} />
                   </div>
                   <div>
                     <h2 className="text-xs font-black font-display uppercase text-white">
                       Bienveillance
                     </h2>
-                    <p className="text-[10px] font-bold text-amber-300">Notre priorité</p>
+                    <p className="text-[10px] font-bold text-pink-300">Notre priorité</p>
                   </div>
                 </div>
-                <p className="text-xs leading-relaxed text-cyan-100/80 font-medium">
+                <p className="text-xs leading-relaxed text-pink-100/80 font-medium">
                   Échange avec respect et empathie. Chaque problème mérite d'être écouté sans jugement.
                 </p>
               </div>
@@ -685,11 +684,11 @@ export default function HomePage() {
       </div>
 
       {/* MOBILE BOTTOM NAV */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/15 bg-slate-950/95 px-4 py-2 backdrop-blur-2xl lg:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/15 bg-[#4c0519]/95 px-4 py-2 backdrop-blur-2xl lg:hidden">
         <div className="mx-auto flex max-w-md items-center justify-around">
           <Link
             href="/accueil"
-            className="flex flex-col items-center gap-1 px-3 py-1.5 text-cyan-400"
+            className="flex flex-col items-center gap-1 px-3 py-1.5 text-[#ff2a6d]"
           >
             <Home size={20} />
             <span className="text-[10px] font-bold">Accueil</span>
@@ -697,11 +696,11 @@ export default function HomePage() {
 
           <Link
             href="/chat"
-            className="relative flex flex-col items-center gap-1 px-3 py-1.5 text-slate-300 hover:text-cyan-300"
+            className="relative flex flex-col items-center gap-1 px-3 py-1.5 text-pink-200 hover:text-white"
           >
             <MessageSquare size={20} />
             {data.unreadCount && data.unreadCount > 0 ? (
-              <span className="absolute top-0 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-cyan-400 text-[9px] font-black text-slate-950 shadow-sm animate-pulse">
+              <span className="absolute top-0 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff2a6d] text-[9px] font-black text-white shadow-sm animate-pulse">
                 {data.unreadCount}
               </span>
             ) : null}
@@ -710,7 +709,7 @@ export default function HomePage() {
 
           <Link
             href="/publier"
-            className="flex h-12 w-12 -translate-y-3 items-center justify-center rounded-full bg-cyan-400 text-slate-950 shadow-lg shadow-cyan-400/50"
+            className="flex h-12 w-12 -translate-y-3 items-center justify-center rounded-full btn-pink text-white shadow-lg"
             aria-label="Publier"
           >
             <Plus size={24} />
@@ -718,7 +717,7 @@ export default function HomePage() {
 
           <Link
             href="/recherche"
-            className="flex flex-col items-center gap-1 px-3 py-1.5 text-slate-300"
+            className="flex flex-col items-center gap-1 px-3 py-1.5 text-pink-200"
           >
             <Search size={20} />
             <span className="text-[10px] font-bold">Recherche</span>
@@ -726,7 +725,7 @@ export default function HomePage() {
 
           <Link
             href="/compte"
-            className="flex flex-col items-center gap-1 px-3 py-1.5 text-slate-300"
+            className="flex flex-col items-center gap-1 px-3 py-1.5 text-pink-200"
           >
             <ShieldCheck size={20} />
             <span className="text-[10px] font-bold">Compte</span>

@@ -14,88 +14,109 @@
     font-family: var(--font-display), 'Outfit', system-ui, sans-serif;
   }
 
-  /* Glassmorphism Styles - Figma Dating/Social Style */
+  /* Glassmorphism Styles - Pure Hot Pink & Rose Aesthetic */
   .bg-glass {
-    background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+    background: #ffffff;
+    border: 1px solid rgba(255, 42, 109, 0.15);
+    box-shadow: 0 20px 50px rgba(255, 42, 109, 0.08), 0 8px 25px rgba(0, 0, 0, 0.04);
   }
 
   .bg-glass-card {
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-    border: 1px solid rgba(244, 63, 94, 0.25);
-    box-shadow: 0 16px 40px 0 rgba(15, 23, 42, 0.6);
+    background: #ffffff;
+    border: 1px solid rgba(255, 42, 109, 0.15);
+    box-shadow: 0 25px 60px rgba(255, 42, 109, 0.12), 0 10px 30px rgba(0, 0, 0, 0.04);
   }
 
   .bg-glass-card-hover {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .bg-glass-card-hover:hover {
-    background: rgba(244, 63, 94, 0.12);
-    border-color: rgba(251, 113, 133, 0.6);
-    box-shadow: 0 20px 50px 0 rgba(244, 63, 94, 0.35);
+    background: #ffffff;
+    border-color: rgba(255, 42, 109, 0.4);
+    box-shadow: 0 20px 50px 0 rgba(255, 42, 109, 0.2);
     transform: translateY(-2px);
   }
 
   .bg-glass-input {
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(16px);
-    color: #ffffff;
+    background: #f4f3f6;
+    border: 1px solid transparent;
+    color: #0f172a;
     transition: all 0.25s ease;
   }
   .bg-glass-input:focus {
     outline: none;
-    border-color: #fb7185;
-    box-shadow: 0 0 25px rgba(244, 63, 94, 0.45);
-    background: rgba(15, 23, 42, 0.95);
+    border-color: #ff2a6d;
+    box-shadow: 0 0 0 4px rgba(255, 42, 109, 0.18);
+    background: #ffffff;
   }
 
-  /* Text Effects & Typography Gradients */
+  /* Pure Hot Pink / Rose Gradient Button (NO ORANGE) */
+  .btn-becky, .btn-pink {
+    background: linear-gradient(90deg, #ff2a6d 0%, #ff4b7d 50%, #ff6699 100%);
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(255, 42, 109, 0.38);
+    transition: all 0.3s ease;
+  }
+  .btn-becky:hover, .btn-pink:hover {
+    box-shadow: 0 15px 35px rgba(255, 42, 109, 0.55);
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+  }
+
+  /* Hot Pink Badges / Pills */
+  .badge-pink {
+    background: #ff2a6d;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(255, 42, 109, 0.35);
+  }
+
+  .badge-pink-soft {
+    background: rgba(255, 42, 109, 0.12);
+    color: #ff2a6d;
+    border: 1px solid rgba(255, 42, 109, 0.3);
+  }
+
+  /* Text Effects & Typography Gradients - Pure Pink Palette */
   .gradient-text-cyan {
-    background: linear-gradient(135deg, #ffffff 0%, #fecdd3 35%, #fb7185 70%, #e11d48 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #ff2a6d 50%, #ff6699 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .gradient-text-blue {
-    background: linear-gradient(135deg, #ffffff 0%, #ffe4e6 40%, #fda4af 75%, #f43f5e 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #ff2a6d 60%, #ff4b7d 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .gradient-text-rose {
-    background: linear-gradient(135deg, #ffffff 0%, #fecdd3 40%, #fb7185 75%, #e11d48 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #ff2a6d 50%, #ff6699 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .gradient-text-purple {
-    background: linear-gradient(135deg, #ffffff 0%, #fecdd3 40%, #fb7185 80%, #be123c 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #ff2a6d 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .gradient-text-gold {
-    background: linear-gradient(135deg, #ffffff 0%, #fef08a 45%, #fde047 75%, #eab308 100%);
+    background: linear-gradient(135deg, #ff2a6d 0%, #ff6699 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .text-shadow-glow {
-    text-shadow: 0 0 25px rgba(244, 63, 94, 0.8), 0 0 45px rgba(225, 29, 72, 0.6);
+    text-shadow: 0 0 25px rgba(255, 42, 109, 0.35);
   }
 
   .text-shadow-purple-glow {
-    text-shadow: 0 0 25px rgba(251, 113, 133, 0.8);
+    text-shadow: 0 0 25px rgba(255, 42, 109, 0.35);
   }
 
   .text-shadow-title {
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -147,8 +168,8 @@ html {
 }
 
 body {
-  background: linear-gradient(135deg, #18030a 0%, #4c0519 25%, #881337 55%, #be123c 85%, #0f172a 100%);
-  color: #f8fafc;
+  background: linear-gradient(135deg, #9f1239 0%, #881337 40%, #4c0519 100%);
+  color: #ffffff;
   min-height: 100vh;
   font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
   overflow-x: hidden;
@@ -162,21 +183,21 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.025em;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Pure Hot Pink */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.95);
+  background: #4c0519;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #fb7185 0%, #be123c 100%);
+  background: linear-gradient(180deg, #ff2a6d 0%, #ff6699 100%);
   border-radius: 9999px;
-  border: 2px solid rgba(15, 23, 42, 0.9);
+  border: 2px solid #4c0519;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #fda4af 0%, #e11d48 100%);
+  background: linear-gradient(180deg, #ff0055 0%, #ff4b7d 100%);
 }
 
 /* Prevent iOS / Mobile Safari / Chrome auto-zoom on input focus */
@@ -187,5 +208,6 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 16px !important;
   }
 }
+
 
 

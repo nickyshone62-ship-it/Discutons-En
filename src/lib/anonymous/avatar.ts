@@ -15,22 +15,22 @@ export type SnapchatAvatarPreset = {
 };
 
 const BG_GRADIENTS = [
-  "from-cyan-400 to-sky-500",
+  "from-pink-500 to-rose-600",
   "from-rose-500 to-pink-500",
-  "from-purple-500 to-indigo-500",
-  "from-amber-400 to-yellow-500",
-  "from-emerald-400 to-teal-500",
+  "from-pink-400 to-rose-500",
+  "from-rose-600 to-pink-400",
+  "from-pink-600 to-rose-700",
   "from-pink-500 to-rose-400",
-  "from-blue-500 to-cyan-500",
-  "from-orange-400 to-amber-500",
-  "from-violet-500 to-purple-600",
-  "from-teal-400 to-emerald-600",
+  "from-[#ff2a6d] to-rose-600",
+  "from-rose-400 to-pink-600",
   "from-fuchsia-500 to-pink-600",
-  "from-lime-400 to-emerald-500",
-  "from-sky-400 to-indigo-600",
-  "from-amber-500 to-red-500",
-  "from-indigo-400 to-purple-700",
-  "from-cyan-300 to-blue-600",
+  "from-pink-500 to-rose-500",
+  "from-rose-500 to-pink-600",
+  "from-pink-400 to-rose-400",
+  "from-rose-600 to-pink-500",
+  "from-pink-500 to-rose-600",
+  "from-rose-500 to-[#ff2a6d]",
+  "from-pink-600 to-rose-500",
 ];
 
 const REALISTIC_STYLES = ["adventurer", "personas", "avataaars", "openPeeps"] as const;
