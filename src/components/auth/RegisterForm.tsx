@@ -14,6 +14,7 @@ import {
   ExternalLink,
   CreditCard,
   Clock,
+  Sparkles,
 } from "lucide-react";
 import { SNAPCHAT_AVATARS, getAvatarUrl, SnapchatAvatarPreset } from "@/lib/anonymous";
 import { OrangeMoneyLogo, MoovMoneyLogo, WaveLogo } from "@/components/auth/PaymentLogos";
@@ -132,28 +133,28 @@ export default function RegisterForm() {
 
   if (pendingSuccess) {
     return (
-      <div className="relative w-full max-w-lg mx-auto my-10">
+      <div className="relative w-full max-w-lg mx-auto my-10 font-sans">
         <div className="rounded-[36px] border border-pink-100 bg-white p-8 sm:p-10 shadow-[0_25px_65px_rgba(0,0,0,0.06)] text-slate-900 text-center space-y-6">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-pink-100 text-[#ff2a6d] border-2 border-pink-200 animate-pulse">
             <Clock size={40} />
           </div>
 
           <div className="space-y-2">
-            <span className="inline-block rounded-full bg-pink-100 px-3 py-1 text-xs font-bold text-[#ff2a6d] uppercase tracking-widest border border-pink-200">
-              En attente d'approbation
+            <span className="inline-block rounded-full bg-pink-100 px-3.5 py-1 text-xs font-black text-[#ff2a6d] uppercase tracking-widest border border-pink-200 shadow-sm">
+              ✨ En attente d'approbation
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-display text-slate-900 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black font-display text-slate-900 tracking-tight">
               Compte Créé avec Succès !
             </h2>
           </div>
 
-          <p className="text-sm text-slate-600 leading-relaxed font-medium">
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold">
             {successMessage || "Votre compte a été enregistré. Un administrateur va vérifier votre paiement et activer votre compte sous peu."}
           </p>
 
-          <div className="rounded-2xl border border-pink-100 bg-[#f4f3f6] p-4 text-left space-y-2 text-xs">
+          <div className="rounded-2xl border border-pink-100 bg-[#f4f3f6] p-4 text-left space-y-2.5 text-xs">
             <div className="flex justify-between items-center text-slate-700">
-              <span className="font-semibold text-slate-500">Moyen de paiement :</span>
+              <span className="font-extrabold text-slate-600">Moyen de paiement :</span>
               <span className="font-black text-slate-900 flex items-center gap-1.5">
                 {paymentMethod === "ORANGE_MONEY" && <><OrangeMoneyLogo className="h-5 w-5" /> Orange Money</>}
                 {paymentMethod === "MOOV_MONEY" && <><MoovMoneyLogo className="h-5 w-5" /> Moov Money</>}
@@ -161,12 +162,12 @@ export default function RegisterForm() {
               </span>
             </div>
             <div className="flex justify-between items-center text-slate-700">
-              <span className="font-semibold text-slate-500">Numéro de paiement :</span>
-              <span className="font-mono font-bold text-[#ff2a6d]">{paymentPhone}</span>
+              <span className="font-extrabold text-slate-600">Numéro de paiement :</span>
+              <span className="font-mono font-black text-[#ff2a6d] text-sm">{paymentPhone}</span>
             </div>
             <div className="flex justify-between items-center text-slate-700">
-              <span className="font-semibold text-slate-500">Référence transaction :</span>
-              <span className="font-mono font-bold text-[#ff2a6d]">{paymentRef}</span>
+              <span className="font-extrabold text-slate-600">Référence transaction :</span>
+              <span className="font-mono font-black text-[#ff2a6d] text-sm">{paymentRef}</span>
             </div>
           </div>
 
@@ -185,18 +186,25 @@ export default function RegisterForm() {
   }
 
   return (
-    <div className="relative w-full max-w-xl mx-auto my-6">
+    <div className="relative w-full max-w-xl mx-auto my-6 font-sans">
       {/* BECKY LIGHT CARD CONTAINER */}
-      <div className="rounded-[36px] border border-pink-100/70 bg-white p-6 sm:p-10 shadow-[0_25px_65px_rgba(0,0,0,0.06)] text-slate-900">
-        <div className="mb-6 text-center">
-          <Logo variant="full" size="lg" href="/" className="mb-2" />
+      <div className="rounded-[36px] border border-pink-100/80 bg-white p-6 sm:p-10 shadow-[0_25px_65px_rgba(0,0,0,0.06)] text-slate-900">
+        
+        {/* MAIN PAGE HEADER WITH PROMINENT TITLES & SUBTITLES */}
+        <div className="mb-8 text-center space-y-3">
+          <Logo variant="full" size="lg" href="/" className="mb-3" />
 
-          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold font-display tracking-tight text-slate-900">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-pink-200 bg-pink-50 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#ff2a6d] shadow-sm">
+            <Sparkles size={13} className="text-[#ff2a6d]" />
+            Inscription 100% Anonyme & Sécurisée
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl font-black font-display tracking-tight text-slate-900 leading-tight">
             Créer un compte
           </h1>
 
-          <p className="mt-2 text-xs font-medium leading-relaxed text-slate-500 max-w-sm mx-auto">
-            Crée ton compte avec ton nom & prénom et choisis parmi <strong>100 Avatars Bitmoji</strong>.
+          <p className="text-xs sm:text-sm font-semibold leading-relaxed text-slate-600 max-w-md mx-auto">
+            Renseigne tes identifiants secrets et choisis ton avatar parmi <span className="text-[#ff2a6d] font-black">100 Bitmojis 3D exclusifs</span>.
           </p>
         </div>
 
@@ -210,22 +218,22 @@ export default function RegisterForm() {
             </div>
           )}
 
-          {/* SNAPCHAT BITMOJI AVATAR PICKER */}
-          <div className="rounded-3xl border border-pink-100 bg-[#f8f7f9] p-5 space-y-4">
+          {/* SECTION 1: SNAPCHAT BITMOJI AVATAR PICKER */}
+          <div className="rounded-3xl border border-pink-100 bg-[#f8f7f9] p-5 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-pink-100 text-[#ff2a6d] shadow-sm font-bold text-lg">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl btn-pink text-white shadow-md font-bold text-xl">
                   👻
                 </div>
                 <div>
-                  <h2 className="text-xs font-extrabold font-display uppercase tracking-wider text-slate-900 flex items-center gap-2">
-                    100 Avatars Bitmoji
-                    <span className="rounded-full bg-pink-100 px-2 py-0.5 text-[10px] text-[#ff2a6d] font-bold border border-pink-200">
-                      100 au choix
+                  <h2 className="text-sm font-black font-display uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                    1. Choix de l'Avatar Bitmoji
+                    <span className="rounded-full bg-pink-100 px-2.5 py-0.5 text-[10px] text-[#ff2a6d] font-black border border-pink-200">
+                      100 Avatars
                     </span>
                   </h2>
-                  <p className="text-[11px] text-slate-500 font-medium">
-                    Clique pour choisir ou mélange au hasard 🔀
+                  <p className="text-xs font-semibold text-slate-500">
+                    Clique pour choisir ton style ou mélange au hasard 🔀
                   </p>
                 </div>
               </div>
@@ -234,10 +242,10 @@ export default function RegisterForm() {
                 <button
                   type="button"
                   onClick={handleRandomize}
-                  className="rounded-full bg-white border border-pink-200 px-3 py-1.5 text-[11px] font-bold text-[#ff2a6d] hover:bg-pink-50 transition flex items-center gap-1 shadow-sm"
+                  className="rounded-full bg-white border border-pink-200 px-3 py-1.5 text-[11px] font-black text-[#ff2a6d] hover:bg-pink-50 transition flex items-center gap-1 shadow-sm"
                   title="Choisir un avatar au hasard"
                 >
-                  🔀 Aleatoire
+                  🔀 Aléatoire
                 </button>
 
                 <img
@@ -310,11 +318,20 @@ export default function RegisterForm() {
             </div>
           </div>
 
+          {/* SECTION 2 HEADER: INFORMATIONS */}
+          <div className="rounded-2xl border border-pink-200/80 bg-gradient-to-r from-pink-50 via-rose-50 to-pink-50 p-3 px-4 flex items-center justify-between shadow-xs">
+            <h2 className="text-xs font-black font-display uppercase tracking-wider text-[#ff2a6d] flex items-center gap-2">
+              <span>👤 2. Informations Personnelles & Compte</span>
+            </h2>
+            <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">Étape 2/3</span>
+          </div>
+
           {/* NAME & SURNAME INPUTS */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
-              <label htmlFor="firstName" className="mb-1.5 block text-xs font-bold text-slate-700">
-                Prénom
+              <label htmlFor="firstName" className="mb-1.5 flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-800">
+                <span>Prénom</span>
+                <span className="text-[10px] font-bold text-[#ff2a6d]">Requis</span>
               </label>
               <input
                 id="firstName"
@@ -325,13 +342,14 @@ export default function RegisterForm() {
                 value={firstName}
                 onChange={(event) => setFirstName(event.target.value)}
                 placeholder="Ex: Thomas"
-                className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200"
+                className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200 shadow-inner"
               />
             </div>
 
             <div>
-              <label htmlFor="lastName" className="mb-1.5 block text-xs font-bold text-slate-700">
-                Nom
+              <label htmlFor="lastName" className="mb-1.5 flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-800">
+                <span>Nom</span>
+                <span className="text-[10px] font-bold text-[#ff2a6d]">Requis</span>
               </label>
               <input
                 id="lastName"
@@ -342,7 +360,7 @@ export default function RegisterForm() {
                 value={lastName}
                 onChange={(event) => setLastName(event.target.value)}
                 placeholder="Ex: Dubois"
-                className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200"
+                className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200 shadow-inner"
               />
             </div>
           </div>
@@ -350,8 +368,9 @@ export default function RegisterForm() {
           {/* USERNAME & EMAIL INPUTS */}
           <div className="space-y-3.5">
             <div>
-              <label htmlFor="username" className="mb-1.5 block text-xs font-bold text-slate-700">
-                Nom d'utilisateur (Pseudo unique)
+              <label htmlFor="username" className="mb-1.5 flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-800">
+                <span>Nom d'utilisateur (Pseudo unique)</span>
+                <span className="text-[10px] font-bold text-[#ff2a6d]">Requis</span>
               </label>
               <input
                 id="username"
@@ -363,13 +382,14 @@ export default function RegisterForm() {
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
                 placeholder="Ex: thomas_d"
-                className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200"
+                className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200 shadow-inner"
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="mb-1.5 block text-xs font-bold text-slate-700">
-                Adresse Email
+              <label htmlFor="email" className="mb-1.5 flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-800">
+                <span>Adresse Email</span>
+                <span className="text-[10px] font-bold text-[#ff2a6d]">Requis</span>
               </label>
               <input
                 id="email"
@@ -379,14 +399,15 @@ export default function RegisterForm() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="Ex: thomas.dubois@email.com"
-                className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200"
+                className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200 shadow-inner"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div className="relative">
-                <label htmlFor="password" className="mb-1.5 block text-xs font-bold text-slate-700">
-                  Mot de passe
+                <label htmlFor="password" className="mb-1.5 flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-800">
+                  <span>Mot de passe</span>
+                  <span className="text-[10px] font-bold text-[#ff2a6d]">8+ caract.</span>
                 </label>
                 <input
                   id="password"
@@ -398,7 +419,7 @@ export default function RegisterForm() {
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="8+ caractères"
-                  className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 pr-12 text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200"
+                  className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 pr-12 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200 shadow-inner"
                 />
                 <button
                   type="button"
@@ -410,8 +431,9 @@ export default function RegisterForm() {
               </div>
 
               <div className="relative">
-                <label htmlFor="confirmPassword" className="mb-1.5 block text-xs font-bold text-slate-700">
-                  Confirmation
+                <label htmlFor="confirmPassword" className="mb-1.5 flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-800">
+                  <span>Confirmation</span>
+                  <span className="text-[10px] font-bold text-[#ff2a6d]">Requis</span>
                 </label>
                 <input
                   id="confirmPassword"
@@ -421,7 +443,7 @@ export default function RegisterForm() {
                   value={confirmPassword}
                   onChange={(event) => setConfirmPassword(event.target.value)}
                   placeholder="Répéter le mot de passe"
-                  className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 pr-12 text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200"
+                  className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 pr-12 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200 shadow-inner"
                 />
                 <button
                   type="button"
@@ -434,18 +456,21 @@ export default function RegisterForm() {
             </div>
           </div>
 
-          {/* MOYEN DE PAIEMENT SECTION */}
-          <div className="rounded-3xl border border-pink-100 bg-[#f8f7f9] p-5 space-y-4">
+          {/* SECTION 3: MOYEN DE PAIEMENT SECTION */}
+          <div className="rounded-3xl border border-pink-100 bg-[#f8f7f9] p-5 space-y-4 shadow-sm">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#ff2a6d] text-white font-extrabold shadow-sm">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl btn-pink text-white font-extrabold shadow-md">
                 <CreditCard size={20} />
               </div>
               <div>
-                <h2 className="text-xs font-extrabold font-display uppercase tracking-wider text-slate-900">
-                  Moyen de Paiement à l'inscription
+                <h2 className="text-sm font-black font-display uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                  3. Activation & Moyen de Paiement
+                  <span className="rounded-full bg-pink-100 px-2.5 py-0.5 text-[10px] text-[#ff2a6d] font-black border border-pink-200">
+                    Requis
+                  </span>
                 </h2>
-                <p className="text-[11px] text-slate-500 font-medium">
-                  Sélectionne ton moyen de paiement et effectue le transfert vers le numéro <strong>06887330</strong>.
+                <p className="text-xs font-semibold text-slate-500">
+                  Transfère le montant vers le numéro <strong>06887330</strong> pour valider l'accès
                 </p>
               </div>
             </div>
@@ -457,12 +482,12 @@ export default function RegisterForm() {
                 onClick={() => setPaymentMethod("ORANGE_MONEY")}
                 className={`flex flex-col items-center justify-center rounded-2xl p-3 border transition duration-200 ${
                   paymentMethod === "ORANGE_MONEY"
-                    ? "border-[#ff2a6d] bg-pink-50 shadow-sm"
+                    ? "border-[#ff2a6d] bg-pink-50 shadow-md scale-102"
                     : "border-slate-200 bg-white hover:bg-pink-50/50"
                 }`}
               >
                 <OrangeMoneyLogo className="h-8 w-8 mb-1" />
-                <span className="text-[11px] font-bold text-slate-800">Orange Money</span>
+                <span className="text-[11px] font-extrabold text-slate-900">Orange Money</span>
               </button>
 
               <button
@@ -470,12 +495,12 @@ export default function RegisterForm() {
                 onClick={() => setPaymentMethod("WAVE")}
                 className={`flex flex-col items-center justify-center rounded-2xl p-3 border transition duration-200 ${
                   paymentMethod === "WAVE"
-                    ? "border-[#ff2a6d] bg-pink-50 shadow-sm"
+                    ? "border-[#ff2a6d] bg-pink-50 shadow-md scale-102"
                     : "border-slate-200 bg-white hover:bg-pink-50/50"
                 }`}
               >
                 <WaveLogo className="h-8 w-8 mb-1" />
-                <span className="text-[11px] font-bold text-slate-800">Wave</span>
+                <span className="text-[11px] font-extrabold text-slate-900">Wave</span>
               </button>
 
               <div className="col-span-2 sm:col-span-1 opacity-50 cursor-not-allowed flex flex-col items-center justify-center rounded-2xl p-3 border border-slate-200 bg-white">
@@ -486,14 +511,14 @@ export default function RegisterForm() {
 
             {/* PAYMENT METHOD DETAILS & DIRECT ACTION BUTTONS */}
             {paymentMethod === "ORANGE_MONEY" && (
-              <div className="rounded-2xl border border-pink-200 bg-pink-50/80 p-4 space-y-3">
+              <div className="rounded-2xl border border-pink-200 bg-pink-50/90 p-4 space-y-3 shadow-xs">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-slate-700">Code USSD Orange Money :</span>
-                  <span className="font-mono font-black text-[#ff2a6d] bg-white px-2 py-1 rounded-lg border border-pink-200 select-all">
+                  <span className="font-extrabold text-slate-800">Code USSD Orange Money :</span>
+                  <span className="font-mono font-black text-[#ff2a6d] bg-white px-2.5 py-1 rounded-lg border border-pink-200 select-all shadow-xs text-xs">
                     *144*2*1*06887330*500#
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
+                <p className="text-xs text-slate-600 leading-relaxed font-semibold">
                   Clique sur le bouton ci-dessous pour composer automatiquement le code USSD sur ton téléphone.
                 </p>
                 <a
@@ -507,14 +532,14 @@ export default function RegisterForm() {
             )}
 
             {paymentMethod === "WAVE" && (
-              <div className="rounded-2xl border border-pink-200 bg-pink-50/80 p-4 space-y-3">
+              <div className="rounded-2xl border border-pink-200 bg-pink-50/90 p-4 space-y-3 shadow-xs">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-slate-700">Compte Wave :</span>
-                  <span className="font-mono font-black text-[#ff2a6d] bg-white px-2 py-1 rounded-lg border border-pink-200 select-all">
+                  <span className="font-extrabold text-slate-800">Compte Wave :</span>
+                  <span className="font-mono font-black text-[#ff2a6d] bg-white px-2.5 py-1 rounded-lg border border-pink-200 select-all shadow-xs text-xs">
                     06887330
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
+                <p className="text-xs text-slate-600 leading-relaxed font-semibold">
                   Clique ci-dessous pour ouvrir directement ton compte Wave et faire le transfert vers <strong>06887330</strong>.
                 </p>
                 <a
@@ -524,7 +549,7 @@ export default function RegisterForm() {
                   className="flex items-center justify-center gap-2 h-11 w-full rounded-2xl btn-pink font-extrabold text-xs uppercase tracking-wider transition shadow-md active:scale-95"
                 >
                   <ExternalLink size={16} />
-                  Payer directement via l'application Wave (06887330)
+                  Payer via l'application Wave (06887330)
                 </a>
               </div>
             )}
@@ -532,8 +557,9 @@ export default function RegisterForm() {
             {/* PAYMENT TRANSACTION INPUTS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
               <div>
-                <label htmlFor="paymentPhone" className="mb-1.5 block text-xs font-bold text-slate-700">
-                  Numéro ayant payé
+                <label htmlFor="paymentPhone" className="mb-1.5 flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-800">
+                  <span>Numéro ayant payé</span>
+                  <span className="text-[10px] font-bold text-[#ff2a6d]">Requis</span>
                 </label>
                 <input
                   id="paymentPhone"
@@ -542,13 +568,14 @@ export default function RegisterForm() {
                   value={paymentPhone}
                   onChange={(e) => setPaymentPhone(e.target.value)}
                   placeholder="Ex: 06887330"
-                  className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200"
+                  className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200 shadow-inner"
                 />
               </div>
 
               <div>
-                <label htmlFor="paymentRef" className="mb-1.5 block text-xs font-bold text-slate-700">
-                  ID / Réf Transaction
+                <label htmlFor="paymentRef" className="mb-1.5 flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-800">
+                  <span>ID / Réf Transaction</span>
+                  <span className="text-[10px] font-bold text-[#ff2a6d]">Requis</span>
                 </label>
                 <input
                   id="paymentRef"
@@ -557,7 +584,7 @@ export default function RegisterForm() {
                   value={paymentRef}
                   onChange={(e) => setPaymentRef(e.target.value)}
                   placeholder="Ex: PP240906.1420..."
-                  className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200"
+                  className="h-12 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-semibold text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] transition-all duration-200 shadow-inner"
                 />
               </div>
             </div>
@@ -565,7 +592,7 @@ export default function RegisterForm() {
 
           {/* TERMS CHECKBOX */}
           <div className="flex items-center justify-center gap-2 pt-1">
-            <label className="flex items-center gap-2 text-xs font-medium text-slate-600 cursor-pointer select-none">
+            <label className="flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={termsAccepted}
@@ -574,18 +601,18 @@ export default function RegisterForm() {
               />
               <span>
                 J'accepte les{" "}
-                <span className="text-slate-900 font-bold underline hover:text-[#ff2a6d] transition">
+                <span className="text-slate-900 font-extrabold underline hover:text-[#ff2a6d] transition">
                   Conditions d'Utilisation
                 </span>
               </span>
             </label>
           </div>
 
-          {/* HOT PINK GRADIENT BUTTON */}
+          {/* HOT PINK GRADIENT SUBMIT BUTTON */}
           <button
             type="submit"
             disabled={loading}
-            className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-2xl btn-pink font-extrabold font-display text-sm uppercase tracking-wider transition-all duration-300 transform active:scale-95 disabled:opacity-60"
+            className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-2xl btn-pink font-extrabold font-display text-sm uppercase tracking-wider transition-all duration-300 transform active:scale-95 disabled:opacity-60 shadow-lg"
           >
             {loading ? (
               <>
@@ -602,11 +629,11 @@ export default function RegisterForm() {
         </form>
 
         <div className="mt-8 pt-4 border-t border-slate-100 text-center space-y-2">
-          <p className="text-xs font-medium text-slate-600">
+          <p className="text-xs font-semibold text-slate-600">
             Vous avez déjà un compte ?{" "}
             <Link
               href="/connexion"
-              className="font-bold text-slate-900 hover:text-[#ff2a6d] transition"
+              className="font-black text-[#ff2a6d] hover:underline transition"
             >
               Se connecter
             </Link>

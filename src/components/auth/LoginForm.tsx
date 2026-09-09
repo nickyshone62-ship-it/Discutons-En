@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Logo from "@/components/brand/Logo";
 import { FormEvent, useState } from "react";
-import { Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Loader2, ShieldCheck, Sparkles } from "lucide-react";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -49,20 +49,25 @@ export default function LoginForm() {
   return (
     <div className="relative w-full max-w-md mx-auto">
       {/* BECKY UI LIGHT CARD CONTAINER */}
-      <div className="rounded-[36px] border border-pink-100/70 bg-white p-8 sm:p-10 shadow-[0_25px_65px_rgba(0,0,0,0.06)] text-slate-900">
-        <div className="mb-7 text-center">
-          <Logo variant="full" size="lg" href="/" className="mb-2" />
+      <div className="rounded-[36px] border border-pink-100/80 bg-white p-8 sm:p-10 shadow-[0_25px_65px_rgba(0,0,0,0.06)] text-slate-900">
+        <div className="mb-8 text-center space-y-3">
+          <Logo variant="full" size="lg" href="/" className="mb-3" />
 
-          <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold font-display tracking-tight text-slate-900">
-            Se connecter
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-pink-200 bg-pink-50 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#ff2a6d] shadow-sm">
+            <Sparkles size={13} className="text-[#ff2a6d]" />
+            Espace Membre Anonyme
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl font-black font-display tracking-tight text-slate-900">
+            Se Connecter
           </h1>
 
-          <p className="mt-2 text-xs font-medium leading-relaxed text-slate-500 max-w-xs mx-auto">
-            Connecte-toi pour retrouver ton espace et la communauté.
+          <p className="text-xs sm:text-sm font-semibold leading-relaxed text-slate-600 max-w-xs mx-auto">
+            Connecte-toi pour retrouver ton <span className="text-[#ff2a6d] font-extrabold">espace anonyme</span> et échanger en toute sécurité.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
             <div
               role="alert"
@@ -74,8 +79,9 @@ export default function LoginForm() {
 
           <div className="space-y-4 text-left">
             <div>
-              <label htmlFor="login-email" className="mb-1.5 block text-xs font-bold text-slate-700">
-                Adresse email
+              <label htmlFor="login-email" className="mb-1.5 flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-800">
+                <span>Adresse email</span>
+                <span className="text-[10px] font-bold text-[#ff2a6d]">Requis</span>
               </label>
               <input
                 id="login-email"
@@ -84,14 +90,15 @@ export default function LoginForm() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                placeholder="Entrez votre adresse email"
-                className="h-13 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-medium text-slate-900 placeholder:text-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] focus:border-transparent transition-all duration-200"
+                placeholder="Ex: votre_email@domaine.com"
+                className="h-13 w-full rounded-2xl bg-[#f4f3f6] px-5 text-sm font-semibold text-slate-900 placeholder:text-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] focus:border-transparent transition-all duration-200 shadow-inner"
               />
             </div>
 
             <div>
-              <label htmlFor="login-password" className="mb-1.5 block text-xs font-bold text-slate-700">
-                Mot de passe
+              <label htmlFor="login-password" className="mb-1.5 flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-800">
+                <span>Mot de passe</span>
+                <span className="text-[10px] font-bold text-[#ff2a6d]">Requis</span>
               </label>
               <div className="relative">
                 <input
@@ -102,7 +109,7 @@ export default function LoginForm() {
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="Entrez votre mot de passe"
-                  className="h-13 w-full rounded-2xl bg-[#f4f3f6] px-5 pr-12 text-sm font-medium text-slate-900 placeholder:text-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] focus:border-transparent transition-all duration-200"
+                  className="h-13 w-full rounded-2xl bg-[#f4f3f6] px-5 pr-12 text-sm font-semibold text-slate-900 placeholder:text-slate-400 outline-none focus:bg-white focus:ring-2 focus:ring-[#ff2a6d] focus:border-transparent transition-all duration-200 shadow-inner"
                 />
                 <button
                   type="button"
@@ -115,11 +122,10 @@ export default function LoginForm() {
             </div>
           </div>
 
-          {/* BECKY EXACT GRADIENT BUTTON (ROSE TO ORANGE) */}
           <button
             type="submit"
             disabled={loading}
-            className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-2xl btn-becky font-extrabold font-display text-sm uppercase tracking-wider transition-all duration-300 transform active:scale-95 disabled:opacity-60"
+            className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-2xl btn-pink font-extrabold font-display text-sm uppercase tracking-wider transition-all duration-300 transform active:scale-95 disabled:opacity-60 shadow-lg"
           >
             {loading ? (
               <>
@@ -135,15 +141,27 @@ export default function LoginForm() {
           </button>
         </form>
 
-        <p className="mt-8 text-center text-xs font-medium text-slate-600">
-          Pas encore de compte ?{" "}
-          <Link
-            href="/inscription"
-            className="font-bold text-slate-900 hover:text-[#ff2a6d] transition"
-          >
-            Créer un compte
-          </Link>
-        </p>
+        <div className="mt-8 pt-4 border-t border-slate-100 text-center space-y-2">
+          <p className="text-xs font-semibold text-slate-600">
+            Pas encore de compte ?{" "}
+            <Link
+              href="/inscription"
+              className="font-black text-[#ff2a6d] hover:underline transition"
+            >
+              Créer un compte
+            </Link>
+          </p>
+
+          <p className="text-[11px] text-slate-500 pt-1">
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-1.5 font-bold text-slate-700 hover:text-[#ff2a6d] bg-slate-100 hover:bg-slate-200 border border-slate-200 px-3.5 py-1.5 rounded-full transition"
+            >
+              <ShieldCheck size={14} className="text-[#ff2a6d]" />
+              Espace Administrateur 🛡️
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
