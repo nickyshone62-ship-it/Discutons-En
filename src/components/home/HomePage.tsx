@@ -208,10 +208,17 @@ export default function HomePage() {
       <div className="pointer-events-none fixed top-12 left-1/3 h-28 w-28 rounded-full bg-pink-300/40 blur-2xl" />
       <div className="pointer-events-none fixed bottom-10 right-10 h-96 w-96 rounded-full bg-rose-200/60 opacity-80 blur-3xl" />
 
-      {/* NAVBAR */}
-      <header className="sticky top-0 z-40 border-b border-pink-100/80 bg-white/90 backdrop-blur-2xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Logo variant="horizontal" size="md" href="/accueil" />
+      {/* NAVBAR WITH PROMINENT DISCUTONS-EN LOGO */}
+      <header className="sticky top-0 z-40 border-b border-pink-100/80 bg-white/90 backdrop-blur-2xl shadow-xs">
+        <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          
+          <div className="flex items-center gap-4">
+            <Logo variant="horizontal" size="lg" href="/accueil" />
+            <div className="hidden xl:flex items-center gap-1.5 rounded-full border border-pink-200 bg-pink-50 px-3.5 py-1 text-xs font-black text-[#ff2a6d] shadow-xs">
+              <Sparkles size={13} className="text-[#ff2a6d]" />
+              Discutons-En · Entraide Anonyme
+            </div>
+          </div>
 
           <div className="hidden items-center gap-3 md:flex">
             {(data.user.role === "ADMIN" || data.user.role === "SUPER_ADMIN") && (
@@ -290,11 +297,15 @@ export default function HomePage() {
         </div>
 
         {menuOpen && (
-          <div className="border-t border-pink-100 bg-white px-4 py-4 backdrop-blur-2xl md:hidden">
+          <div className="border-t border-pink-100 bg-white px-4 py-4 backdrop-blur-2xl md:hidden space-y-3">
+            <div className="flex justify-center pb-1">
+              <Logo variant="horizontal" size="md" href="/accueil" />
+            </div>
+
             <Link
               href="/compte"
               onClick={() => setMenuOpen(false)}
-              className="mb-4 flex items-center gap-3 rounded-2xl border border-pink-200 bg-pink-50 p-3"
+              className="flex items-center gap-3 rounded-2xl border border-pink-200 bg-pink-50 p-3"
             >
               <img
                 src={data.identity.avatarUrl}
@@ -329,7 +340,7 @@ export default function HomePage() {
                 className="flex items-center gap-3 rounded-2xl bg-[#f4f3f6] px-4 py-3 text-sm font-bold text-slate-800"
               >
                 <Home size={18} />
-                Accueil
+                Accueil Discutons-En
               </Link>
 
               <Link
@@ -369,12 +380,18 @@ export default function HomePage() {
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-5">
               <div className="rounded-[32px] border border-pink-100/80 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] space-y-2.5">
+                
+                {/* DISCUTONS-EN BRAND BANNER IN SIDEBAR */}
+                <div className="flex items-center gap-2 pb-3 mb-1 border-b border-pink-100/80">
+                  <Logo variant="horizontal" size="sm" href="/accueil" />
+                </div>
+
                 <Link
                   href="/accueil"
                   className="flex items-center gap-3 rounded-2xl bg-pink-50 border border-pink-200 px-4 py-3.5 text-sm font-extrabold font-display text-[#ff2a6d] shadow-xs"
                 >
                   <Home size={18} className="text-[#ff2a6d]" />
-                  Accueil
+                  Accueil Discutons-En
                 </Link>
 
                 <Link
@@ -397,7 +414,7 @@ export default function HomePage() {
               {/* CATEGORIES CARD */}
               <div className="rounded-[32px] border border-pink-100/80 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)]">
                 <h2 className="mb-3 text-xs font-black font-display uppercase tracking-widest text-[#ff2a6d]">
-                  Catégories
+                  Catégories Discutons-En
                 </h2>
 
                 <div className="space-y-1">
@@ -419,12 +436,19 @@ export default function HomePage() {
 
           {/* MAIN FEED SECTION */}
           <section className="min-w-0 space-y-6">
-            {/* HERO WELCOME BANNER */}
+            {/* HERO WELCOME BANNER WITH HIGH-IMPACT BRAND HIGHLIGHT */}
             <div className="relative overflow-hidden rounded-[32px] border border-pink-200 bg-gradient-to-r from-[#ff2a6d] via-[#ff4b7d] to-[#ff6699] p-6 text-white shadow-[0_20px_60px_rgba(255,42,109,0.25)] sm:p-8">
               <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/20 blur-2xl" />
 
               <div className="relative z-10">
-                <div className="flex items-center gap-3">
+                
+                {/* PROMINENT BRAND BADGE */}
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3.5 py-1 text-xs font-black uppercase tracking-widest text-white backdrop-blur-md mb-3 border border-white/30 shadow-sm">
+                  <Sparkles size={13} className="text-white" />
+                  Plateforme Officielle Discutons-En
+                </div>
+
+                <div className="flex items-center gap-3 mt-1">
                   <img
                     src={data.identity.avatarUrl}
                     alt={data.identity.anonymousName}
@@ -432,7 +456,7 @@ export default function HomePage() {
                   />
                   <div>
                     <p className="text-xs font-semibold text-pink-100">
-                      Bienvenue
+                      Bienvenue dans votre espace
                     </p>
                     <p className="font-black font-display text-white text-base">
                       {data.identity.anonymousName}
@@ -440,12 +464,12 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <h1 className="mt-4 max-w-xl text-2xl font-extrabold font-display tracking-tight sm:text-3xl text-white">
+                <h1 className="mt-4 max-w-xl text-2xl font-black font-display tracking-tight sm:text-3xl text-white">
                   Quel problème veux-tu partager aujourd'hui ?
                 </h1>
 
-                <p className="mt-2 max-w-xl text-xs sm:text-sm leading-relaxed text-pink-100 font-medium">
-                  Exprime-toi librement. La communauté est là pour t'écouter, échanger et trouver la meilleure voie avec toi.
+                <p className="mt-2.5 max-w-xl text-xs sm:text-sm leading-relaxed text-pink-100 font-semibold">
+                  Sur <strong className="text-white underline font-black">Discutons-En</strong>, exprime-toi librement et en toute confidentialité avec notre communauté d'entraide.
                 </p>
 
                 <Link
@@ -453,7 +477,7 @@ export default function HomePage() {
                   className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-white text-[#ff2a6d] hover:bg-pink-50 px-7 py-3.5 text-xs font-extrabold font-display uppercase tracking-widest shadow-lg transition transform hover:scale-[1.02] active:scale-95 duration-300"
                 >
                   <Plus size={18} />
-                  Partager un problème
+                  Partager un problème sur Discutons-En
                 </Link>
               </div>
             </div>
@@ -461,7 +485,7 @@ export default function HomePage() {
             {/* MOBILE CATEGORIES */}
             <div className="lg:hidden">
               <h2 className="mb-2 text-xs font-black font-display uppercase tracking-widest text-[#ff2a6d]">
-                Catégories
+                Catégories Discutons-En
               </h2>
               <div className="flex gap-2 overflow-x-auto pb-2">
                 {data.categories.map((category) => (
@@ -481,7 +505,7 @@ export default function HomePage() {
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <p className="text-xs font-black font-display uppercase tracking-widest text-[#ff2a6d]">
-                    Communauté
+                    Communauté Discutons-En
                   </p>
                   <h2 className="text-2xl font-extrabold font-display text-slate-900">
                     Problèmes récents
@@ -501,7 +525,7 @@ export default function HomePage() {
                     Aucun problème pour le moment
                   </h3>
                   <p className="mx-auto mt-2 max-w-sm text-xs font-medium text-slate-500">
-                    Sois le premier à partager quelque chose avec la communauté.
+                    Sois le premier à partager quelque chose avec la communauté Discutons-En.
                   </p>
                   <Link
                     href="/publier"
@@ -651,31 +675,31 @@ export default function HomePage() {
                     <ShieldCheck size={20} />
                   </div>
                   <div>
-                    <h2 className="text-xs font-extrabold font-display uppercase text-slate-900">
+                    <h2 className="text-xs font-black font-display uppercase text-slate-900">
                       Anonymat garanti
                     </h2>
-                    <p className="text-[10px] font-bold text-[#ff2a6d]">Toujours protégé</p>
+                    <p className="text-[10px] font-bold text-[#ff2a6d]">Protégé par Discutons-En</p>
                   </div>
                 </div>
                 <p className="text-xs leading-relaxed text-slate-600 font-medium">
-                  Les autres membres voient uniquement ton pseudonyme anonyme attribué. Tes données personnelles sont privées.
+                  Les membres de <strong className="text-slate-900">Discutons-En</strong> voient uniquement ton pseudo anonyme. Tes données restent sécurisées.
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-pink-100/80 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] space-y-3">
+              <div className="rounded-[32px] border border-pink-100/80 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-pink-50 text-[#ff2a6d] border border-pink-100">
                     <Sparkles size={19} />
                   </div>
                   <div>
-                    <h2 className="text-xs font-extrabold font-display uppercase text-slate-900">
+                    <h2 className="text-xs font-black font-display uppercase text-slate-900">
                       Bienveillance
                     </h2>
-                    <p className="text-[10px] font-bold text-[#ff2a6d]">Notre priorité</p>
+                    <p className="text-[10px] font-bold text-[#ff2a6d]">Charte Discutons-En</p>
                   </div>
                 </div>
                 <p className="text-xs leading-relaxed text-slate-600 font-medium">
-                  Échange avec respect et empathie. Chaque problème mérite d'être écouté sans jugement.
+                  Sur <strong className="text-slate-900">Discutons-En</strong>, échanche avec respect et empathie. Chaque sujet est accueilli sans jugement.
                 </p>
               </div>
             </div>
