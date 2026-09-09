@@ -613,13 +613,13 @@ export default function ChatSpace() {
   }
 
   return (
-    <div className="w-full max-w-full flex-1 h-full flex flex-col p-3 sm:p-5 md:p-6 font-sans text-white overflow-hidden gap-3">
-      {/* HEADER (Matching reference image: Back button left, Title center, Avatar badge top right) */}
-      <div className="flex items-center justify-between rounded-3xl border border-white/20 bg-slate-950/80 p-3.5 sm:p-4 shadow-2xl backdrop-blur-2xl shrink-0">
+    <div className="w-full max-w-full flex-1 h-full flex flex-col p-3 sm:p-5 md:p-6 font-sans text-slate-900 overflow-hidden gap-3">
+      {/* HEADER */}
+      <div className="flex items-center justify-between rounded-3xl border border-pink-100/80 bg-white/90 p-3.5 sm:p-4 shadow-md backdrop-blur-2xl shrink-0">
         <div className="flex items-center gap-3">
           <Link
             href="/accueil"
-            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-cyan-200 hover:bg-white/20 hover:text-white transition border border-white/15 shadow-sm"
+            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 hover:bg-pink-50 hover:text-[#ff2a6d] transition border border-slate-200 shadow-sm"
             title="Retour à l'accueil"
           >
             <ArrowLeft size={20} />
@@ -627,11 +627,11 @@ export default function ChatSpace() {
 
           <Logo variant="icon" size="sm" className="hidden xs:inline-flex" />
           <div>
-            <h1 className="text-base sm:text-lg font-black font-display tracking-tight text-white flex items-center gap-2">
+            <h1 className="text-base sm:text-lg font-extrabold font-display tracking-tight text-slate-900 flex items-center gap-2">
               Salon Communautaire
-              <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
+              <span className="flex h-2.5 w-2.5 rounded-full bg-[#ff2a6d] animate-pulse shadow-[0_0_10px_rgba(255,42,109,0.8)]" />
             </h1>
-            <p className="text-xs font-medium text-cyan-100/70">
+            <p className="text-xs font-medium text-slate-500">
               Échanges instantanés en direct
             </p>
           </div>
@@ -640,19 +640,19 @@ export default function ChatSpace() {
         {/* TOP-RIGHT USER BADGE */}
         <div className="flex items-center gap-2">
           {currentUser ? (
-            <div className="flex items-center gap-2.5 p-1.5 px-3 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-lg">
+            <div className="flex items-center gap-2.5 p-1.5 px-3 rounded-full bg-pink-50 border border-pink-200 backdrop-blur-md shadow-sm">
               <img
                 src={currentUser.avatarUrl}
                 alt={currentUser.anonymousName}
-                className="h-7 w-7 rounded-full border border-cyan-400 shadow-md object-cover"
+                className="h-7 w-7 rounded-full border border-[#ff2a6d] shadow-sm object-cover"
                 title={currentUser.anonymousName}
               />
-              <span className="text-xs font-bold font-display text-white hidden sm:inline">
+              <span className="text-xs font-extrabold font-display text-slate-900 hidden sm:inline">
                 {currentUser.anonymousName}
               </span>
             </div>
           ) : (
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/40">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-pink-100 text-[#ff2a6d] border border-pink-200">
               <Users size={18} />
             </div>
           )}
@@ -660,17 +660,17 @@ export default function ChatSpace() {
       </div>
 
       {/* MESSAGES FEED */}
-      <div className="flex-1 overflow-y-auto rounded-3xl border border-white/20 bg-slate-950/60 p-4 sm:p-6 shadow-2xl backdrop-blur-2xl space-y-5">
+      <div className="flex-1 overflow-y-auto rounded-3xl border border-pink-100/80 bg-white/90 p-4 sm:p-6 shadow-lg backdrop-blur-2xl space-y-5">
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center text-center p-6 space-y-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-cyan-400/20 text-cyan-300 border border-cyan-400/40 shadow-inner">
+            <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-pink-100 text-[#ff2a6d] border border-pink-200 shadow-inner">
               <Users size={28} />
             </div>
             <div>
-              <h3 className="font-black font-display text-white text-lg">
+              <h3 className="font-extrabold font-display text-slate-900 text-lg">
                 Salon Communautaire en Direct
               </h3>
-              <p className="text-xs font-medium text-cyan-100/80 max-w-sm mt-1 leading-relaxed">
+              <p className="text-xs font-medium text-slate-500 max-w-sm mt-1 leading-relaxed">
                 Soyez le premier à envoyer un message anonyme ou choisissez un sujet ci-dessous.
               </p>
             </div>
@@ -680,7 +680,7 @@ export default function ChatSpace() {
               <button
                 type="button"
                 onClick={() => setInputText("Bonjour à tous ! 👋")}
-                className="w-full rounded-2xl border border-white/20 bg-slate-900/90 p-3 text-xs sm:text-sm font-semibold text-cyan-100 hover:bg-cyan-400 hover:text-slate-950 transition shadow-md text-left flex items-center justify-between group"
+                className="w-full rounded-2xl border border-slate-200 bg-[#f4f3f6] p-3 text-xs sm:text-sm font-semibold text-slate-800 hover:bg-[#ff2a6d] hover:text-white transition shadow-sm text-left flex items-center justify-between group"
               >
                 <span>👋 Saluer la communauté</span>
                 <span className="opacity-0 group-hover:opacity-100 transition">→</span>
@@ -689,7 +689,7 @@ export default function ChatSpace() {
               <button
                 type="button"
                 onClick={() => setInputText("J'aimerais avoir des conseils sur...")}
-                className="w-full rounded-2xl border border-white/20 bg-slate-900/90 p-3 text-xs sm:text-sm font-semibold text-cyan-100 hover:bg-cyan-400 hover:text-slate-950 transition shadow-md text-left flex items-center justify-between group"
+                className="w-full rounded-2xl border border-slate-200 bg-[#f4f3f6] p-3 text-xs sm:text-sm font-semibold text-slate-800 hover:bg-[#ff2a6d] hover:text-white transition shadow-sm text-left flex items-center justify-between group"
               >
                 <span>💡 Demander un conseil anonyme</span>
                 <span className="opacity-0 group-hover:opacity-100 transition">→</span>
@@ -698,7 +698,7 @@ export default function ChatSpace() {
               <button
                 type="button"
                 onClick={() => setInputText("Qui est disponible pour discuter ?")}
-                className="w-full rounded-2xl border border-white/20 bg-slate-900/90 p-3 text-xs sm:text-sm font-semibold text-cyan-100 hover:bg-cyan-400 hover:text-slate-950 transition shadow-md text-left flex items-center justify-between group"
+                className="w-full rounded-2xl border border-slate-200 bg-[#f4f3f6] p-3 text-xs sm:text-sm font-semibold text-slate-800 hover:bg-[#ff2a6d] hover:text-white transition shadow-sm text-left flex items-center justify-between group"
               >
                 <span>💬 Lancer une discussion</span>
                 <span className="opacity-0 group-hover:opacity-100 transition">→</span>
@@ -719,7 +719,7 @@ export default function ChatSpace() {
               <img
                 src={msg.author.avatarUrl}
                 alt={msg.author.anonymousName}
-                className="h-9 w-9 rounded-full shrink-0 mt-1 border border-cyan-400/40 shadow-md object-cover"
+                className="h-9 w-9 rounded-full shrink-0 mt-1 border border-pink-300 shadow-sm object-cover"
               />
 
               <div
@@ -728,50 +728,50 @@ export default function ChatSpace() {
                 }`}
               >
                 <div
-                  className={`flex items-center gap-2 text-[11px] font-bold text-cyan-200/80 ${
+                  className={`flex items-center gap-2 text-[11px] font-bold text-slate-500 ${
                     msg.isMe ? "justify-end" : "justify-start"
                   }`}
                 >
-                  <span className="font-display">{msg.author.anonymousName}</span>
+                  <span className="font-display text-slate-800">{msg.author.anonymousName}</span>
                   <span>·</span>
                   <span className="text-[10px] font-sans font-normal opacity-80">{formatTime(msg.createdAt)}</span>
                   {msg.isEdited && (
-                    <span className="italic text-cyan-300/80 text-[10px]">(modifié)</span>
+                    <span className="italic text-[#ff2a6d] text-[10px]">(modifié)</span>
                   )}
                 </div>
 
                 {/* QUOTED REPLY PREVIEW */}
                 {msg.replyTo && (
-                  <div className="mb-2 rounded-2xl border-l-4 border-cyan-400 bg-gradient-to-r from-cyan-950/90 via-slate-950/90 to-purple-950/80 p-2.5 px-3.5 text-xs text-cyan-100 backdrop-blur-xl shadow-xl border border-cyan-400/40">
-                    <div className="flex items-center gap-2 font-black font-display text-cyan-300">
-                      <CornerDownRight size={14} className="text-cyan-400 shrink-0" />
-                      <span>En réponse à <span className="text-white underline decoration-cyan-400/80 font-black">{msg.replyTo.authorName}</span></span>
+                  <div className="mb-2 rounded-2xl border-l-4 border-[#ff2a6d] bg-pink-50 p-2.5 px-3.5 text-xs text-slate-800 shadow-sm border border-pink-100">
+                    <div className="flex items-center gap-2 font-extrabold font-display text-[#ff2a6d]">
+                      <CornerDownRight size={14} className="text-[#ff2a6d] shrink-0" />
+                      <span>En réponse à <span className="text-slate-900 underline font-black">{msg.replyTo.authorName}</span></span>
                     </div>
-                    <p className="mt-1 text-xs text-cyan-100/90 italic truncate font-medium pl-4 border-l border-cyan-400/30">
+                    <p className="mt-1 text-xs text-slate-600 italic truncate font-medium pl-4 border-l border-pink-300">
                       "{msg.replyTo.content}"
                     </p>
                   </div>
                 )}
 
                 {isEditing ? (
-                  <div className="flex items-center gap-2 bg-slate-900/95 border border-cyan-400 p-2.5 rounded-2xl text-left shadow-2xl backdrop-blur-2xl">
+                  <div className="flex items-center gap-2 bg-white border border-[#ff2a6d] p-2.5 rounded-2xl text-left shadow-lg">
                     <input
                       type="text"
                       value={editText}
                       onChange={(e) => setEditText(e.target.value)}
-                      className="bg-transparent text-white text-base outline-none flex-1 px-2 font-medium"
+                      className="bg-transparent text-slate-900 text-base outline-none flex-1 px-2 font-medium"
                       autoFocus
                     />
                     <button
                       onClick={() => handleSaveEdit(msg.id)}
-                      className="p-2 rounded-xl bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition font-bold shadow-md"
+                      className="p-2 rounded-xl bg-[#ff2a6d] text-white hover:bg-pink-600 transition font-bold shadow-md"
                       title="Enregistrer"
                     >
                       <Check size={16} />
                     </button>
                     <button
                       onClick={() => setEditingId(null)}
-                      className="p-2 rounded-xl bg-white/10 text-slate-300 hover:text-white transition"
+                      className="p-2 rounded-xl bg-slate-100 text-slate-600 hover:text-slate-900 transition"
                       title="Annuler"
                     >
                       <X size={16} />
@@ -789,10 +789,10 @@ export default function ChatSpace() {
                         <VoicePlayer src={msg.audioUrl} isMe={msg.isMe} />
                       ) : (
                         <div
-                          className={`rounded-3xl px-4.5 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words inline-block shadow-lg ${
+                          className={`rounded-3xl px-4.5 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words inline-block shadow-md ${
                             msg.isMe
-                              ? "bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 font-semibold rounded-tr-none shadow-[0_0_20px_rgba(34,211,238,0.25)]"
-                              : "bg-white/10 text-white font-medium rounded-tl-none border border-white/15 backdrop-blur-xl hover:bg-white/15"
+                              ? "btn-pink text-white font-semibold rounded-tr-none shadow-[0_4px_14px_rgba(255,42,109,0.3)]"
+                              : "bg-[#f4f3f6] text-slate-900 font-medium rounded-tl-none border border-slate-200/80 hover:bg-white"
                           }`}
                         >
                           {msg.content}
@@ -807,10 +807,10 @@ export default function ChatSpace() {
                           e.stopPropagation();
                           handleLikeMessage(msg.id);
                         }}
-                        className={`absolute -bottom-2 right-2 flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-black border shadow-lg transition transform active:scale-95 ${
+                        className={`absolute -bottom-2 right-2 flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold border shadow-md transition transform active:scale-95 ${
                           msg.isLikedByMe
-                            ? "bg-rose-500 text-white border-rose-400 shadow-rose-500/40"
-                            : "bg-slate-900/90 text-rose-400 border-white/20"
+                            ? "bg-[#ff2a6d] text-white border-[#ff2a6d]"
+                            : "bg-white text-[#ff2a6d] border-pink-200"
                         }`}
                       >
                         <Heart size={11} className="fill-current" />
@@ -822,7 +822,7 @@ export default function ChatSpace() {
                     {activeMenuMsgId === msg.id && (
                       <div
                         onClick={(e) => e.stopPropagation()}
-                        className={`mt-2 flex flex-wrap items-center gap-2 rounded-2xl border border-cyan-400/60 bg-slate-950/95 p-2 px-3 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150 z-30 max-w-full ${
+                        className={`mt-2 flex flex-wrap items-center gap-2 rounded-2xl border border-pink-200 bg-white p-2 px-3 shadow-2xl z-30 max-w-full ${
                           msg.isMe ? "justify-end" : "justify-start"
                         }`}
                       >
@@ -831,7 +831,7 @@ export default function ChatSpace() {
                             setReplyingToMsg(msg);
                             setActiveMenuMsgId(null);
                           }}
-                          className="flex items-center gap-1.5 rounded-xl bg-cyan-400/20 px-3 py-1.5 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition active:scale-95"
+                          className="flex items-center gap-1.5 rounded-xl bg-pink-50 px-3 py-1.5 text-xs font-bold text-[#ff2a6d] hover:bg-pink-100 transition active:scale-95"
                         >
                           <Reply size={14} />
                           <span>Répondre</span>
@@ -844,11 +844,11 @@ export default function ChatSpace() {
                           }}
                           className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition active:scale-95 ${
                             msg.isLikedByMe
-                              ? "bg-rose-500/30 text-rose-300 border border-rose-400/40"
-                              : "bg-white/10 text-slate-200 hover:text-rose-400"
+                              ? "bg-pink-100 text-[#ff2a6d] border border-pink-200"
+                              : "bg-slate-100 text-slate-700 hover:text-[#ff2a6d]"
                           }`}
                         >
-                          <Heart size={14} className={msg.isLikedByMe ? "fill-rose-400" : ""} />
+                          <Heart size={14} className={msg.isLikedByMe ? "fill-[#ff2a6d]" : ""} />
                           <span>Aimer ({msg.likesCount || 0})</span>
                         </button>
 
@@ -861,7 +861,7 @@ export default function ChatSpace() {
                                   setEditText(msg.content);
                                   setActiveMenuMsgId(null);
                                 }}
-                                className="flex items-center gap-1.5 rounded-xl bg-cyan-400/20 px-3 py-1.5 text-xs font-bold text-cyan-300 hover:bg-cyan-400/30 transition active:scale-95"
+                                className="flex items-center gap-1.5 rounded-xl bg-pink-50 px-3 py-1.5 text-xs font-bold text-[#ff2a6d] hover:bg-pink-100 transition active:scale-95"
                               >
                                 <Edit2 size={14} />
                                 <span>Modifier</span>
@@ -872,9 +872,9 @@ export default function ChatSpace() {
                                 handleDeleteMessage(msg.id);
                                 setActiveMenuMsgId(null);
                               }}
-                              className="flex items-center gap-1.5 rounded-xl bg-red-500/25 border border-red-500/40 px-3 py-1.5 text-xs font-black text-red-200 hover:bg-red-500/40 transition active:scale-95 shadow-md shadow-red-950/50"
+                              className="flex items-center gap-1.5 rounded-xl bg-red-50 border border-red-200 px-3 py-1.5 text-xs font-black text-red-600 hover:bg-red-100 transition active:scale-95 shadow-sm"
                             >
-                              <Trash2 size={14} className="text-red-400" />
+                              <Trash2 size={14} className="text-red-500" />
                               <span>Supprimer</span>
                             </button>
                           </>
@@ -882,7 +882,7 @@ export default function ChatSpace() {
 
                         <button
                           onClick={() => setActiveMenuMsgId(null)}
-                          className="p-1.5 rounded-xl bg-white/10 text-slate-400 hover:text-white transition"
+                          className="p-1.5 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-800 transition"
                           title="Fermer"
                         >
                           <X size={15} />
@@ -897,16 +897,16 @@ export default function ChatSpace() {
         })
       )}
 
-        {/* STATUS INDICATOR (Matching reference image status ring "Connecting with agent") */}
-        <div className="flex items-center justify-center gap-2 text-xs font-semibold text-cyan-200/80 py-2">
-          <span className="h-4 w-4 rounded-full border-2 border-emerald-400 border-t-transparent animate-spin" />
+        {/* STATUS INDICATOR */}
+        <div className="flex items-center justify-center gap-2 text-xs font-semibold text-slate-500 py-2">
+          <span className="h-4 w-4 rounded-full border-2 border-[#ff2a6d] border-t-transparent animate-spin" />
           <span>Connecté en direct · salon anonyme</span>
         </div>
 
         <div ref={messagesEndRef} />
       </div>
 
-      {/* CHAT INPUT CONTAINER CARD (Strictly matching reference image layout) */}
+      {/* CHAT INPUT CONTAINER CARD */}
       <div className="w-full shrink-0 space-y-2">
         {/* UNREAD NEW MESSAGE BANNER */}
         {hasUnreadBanner && (
@@ -916,20 +916,21 @@ export default function ChatSpace() {
               setHasUnreadBanner(false);
               scrollToBottom();
             }}
-            className="w-full flex items-center justify-center gap-2 rounded-2xl bg-cyan-400/20 border border-cyan-400/50 p-2.5 px-4 text-xs font-bold text-cyan-300 hover:bg-cyan-400 hover:text-slate-950 transition shadow-lg backdrop-blur-md animate-bounce cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 rounded-2xl bg-pink-50 border border-pink-200 p-2.5 px-4 text-xs font-bold text-[#ff2a6d] hover:bg-[#ff2a6d] hover:text-white transition shadow-md animate-bounce cursor-pointer"
           >
             <Bell size={15} />
             <span>Nouveau message anonyme reçu · Cliquer pour voir ↓</span>
           </button>
         )}
+
         {/* REPLIES PREVIEW BAR */}
         {replyingToMsg && (
-          <div className="flex items-center justify-between rounded-2xl bg-cyan-400/15 border border-cyan-400/30 p-2.5 px-4 text-xs text-cyan-100 backdrop-blur-md">
+          <div className="flex items-center justify-between rounded-2xl bg-pink-50 border border-pink-200 p-2.5 px-4 text-xs text-slate-800 shadow-sm">
             <div className="flex items-center gap-2 truncate">
-              <Reply size={15} className="text-cyan-300 shrink-0" />
+              <Reply size={15} className="text-[#ff2a6d] shrink-0" />
               <span>
-                En réponse à <strong className="font-bold text-white">{replyingToMsg.author.anonymousName}</strong>:{" "}
-                <span className="italic truncate max-w-[220px] text-cyan-200/80">
+                En réponse à <strong className="font-bold text-slate-900">{replyingToMsg.author.anonymousName}</strong>:{" "}
+                <span className="italic truncate max-w-[220px] text-slate-600">
                   "{replyingToMsg.content}"
                 </span>
               </span>
@@ -938,7 +939,7 @@ export default function ChatSpace() {
             <button
               type="button"
               onClick={() => setReplyingToMsg(null)}
-              className="p-1 text-cyan-300 hover:text-white"
+              className="p-1 text-slate-500 hover:text-[#ff2a6d]"
               title="Annuler la réponse"
             >
               <X size={16} />
@@ -947,10 +948,10 @@ export default function ChatSpace() {
         )}
 
         {recording ? (
-          <div className="flex w-full items-center justify-between rounded-3xl border border-red-500/40 bg-red-950/60 p-4 px-5 shadow-2xl backdrop-blur-2xl">
+          <div className="flex w-full items-center justify-between rounded-3xl border border-red-200 bg-red-50 p-4 px-5 shadow-lg">
             <div className="flex items-center gap-3">
               <span className="h-3 w-3 rounded-full bg-red-500 animate-ping" />
-              <span className="text-xs font-black font-display tracking-wider text-red-200">
+              <span className="text-xs font-extrabold font-display tracking-wider text-red-700">
                 ENREGISTREMENT VOCAL ({recordTimer}s)
               </span>
             </div>
@@ -959,14 +960,14 @@ export default function ChatSpace() {
               <button
                 type="button"
                 onClick={cancelRecording}
-                className="rounded-full px-4 py-2 text-xs font-bold text-slate-300 hover:bg-white/10 hover:text-white transition"
+                className="rounded-full px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-200 transition"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={stopRecording}
-                className="inline-flex items-center gap-2 rounded-2xl bg-red-600 px-5 py-2.5 text-xs font-black font-display uppercase tracking-widest text-white hover:bg-red-500 transition shadow-lg shadow-red-600/40"
+                className="inline-flex items-center gap-2 rounded-2xl bg-red-600 px-5 py-2.5 text-xs font-extrabold font-display uppercase tracking-widest text-white hover:bg-red-700 transition shadow-md"
               >
                 Envoyer
                 <Send size={14} />
@@ -976,9 +977,9 @@ export default function ChatSpace() {
         ) : (
           <form
             onSubmit={handleSendMessage}
-            className="flex w-full flex-col rounded-3xl border border-white/20 bg-slate-950/85 p-3.5 sm:p-4 shadow-2xl backdrop-blur-2xl space-y-3"
+            className="flex w-full flex-col rounded-3xl border border-pink-100/80 bg-white/95 p-3.5 sm:p-4 shadow-lg backdrop-blur-2xl space-y-3"
           >
-            {/* TOP AREA: INPUT FIELD ("Type message" format) */}
+            {/* TOP AREA: INPUT FIELD */}
             <div className="w-full px-1">
               <textarea
                 value={inputText}
@@ -996,19 +997,19 @@ export default function ChatSpace() {
                 }
                 rows={2}
                 maxLength={1000}
-                className="w-full resize-none bg-transparent px-2 text-sm sm:text-base font-medium outline-none text-white placeholder:text-cyan-200/50"
+                className="w-full resize-none bg-transparent px-2 text-sm sm:text-base font-medium outline-none text-slate-900 placeholder:text-slate-400"
               />
             </div>
 
-            {/* BOTTOM BAR INSIDE CARD: ICONS ON LEFT (Smile, Paperclip, Mic), RECTANGULAR SEND BUTTON ON RIGHT */}
-            <div className="flex items-center justify-between pt-2 border-t border-white/10">
+            {/* BOTTOM BAR INSIDE CARD */}
+            <div className="flex items-center justify-between pt-2 border-t border-slate-100">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
                   type="button"
                   onClick={() => {
                     setInputText((prev) => prev + " 😊");
                   }}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-cyan-300 hover:bg-white/20 hover:text-white transition border border-white/15"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f4f3f6] text-slate-600 hover:bg-pink-50 hover:text-[#ff2a6d] transition border border-slate-200/60"
                   title="Ajouter un emoji"
                 >
                   <Smile size={18} />
@@ -1019,7 +1020,7 @@ export default function ChatSpace() {
                   onClick={() => {
                     setInputText("Bonjour à tous ! 👋");
                   }}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-cyan-300 hover:bg-white/20 hover:text-white transition border border-white/15"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f4f3f6] text-slate-600 hover:bg-pink-50 hover:text-[#ff2a6d] transition border border-slate-200/60"
                   title="Pièce jointe / Prompt"
                 >
                   <Paperclip size={18} />
@@ -1028,23 +1029,23 @@ export default function ChatSpace() {
                 <button
                   type="button"
                   onClick={startRecording}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-cyan-300 hover:bg-white/20 hover:text-white transition border border-white/15"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f4f3f6] text-slate-600 hover:bg-pink-50 hover:text-[#ff2a6d] transition border border-slate-200/60"
                   title="Message vocal"
                 >
                   <Mic size={18} />
                 </button>
               </div>
 
-              {/* SOLID SEND BUTTON ON RIGHT (Matching reference format) */}
+              {/* SOLID SEND BUTTON ON RIGHT */}
               <button
                 type="submit"
                 disabled={sending || !inputText.trim()}
-                className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 px-6 py-2.5 text-xs sm:text-sm font-black font-display transition transform active:scale-95 disabled:opacity-40 shadow-[0_0_20px_rgba(34,211,238,0.35)]"
+                className="flex items-center gap-2 rounded-2xl btn-pink text-white px-6 py-2.5 text-xs sm:text-sm font-extrabold font-display uppercase tracking-wider transition transform active:scale-95 disabled:opacity-40 shadow-md"
                 title="Envoyer le message"
               >
                 <span>Envoyer</span>
                 {sending ? (
-                  <Loader2 size={16} className="animate-spin" />
+                  <Loader2 size={16} className="animate-spin text-white" />
                 ) : (
                   <Send size={16} />
                 )}
@@ -1053,10 +1054,10 @@ export default function ChatSpace() {
           </form>
         )}
 
-        {/* POWERED BY FOOTER AT BOTTOM (Matching "Powered by kirridesk" format) */}
-        <div className="flex justify-center items-center gap-1.5 py-0.5 text-[11px] text-cyan-200/60 font-medium">
+        {/* POWERED BY FOOTER AT BOTTOM */}
+        <div className="flex justify-center items-center gap-1.5 py-0.5 text-[11px] text-slate-400 font-medium">
           <span>Propulsé par</span>
-          <span className="font-black font-display text-cyan-300 tracking-wider">Discutons-En</span>
+          <span className="font-black font-display text-[#ff2a6d] tracking-wider">Discutons-En</span>
         </div>
       </div>
     </div>

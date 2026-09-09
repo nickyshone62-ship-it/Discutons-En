@@ -168,8 +168,8 @@ html {
 }
 
 body {
-  background: linear-gradient(135deg, #9f1239 0%, #881337 40%, #4c0519 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #fdf8fa 0%, #faedf3 45%, #f7e4ed 80%, #fdf8fa 100%);
+  color: #0f172a;
   min-height: 100vh;
   font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
   overflow-x: hidden;
@@ -189,12 +189,12 @@ h1, h2, h3, h4, h5, h6 {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #4c0519;
+  background: #faedf3;
 }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #ff2a6d 0%, #ff6699 100%);
   border-radius: 9999px;
-  border: 2px solid #4c0519;
+  border: 2px solid #faedf3;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #ff0055 0%, #ff4b7d 100%);
