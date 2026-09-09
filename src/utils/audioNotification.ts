@@ -46,7 +46,11 @@ export function playNotificationChime() {
 export function requestBrowserNotificationPermission() {
   if (typeof window !== "undefined" && "Notification" in window) {
     if (Notification.permission === "default") {
-      Notification.requestPermission().catch(() => {});
+      try {
+        Notification.requestPermission().catch(() => {});
+      } catch (e) {
+        console.warn("Notification permission request error:", e);
+      }
     }
   }
 }
@@ -61,12 +65,27 @@ export function sendBrowserNotification(
     "Notification" in window &&
     Notification.permission === "granted"
   ) {
-    if (document.hidden) {
-      try {
-        new Notification(title, {
-          body,
-          icon: iconUrl || "/favicon.ico",
+    const icon = iconUrl || "/icons/icon-192x192.png";
+
+    // ServiceWorker showNotification for mobile Android / iOS compatibility
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.ready
+        .then((registration) => {
+          registration.showNotification(title, {
+            body,
+            icon,
+            badge: icon,
+            tag: "discutons-en-chat",
+          });
+        })
+        .catch(() => {
+          try {
+            new Notification(title, { body, icon });
+          } catch {}
         });
+    } else {
+      try {
+        new Notification(title, { body, icon });
       } catch (err) {
         console.warn("Browser notification creation error:", err);
       }

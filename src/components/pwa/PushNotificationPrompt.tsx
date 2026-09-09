@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bell, X, Check, Shield } from "lucide-react";
+import { Bell, X, Check } from "lucide-react";
 import { requestNotificationPermission, subscribeUserToPush } from "@/utils/pushNotifications";
 
 export default function PushNotificationPrompt() {
@@ -25,10 +25,10 @@ export default function PushNotificationPrompt() {
       return;
     }
 
-    // Delay prompt appearance by 3 seconds for smooth UX
+    // Delay prompt appearance by 2.5 seconds for smooth UX
     const timer = setTimeout(() => {
       setShowPrompt(true);
-    }, 3000);
+    }, 2500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -46,7 +46,7 @@ export default function PushNotificationPrompt() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(subscription.toJSON()),
-          });
+          }).catch(() => {});
         }
 
         setSuccess(true);
@@ -64,46 +64,46 @@ export default function PushNotificationPrompt() {
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    // Dismiss for 7 days
-    const sevenDays = Date.now() + 7 * 24 * 60 * 60 * 1000;
-    localStorage.setItem("push_prompt_dismissed", sevenDays.toString());
+    // Dismiss for 3 days
+    const threeDays = Date.now() + 3 * 24 * 60 * 60 * 1000;
+    localStorage.setItem("push_prompt_dismissed", threeDays.toString());
   };
 
   if (!showPrompt) return null;
 
   return (
     <div className="fixed bottom-20 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 animate-in slide-in-from-bottom duration-300">
-      <div className="relative overflow-hidden rounded-2xl border border-cyan-400/40 bg-slate-950/95 p-4.5 backdrop-blur-2xl shadow-[0_10px_35px_rgba(0,0,0,0.7)] text-white">
-        <div className="pointer-events-none absolute -top-10 -right-10 h-24 w-24 rounded-full bg-cyan-400/20 blur-xl" />
+      <div className="relative overflow-hidden rounded-3xl border border-pink-200 bg-white/95 p-4.5 backdrop-blur-2xl shadow-[0_20px_50px_rgba(255,42,109,0.25)] text-slate-900">
+        <div className="pointer-events-none absolute -top-10 -right-10 h-24 w-24 rounded-full bg-pink-300/30 blur-xl" />
 
         <button
           onClick={handleDismiss}
-          className="absolute top-3 right-3 text-slate-400 hover:text-white p-1 transition"
+          className="absolute top-3 right-3 text-slate-400 hover:text-slate-700 p-1 transition"
           aria-label="Fermer"
         >
           <X className="h-4 w-4" />
         </button>
 
         {success ? (
-          <div className="flex items-center gap-3 py-1 text-emerald-400 font-bold text-sm">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 border border-emerald-400/40">
+          <div className="flex items-center gap-3 py-1 text-emerald-600 font-extrabold text-xs sm:text-sm">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 border border-emerald-300 text-emerald-600">
               <Check className="h-5 w-5" />
             </div>
-            <span>Notifications activées avec succès !</span>
+            <span>Notifications mobiles activées avec succès !</span>
           </div>
         ) : (
           <div className="space-y-3">
             <div className="flex items-start gap-3 pr-6">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-pink-50 border border-pink-200 text-[#ff2a6d] shadow-sm">
                 <Bell className="h-5 w-5 animate-bounce" />
               </div>
 
               <div className="space-y-1">
-                <h4 className="text-sm font-black font-display text-white">
-                  Active les notifications 💬
+                <h4 className="text-sm font-extrabold font-display text-slate-900">
+                  Activer les notifications 💬
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Sois averti instantanément sur ton iPhone / Android dès qu'un nouveau message t'attend.
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  Soyez averti instantanément sur votre téléphone dès qu'un nouveau message arrive.
                 </p>
               </div>
             </div>
@@ -112,14 +112,14 @@ export default function PushNotificationPrompt() {
               <button
                 onClick={handleEnablePush}
                 disabled={loading}
-                className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 px-4 py-2.5 text-xs font-black font-display text-slate-950 transition hover:from-cyan-300 hover:to-sky-300 shadow-[0_0_15px_rgba(34,211,238,0.3)] active:scale-95 disabled:opacity-50"
+                className="flex-1 flex items-center justify-center gap-2 rounded-2xl btn-pink px-4 py-2.5 text-xs font-black font-display uppercase tracking-wider text-white shadow-md active:scale-95 disabled:opacity-50"
               >
-                {loading ? "Activation en cours..." : "ACTIVERN LES NOTIFICATIONS"}
+                {loading ? "Activation..." : "ACTIVER LES NOTIFICATIONS"}
               </button>
 
               <button
                 onClick={handleDismiss}
-                className="rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-xs font-bold text-slate-300 hover:bg-white/10"
+                className="rounded-2xl border border-slate-200 bg-slate-100 px-3.5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-200 transition"
               >
                 Plus tard
               </button>

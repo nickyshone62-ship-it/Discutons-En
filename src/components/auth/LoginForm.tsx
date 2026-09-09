@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Logo from "@/components/brand/Logo";
 import { FormEvent, useState } from "react";
-import { Eye, EyeOff, ArrowRight, Loader2, ShieldCheck, Sparkles } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Loader2, ShieldCheck, Sparkles, UserPlus } from "lucide-react";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -143,18 +143,22 @@ export default function LoginForm() {
           </button>
         </form>
 
-        <div className="mt-8 pt-4 border-t border-slate-100 text-center space-y-2">
-          <p className="text-xs font-semibold text-slate-600">
-            Pas encore de compte ?{" "}
-            <Link
-              href="/inscription"
-              className="font-black text-[#ff2a6d] hover:underline transition"
-            >
-              Créer un compte
-            </Link>
+        {/* HIGHLY VISIBLE S'INSCRIRE CALL TO ACTION BUTTON */}
+        <div className="mt-8 pt-6 border-t border-slate-100 text-center space-y-3">
+          <p className="text-xs font-extrabold text-slate-700">
+            Vous n'avez pas encore de compte ?
           </p>
 
-          <p className="text-[11px] text-slate-500 pt-1">
+          <Link
+            href="/inscription"
+            className="flex h-13 w-full items-center justify-center gap-2 rounded-2xl border-2 border-[#ff2a6d] bg-pink-50 text-[#ff2a6d] font-black font-display text-xs uppercase tracking-widest hover:bg-[#ff2a6d] hover:text-white transition shadow-md transform active:scale-95 group"
+          >
+            <UserPlus size={16} />
+            <span>S'INSCRIRE / CRÉER UN COMPTE</span>
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+
+          <p className="text-[11px] text-slate-500 pt-2">
             <Link
               href="/admin"
               className="inline-flex items-center gap-1.5 font-bold text-slate-700 hover:text-[#ff2a6d] bg-slate-100 hover:bg-slate-200 border border-slate-200 px-3.5 py-1.5 rounded-full transition"

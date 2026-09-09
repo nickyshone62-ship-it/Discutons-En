@@ -3,22 +3,35 @@
  */
 
 export async function requestNotificationPermission(): Promise<NotificationPermission> {
-  if (!('Notification' in window)) {
-    console.warn('[Push] Browser does not support notifications.');
-    return 'denied';
+  if (typeof window === "undefined" || !("Notification" in window)) {
+    console.warn("[Push] Browser does not support notifications.");
+    return "denied";
   }
 
-  if (Notification.permission === 'granted') {
-    return 'granted';
+  if (Notification.permission === "granted") {
+    return "granted";
   }
 
-  const permission = await Notification.requestPermission();
-  return permission;
+  try {
+    // Legacy Safari iOS callback wrapper alongside Promise-based API
+    const permission = await new Promise<NotificationPermission>((resolve) => {
+      const result = Notification.requestPermission((perm) => {
+        if (perm) resolve(perm);
+      });
+      if (result && typeof (result as any).then === "function") {
+        (result as Promise<NotificationPermission>).then(resolve).catch(() => resolve(Notification.permission));
+      }
+    });
+    return permission;
+  } catch (e) {
+    console.warn("[Push] Request permission error:", e);
+    return Notification.permission;
+  }
 }
 
 export async function subscribeUserToPush(): Promise<PushSubscription | null> {
-  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-    console.warn('[Push] Service Worker or PushManager unavailable.');
+  if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+    console.warn("[Push] Service Worker or PushManager unavailable.");
     return null;
   }
 
@@ -28,9 +41,9 @@ export async function subscribeUserToPush(): Promise<PushSubscription | null> {
 
     if (!subscription) {
       const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-      
+
       if (!vapidPublicKey) {
-        console.warn('[Push] NEXT_PUBLIC_VAPID_PUBLIC_KEY is not defined in environment variables. Local push notifications active.');
+        console.warn("[Push] NEXT_PUBLIC_VAPID_PUBLIC_KEY is not defined in environment variables. Local push notifications active.");
         return null;
       }
 
@@ -39,19 +52,19 @@ export async function subscribeUserToPush(): Promise<PushSubscription | null> {
         userVisibleOnly: true,
         applicationServerKey: convertedKey as unknown as BufferSource,
       });
-      console.log('[Push] User successfully subscribed to push service:', subscription);
+      console.log("[Push] User successfully subscribed to push service:", subscription);
     }
 
     return subscription;
   } catch (error) {
-    console.error('[Push] Failed to subscribe to push notifications:', error);
+    console.error("[Push] Failed to subscribe to push notifications:", error);
     return null;
   }
 }
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
-  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
 
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);

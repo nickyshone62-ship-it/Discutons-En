@@ -9,6 +9,7 @@ import {
   MessageSquare,
   ShieldCheck,
   Sparkles,
+  UserPlus,
   Users,
 } from "lucide-react";
 
@@ -22,37 +23,38 @@ export default function LandingPage() {
       <div className="pointer-events-none absolute bottom-32 right-1/4 h-32 w-32 rounded-full bg-rose-300/30 blur-2xl" />
 
       {/* NAVBAR */}
-      <header className="relative z-20 border-b border-pink-100/80 bg-white/80 backdrop-blur-2xl">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Logo variant="horizontal" size="lg" href="/" />
+      <header className="relative z-20 border-b border-pink-100/80 bg-white/90 backdrop-blur-2xl shadow-xs">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-8">
+          <Logo variant="horizontal" size="md" href="/" />
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/connexion"
-              className="rounded-full border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold text-slate-800 transition hover:bg-slate-50 font-display"
+              className="rounded-full border border-slate-200 bg-white px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs font-extrabold text-slate-800 transition hover:bg-slate-50 font-display"
             >
               CONNEXION
             </Link>
 
             <Link
               href="/inscription"
-              className="rounded-full btn-becky font-black font-display px-6 py-2.5 text-xs uppercase tracking-widest transition transform active:scale-95 shadow-[0_8px_20px_rgba(255,75,125,0.3)]"
+              className="rounded-full btn-becky font-black font-display px-4 sm:px-6 py-2 sm:py-2.5 text-xs uppercase tracking-widest transition transform active:scale-95 shadow-[0_8px_20px_rgba(255,42,109,0.35)] flex items-center gap-1.5"
             >
-              S'INSCRIRE
+              <UserPlus size={14} className="hidden sm:inline" />
+              <span>S'INSCRIRE</span>
             </Link>
           </div>
         </div>
       </header>
 
       {/* HERO SECTION */}
-      <section className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <section className="relative z-10 mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
         <div className="text-center space-y-8 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-white px-4.5 py-2 text-xs font-bold text-slate-800 shadow-md">
+          <div className="inline-flex items-center gap-2 rounded-full border border-pink-200 bg-white px-4.5 py-2 text-xs font-bold text-slate-800 shadow-sm">
             <ShieldCheck size={16} className="text-[#ff2a6d]" />
             Plateforme d'Entraide 100% Anonyme & Bienveillante
           </div>
 
-          <h1 className="text-4xl font-extrabold font-display tracking-tight sm:text-6xl leading-tight uppercase text-slate-900">
+          <h1 className="text-4xl font-black font-display tracking-tight sm:text-6xl leading-tight uppercase text-slate-900">
             Un problème ? <br />
             <span className="gradient-text-rose">DIScutons-En</span> Ensemble
           </h1>
@@ -61,18 +63,19 @@ export default function LandingPage() {
             Partage tes difficultés, pose tes questions et reçois les meilleurs conseils d'une communauté bienveillante sans jamais révéler ton identité réelle.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-4">
             <Link
               href="/inscription"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl btn-becky font-extrabold font-display text-sm uppercase tracking-widest py-4.5 px-9 shadow-[0_12px_30px_rgba(255,75,125,0.35)] transition transform hover:scale-105 active:scale-95 duration-300"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl btn-becky font-black font-display text-sm uppercase tracking-widest py-4.5 px-9 shadow-[0_12px_30px_rgba(255,42,109,0.4)] transition transform hover:scale-105 active:scale-95 duration-300"
             >
-              REJOINDRE LA COMMUNAUTÉ
+              <UserPlus size={18} />
+              S'INSCRIRE ET REJOINDRE
               <ArrowRight size={18} />
             </Link>
 
             <Link
               href="/connexion"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-bold font-display text-sm py-4.5 px-8 shadow-sm transition"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-extrabold font-display text-sm py-4 px-8 shadow-sm transition"
             >
               SE CONNECTER
             </Link>
@@ -80,12 +83,12 @@ export default function LandingPage() {
         </div>
 
         {/* FEATURES GRID MATCHING BECKY LIGHT CARDS */}
-        <div className="mt-20 grid gap-6 sm:grid-cols-3">
+        <div className="mt-16 sm:mt-20 grid gap-6 sm:grid-cols-3">
           <div className="rounded-[28px] border border-pink-100/80 bg-white p-7 shadow-[0_20px_50px_rgba(0,0,0,0.05)] space-y-3 text-center sm:text-left hover:-translate-y-1 hover:border-[#ff2a6d]/40 transition-all duration-300">
-            <div className="mx-auto sm:mx-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-[#ff2a6d] border border-rose-100 shadow-sm">
+            <div className="mx-auto sm:mx-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-pink-50 text-[#ff2a6d] border border-pink-100 shadow-sm">
               <ShieldCheck size={24} />
             </div>
-            <h3 className="text-base font-extrabold font-display uppercase text-slate-900 tracking-wider">
+            <h3 className="text-base font-black font-display uppercase text-slate-900 tracking-wider">
               Anonymat Absolu
             </h3>
             <p className="text-xs text-slate-600 leading-relaxed font-medium">
@@ -94,10 +97,10 @@ export default function LandingPage() {
           </div>
 
           <div className="rounded-[28px] border border-pink-100/80 bg-white p-7 shadow-[0_20px_50px_rgba(0,0,0,0.05)] space-y-3 text-center sm:text-left hover:-translate-y-1 hover:border-[#ff2a6d]/40 transition-all duration-300">
-            <div className="mx-auto sm:mx-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-[#ff2a6d] border border-rose-100 shadow-sm">
+            <div className="mx-auto sm:mx-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-pink-50 text-[#ff2a6d] border border-pink-100 shadow-sm">
               <Sparkles size={24} />
             </div>
-            <h3 className="text-base font-extrabold font-display uppercase text-slate-900 tracking-wider">
+            <h3 className="text-base font-black font-display uppercase text-slate-900 tracking-wider">
               Meilleure Piste Guidée
             </h3>
             <p className="text-xs text-slate-600 leading-relaxed font-medium">
@@ -106,10 +109,10 @@ export default function LandingPage() {
           </div>
 
           <div className="rounded-[28px] border border-pink-100/80 bg-white p-7 shadow-[0_20px_50px_rgba(0,0,0,0.05)] space-y-3 text-center sm:text-left hover:-translate-y-1 hover:border-[#ff2a6d]/40 transition-all duration-300">
-            <div className="mx-auto sm:mx-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-[#ff2a6d] border border-rose-100 shadow-sm">
+            <div className="mx-auto sm:mx-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-pink-50 text-[#ff2a6d] border border-pink-100 shadow-sm">
               <MessageSquare size={24} />
             </div>
-            <h3 className="text-base font-extrabold font-display uppercase text-slate-900 tracking-wider">
+            <h3 className="text-base font-black font-display uppercase text-slate-900 tracking-wider">
               Salon Chat & Vocaux
             </h3>
             <p className="text-xs text-slate-600 leading-relaxed font-medium">
