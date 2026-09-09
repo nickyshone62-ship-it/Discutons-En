@@ -125,7 +125,8 @@ export default function RegisterForm() {
       } else {
         window.location.href = "/accueil";
       }
-    } catch {
+    } catch (err) {
+      console.error("Erreur lors de l'inscription:", err);
       setError("Impossible de contacter le serveur. Vérifie ta connexion.");
     } finally {
       setLoading(false);

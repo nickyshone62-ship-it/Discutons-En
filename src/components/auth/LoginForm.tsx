@@ -38,7 +38,8 @@ export default function LoginForm() {
       }
 
       window.location.href = "/accueil";
-    } catch {
+    } catch (err) {
+      console.error("Erreur lors de la connexion:", err);
       setError("Impossible de contacter le serveur. Vérifie ta connexion.");
     } finally {
       setLoading(false);
