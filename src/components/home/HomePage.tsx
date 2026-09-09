@@ -363,15 +363,15 @@ export default function HomePage() {
       </header>
 
       {/* CONTENT GRID */}
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="grid gap-6 lg:grid-cols-[250px_minmax(0,1fr)_260px]">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8 font-sans">
+        <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)_280px]">
           {/* LEFT SIDEBAR */}
           <aside className="hidden lg:block">
-            <div className="sticky top-24 space-y-4">
-              <div className="rounded-3xl border border-pink-100/80 bg-white p-4 shadow-[0_20px_50px_rgba(0,0,0,0.04)] space-y-2">
+            <div className="sticky top-24 space-y-5">
+              <div className="rounded-[32px] border border-pink-100/80 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] space-y-2.5">
                 <Link
                   href="/accueil"
-                  className="flex items-center gap-3 rounded-2xl bg-pink-50 border border-pink-200 px-4 py-3 text-sm font-extrabold font-display text-[#ff2a6d]"
+                  className="flex items-center gap-3 rounded-2xl bg-pink-50 border border-pink-200 px-4 py-3.5 text-sm font-extrabold font-display text-[#ff2a6d] shadow-xs"
                 >
                   <Home size={18} className="text-[#ff2a6d]" />
                   Accueil
@@ -379,7 +379,7 @@ export default function HomePage() {
 
                 <Link
                   href="/chat"
-                  className="flex items-center gap-3 rounded-2xl btn-pink px-4 py-3 text-sm font-black font-display text-white uppercase tracking-wider transition shadow-md hover:scale-[1.02] duration-300"
+                  className="flex items-center gap-3 rounded-2xl btn-pink px-4 py-3.5 text-sm font-black font-display text-white uppercase tracking-wider transition shadow-md hover:scale-[1.02] duration-300"
                 >
                   <MessageSquare size={18} />
                   Chat en direct
@@ -387,7 +387,7 @@ export default function HomePage() {
 
                 <Link
                   href="/recherche"
-                  className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
+                  className="flex items-center gap-3 rounded-2xl px-4 py-3.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
                 >
                   <Search size={18} />
                   Rechercher
@@ -395,8 +395,8 @@ export default function HomePage() {
               </div>
 
               {/* CATEGORIES CARD */}
-              <div className="rounded-3xl border border-pink-100/80 bg-white p-4.5 shadow-[0_20px_50px_rgba(0,0,0,0.04)]">
-                <h2 className="mb-3 text-xs font-extrabold font-display uppercase tracking-widest text-[#ff2a6d]">
+              <div className="rounded-[32px] border border-pink-100/80 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)]">
+                <h2 className="mb-3 text-xs font-black font-display uppercase tracking-widest text-[#ff2a6d]">
                   Catégories
                 </h2>
 
@@ -420,7 +420,7 @@ export default function HomePage() {
           {/* MAIN FEED SECTION */}
           <section className="min-w-0 space-y-6">
             {/* HERO WELCOME BANNER */}
-            <div className="relative overflow-hidden rounded-[28px] border border-pink-200 bg-gradient-to-r from-[#ff2a6d] via-[#ff4b7d] to-[#ff6699] p-6 text-white shadow-xl sm:p-8">
+            <div className="relative overflow-hidden rounded-[32px] border border-pink-200 bg-gradient-to-r from-[#ff2a6d] via-[#ff4b7d] to-[#ff6699] p-6 text-white shadow-[0_20px_60px_rgba(255,42,109,0.25)] sm:p-8">
               <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/20 blur-2xl" />
 
               <div className="relative z-10">
@@ -588,11 +588,11 @@ export default function HomePage() {
 
           {/* RIGHT SIDEBAR */}
           <aside className="hidden lg:block">
-            <div className="sticky top-24 space-y-4">
+            <div className="sticky top-24 space-y-5">
               {/* RECENT MESSAGES CARD */}
-              <div className="rounded-3xl border border-pink-100/80 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] space-y-3.5">
+              <div className="rounded-[32px] border border-pink-100/80 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] space-y-3.5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-extrabold font-display uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                  <h3 className="text-xs font-black font-display uppercase tracking-wider text-slate-900 flex items-center gap-2">
                     <MessageSquare size={16} className="text-[#ff2a6d]" />
                     Messages Récents
                   </h3>
@@ -645,7 +645,7 @@ export default function HomePage() {
                 )}
               </div>
 
-              <div className="rounded-3xl border border-pink-100/80 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] space-y-3">
+              <div className="rounded-[32px] border border-pink-100/80 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-pink-50 text-[#ff2a6d] border border-pink-100">
                     <ShieldCheck size={20} />

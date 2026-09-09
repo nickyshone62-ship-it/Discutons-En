@@ -613,7 +613,7 @@ export default function ChatSpace() {
   }
 
   return (
-    <div className="w-full max-w-full flex-1 h-full flex flex-col p-3 sm:p-5 md:p-6 font-sans text-slate-900 overflow-hidden gap-3">
+    <div className="w-full max-w-full flex-1 h-full flex flex-col p-2 sm:p-4 font-sans text-slate-900 overflow-hidden gap-3 rounded-[32px] border border-pink-100/80 bg-white/70 shadow-[0_25px_65px_rgba(0,0,0,0.05)] backdrop-blur-2xl">
       {/* HEADER */}
       <div className="flex items-center justify-between rounded-3xl border border-pink-100/80 bg-white/90 p-3.5 sm:p-4 shadow-md backdrop-blur-2xl shrink-0">
         <div className="flex items-center gap-3">
